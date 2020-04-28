@@ -29,3 +29,10 @@ BSP: Krafttraining: beides wird gesammelt
 # Schritte
 1. Smartphone app
 2. Uhr
+
+# Farben
+Blau: FF178DEA
+
+# Verschiedenes
+
+Horizontal Divider zwischen Card Views in Home Fragement für Tage
