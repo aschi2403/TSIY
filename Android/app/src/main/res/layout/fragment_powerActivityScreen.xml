@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="MissingDefaultResource">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="@string/app_name"
+            android:textColor="@android:color/white"
+            android:textSize="32sp"
+            app:layout_anchorGravity="center" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="90dp"
+        android:gravity="center|center_vertical"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout2">
+
+        <TextView
+            android:id="@+id/activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Krafttraining"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/timeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="01:23"
+            android:textSize="48sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:id="@+id/cardioPointsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="50dp"
+                android:text="@string/cardiopoints" />
+
+            <TextView
+                android:id="@+id/caloriesLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="50dp"
+                android:text="@string/calories" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:id="@+id/cardioPointsValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="75dp"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/caloriesValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="75dp"
+                android:text="0" />
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/next"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="256dp"
+            android:drawableStart="@android:drawable/ic_media_next" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/pause"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="75dp"
+                android:drawableStart="@android:drawable/ic_media_pause" />
+
+            <Button
+                android:id="@+id/close"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="75dp"
+                android:drawableStart="@android:drawable/ic_menu_close_clear_cancel" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
