@@ -15,4 +15,14 @@
     <string name="statistics">statistics</string>
     <string name="home">home</string>
     <string name="settings">settings</string>
+    <string name="krafttraining">Krafttraining</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="manage_power_activities">manage_power_activities</string>
+    <string name="connect_to_google_fit">connect_to_google_fit</string>
+    <string name="manage_activities">manage_activities</string>
+    <string name="pause_time">pause_time</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_statistics">Statistics</string>
+    <string name="nav_Settings">Settings</string>
 </resources>

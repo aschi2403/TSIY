@@ -1,24 +1,59 @@
 package aschi2403.tsiy
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-
+import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : AppCompatActivity() {
+
+    //private val bottomNavigationView: FrameLayout = findViewById(R.id.main_nav)
+
+    private val homeFragment = HomeFragment();
+    private val statisticsFragment = StatisticsFragment()
+    private val settingsFragment = SettingsFragment()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+
+
+       main_nav.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId){
+                R.id.nav_home -> {
+                    setFragment(homeFragment)
+                }
+
+                R.id.nav_settings -> {
+                    setFragment(settingsFragment)
+                }
+
+                R.id.nav_statistics -> {
+                    setFragment(statisticsFragment)
+                }
+            }
+            true
         }
+
+        main_nav.selectedItemId = R.id.nav_home
+        setFragment(homeFragment)
+
+    }
+
+    private fun setFragment(fragment: Fragment) {
+        var fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.main_frame, fragment)
+        fragmentTransaction.commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
