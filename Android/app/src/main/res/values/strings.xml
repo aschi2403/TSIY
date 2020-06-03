@@ -25,4 +25,15 @@
     <string name="nav_home">Home</string>
     <string name="nav_statistics">Statistics</string>
     <string name="nav_Settings">Settings</string>
+    <string name="activity">Activity</string>
+    <string name="weight">Weight</string>
+    <string name="repetition">Repetition</string>
+    <string name="continueValue">Continue</string>
+    <string name="name">Name</string>
+    <string name="icon">Icon</string>
+    <string name="description">Description</string>
+    <string name="close">Close</string>
+    <string name="save">Save</string>
+    <string name="skip">Skip</string>
+    <string name="pause">Pause</string>
 </resources>
