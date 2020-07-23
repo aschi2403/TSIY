@@ -3,33 +3,33 @@ package aschi2403.tsiy
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
-import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
-
-    //private val bottomNavigationView: FrameLayout = findViewById(R.id.main_nav)
-
-    private val homeFragment = HomeFragment();
+    private val homeFragment = HomeFragment()
     private val statisticsFragment = StatisticsFragment()
     private val settingsFragment = SettingsFragment()
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val mFab = findViewById<FloatingActionButton>(R.id.home_fab)
+
+        mFab.setOnClickListener {
+            Toast.makeText(this@MainActivity, "FAB is clicked...", Toast.LENGTH_LONG).show()
+        }
 
 
-       main_nav.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId){
+
+        main_nav.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
                 R.id.nav_home -> {
                     setFragment(homeFragment)
                 }

@@ -67,16 +67,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="74dp"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:background="#FFFFFF"
-        app:backgroundTint="#FFFFFF"
-        app:srcCompat="@android:drawable/ic_input_add" />
-
-
 </FrameLayout>
