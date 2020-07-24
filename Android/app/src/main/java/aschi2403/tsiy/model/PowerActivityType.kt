@@ -10,4 +10,8 @@ class PowerActivityType(
     override var name: String = "",
     override var icon: String = "",
     override var description: String = ""
-) : IActivityType
+) : IActivityType {
+    override fun toString(): String {
+        return "PowerActivityType(id=$id, name='$name', icon='$icon', description='$description')"
+    }
+}

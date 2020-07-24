@@ -10,4 +10,8 @@ class PowerActivity(
     override var name: String = "",
     var repetitions: Int = 0,
     var weight: Double = 0.0
-) : IActivity
+) : IActivity {
+    override fun toString(): String {
+        return "PowerActivity(id=$id, name='$name', repetitions=$repetitions, weight=$weight)"
+    }
+}

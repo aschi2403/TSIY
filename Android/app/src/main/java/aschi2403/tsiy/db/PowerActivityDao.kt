@@ -9,7 +9,7 @@ import aschi2403.tsiy.model.PowerActivity
 @Dao
 interface PowerActivityDao {
     @Query("SELECT * FROM PowerActivity")
-    fun loadAll(): LiveData<List<PowerActivity>>
+    fun loadAll(): /*LiveData<*/List<PowerActivity>/*>*/
 
     @Query("SELECT * FROM PowerActivity WHERE id= :powerActivityId")
     fun loadPowerActivity(powerActivityId: Long): PowerActivity

@@ -5,4 +5,6 @@ interface IActivityType {
     var name: String
     var icon: String
     var description: String
+
+    override fun toString(): String
 }
