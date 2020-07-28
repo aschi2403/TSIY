@@ -5,17 +5,24 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import aschi2403.tsiy.model.ActivityType
+import aschi2403.tsiy.model.GeneralActivity
 import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.model.PowerActivityType
 
 @Database(
-    entities = arrayOf(PowerActivity::class, PowerActivityType::class, ActivityType::class),
+    entities = arrayOf(
+        PowerActivity::class,
+        PowerActivityType::class,
+        ActivityType::class,
+        GeneralActivity::class
+    ),
     version = 1
 )
 abstract class WorkoutDatabase : RoomDatabase() {
     abstract fun powerActivityDao(): PowerActivityDao
     abstract fun powerActivityTypeDao(): PowerActivityTypeDao
     abstract fun activityTypeDao(): ActivityTypeDao
+    abstract fun generalActivityDao(): GeneralActivityDao
 
     companion object {
         private var instance: WorkoutDatabase? = null
@@ -25,8 +32,8 @@ abstract class WorkoutDatabase : RoomDatabase() {
                 instance = Room.databaseBuilder(
                     context.applicationContext,
                     WorkoutDatabase::class.java,
-                    "Workout"
-                ).build()
+                    "Workout.db"
+                ).createFromAsset("database/Workout_temp.db").build()
             }
             return instance as WorkoutDatabase
         }

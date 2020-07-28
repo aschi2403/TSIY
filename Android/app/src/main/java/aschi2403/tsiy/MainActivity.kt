@@ -1,9 +1,9 @@
 package aschi2403.tsiy
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -23,7 +23,8 @@ class MainActivity : AppCompatActivity() {
         val mFab = findViewById<FloatingActionButton>(R.id.home_fab)
 
         mFab.setOnClickListener {
-            Toast.makeText(this@MainActivity, "FAB is clicked...", Toast.LENGTH_LONG).show()
+            val intent = Intent(this, ChooseActivityType::class.java).apply { }
+            startActivity(intent)
         }
 
 

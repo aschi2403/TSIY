@@ -2,11 +2,9 @@ package aschi2403.tsiy.repository
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import aschi2403.tsiy.db.ActivityTypeDao
-import aschi2403.tsiy.db.PowerActivityDao
-import aschi2403.tsiy.db.PowerActivityTypeDao
-import aschi2403.tsiy.db.WorkoutDatabase
+import aschi2403.tsiy.db.*
 import aschi2403.tsiy.model.ActivityType
+import aschi2403.tsiy.model.GeneralActivity
 import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.model.PowerActivityType
 
@@ -15,6 +13,7 @@ class WorkoutRepo(context: Context) {
     private var powerActivityDao: PowerActivityDao = db.powerActivityDao()
     private var powerActivityTypeDao: PowerActivityTypeDao = db.powerActivityTypeDao()
     private var activityTypeDao: ActivityTypeDao = db.activityTypeDao()
+    private var generalActivityDao: GeneralActivityDao = db.generalActivityDao()
 
 
     // PowerActivity
@@ -25,9 +24,7 @@ class WorkoutRepo(context: Context) {
         return newId
     }
 
-    fun createPowerActivity(): PowerActivity {
-        return PowerActivity()
-    }
+    fun createPowerActivity() = PowerActivity()
 
     val allPowerActivities: /*LiveData<*/List<PowerActivity>
         /*>*/
@@ -35,6 +32,24 @@ class WorkoutRepo(context: Context) {
             return powerActivityDao.loadAll()
         }
 
+    fun powerActivityById(id: Long) = powerActivityDao.loadPowerActivity(id)
+
+    // GeneralActivity
+
+    fun addGeneralActivity(generalActivity: GeneralActivity): Long? {
+        val newId = generalActivityDao.insertGeneralActivity(generalActivity)
+        generalActivity.id = newId
+        return newId
+    }
+
+    fun createGeneralActivity() = GeneralActivity()
+
+    val allGeneralActivities: List<GeneralActivity>
+        get() {
+            return generalActivityDao.loadAll()
+        }
+
+    fun generalActivityById(id: Long) = generalActivityDao.loadGeneralActivity(id)
 
     // PowerActivityType
 
@@ -44,14 +59,14 @@ class WorkoutRepo(context: Context) {
         return newId
     }
 
-    fun createPowerActivityType(): PowerActivityType {
-        return PowerActivityType()
-    }
+    fun createPowerActivityType() = PowerActivityType()
 
     val allPowerActivityTypes: LiveData<List<PowerActivityType>>
         get() {
             return powerActivityTypeDao.loadAll()
         }
+
+    fun powerActivityTypeById(id: Long) = powerActivityTypeDao.loadPowerActivityType(id)
 
     // ActivityType
     fun addActivityType(activityType: ActivityType): Long? {
@@ -60,13 +75,13 @@ class WorkoutRepo(context: Context) {
         return newId
     }
 
-    fun createActivityType(): ActivityType {
-        return ActivityType()
-    }
+    fun createActivityType() = ActivityType()
 
-    val allActivityTypes: LiveData<List<ActivityType>>
+    val allActivityTypes: List<ActivityType>
         get() {
             return activityTypeDao.loadAll()
         }
+
+    fun activityTypeById(id: Long) = activityTypeDao.loadActivityType(id)
 
 }

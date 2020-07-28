@@ -9,7 +9,7 @@ import aschi2403.tsiy.model.ActivityType
 @Dao
 interface ActivityTypeDao {
     @Query("SELECT * FROM ActivityType")
-    fun loadAll(): LiveData<List<ActivityType>>
+    fun loadAll(): List<ActivityType>
 
     @Query("SELECT * FROM ActivityType WHERE id=:activityTypeId")
     fun loadActivityType(activityTypeId: Long): ActivityType

@@ -35,17 +35,12 @@ class HomeFragment : Fragment() {
 
         GlobalScope.launch {
             // get data
-            val activities = repository.allPowerActivities as /*LiveData<*/List<IActivity>/*>*/
+            val activities: List<IActivity> = repository.allPowerActivities
 
             // get adapter with MainActivity as context
             val adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, activities)
 
             listview_home.adapter = adapter
-
-            println("coroutine finished")
         }
-
-
     }
-
 }

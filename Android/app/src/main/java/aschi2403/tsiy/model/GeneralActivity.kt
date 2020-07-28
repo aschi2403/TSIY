@@ -2,41 +2,41 @@ package aschi2403.tsiy.model
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.ForeignKey.CASCADE
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
     foreignKeys = [
         ForeignKey(
-            entity = PowerActivityType::class,
+            entity = ActivityType::class,
             parentColumns = ["id"],
             childColumns = ["activityTypeId"],
-            onDelete = ForeignKey.CASCADE
+            onDelete = CASCADE
         )],
     indices = [Index("activityTypeId")]
 )
-class PowerActivity(
+class GeneralActivity(
     @PrimaryKey(autoGenerate = true)
     override var id: Long? = null,
     override var activityTypeId: Long = 0,
-    var repetitions: Int = 0,
-    var weight: Double = 0.0
+    // time in milliseconds from start
+    var time: Long = 0
 ) : IActivity {
 
     override fun toString(): String {
-        return "PowerActivity(id=$id, activityTypeId=$activityTypeId, repetitions=$repetitions, weight=$weight)"
+        return "GeneralActivity(id=$id, activityTypeId=$activityTypeId, time=$time)"
     }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as PowerActivity
+        other as GeneralActivity
 
         if (id != other.id) return false
         if (activityTypeId != other.activityTypeId) return false
-        if (repetitions != other.repetitions) return false
-        if (weight != other.weight) return false
+        if (time != other.time) return false
 
         return true
     }
@@ -44,8 +44,7 @@ class PowerActivity(
     override fun hashCode(): Int {
         var result = id?.hashCode() ?: 0
         result = 31 * result + activityTypeId.hashCode()
-        result = 31 * result + repetitions
-        result = 31 * result + weight.hashCode()
+        result = 31 * result + time.hashCode()
         return result
     }
 
