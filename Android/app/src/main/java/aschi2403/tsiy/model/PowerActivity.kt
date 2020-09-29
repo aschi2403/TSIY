@@ -1,11 +1,10 @@
 package aschi2403.tsiy.model
 
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import androidx.room.*
+import aschi2403.tsiy.model.relations.IActivity
 
 @Entity(
+    tableName = "PowerActivity",
     foreignKeys = [
         ForeignKey(
             entity = PowerActivityType::class,
@@ -22,6 +21,8 @@ class PowerActivity(
     var repetitions: Int = 0,
     var weight: Double = 0.0
 ) : IActivity {
+    @Ignore
+    lateinit var powerActivityType: PowerActivityType
 
     override fun toString(): String {
         return "PowerActivity(id=$id, activityTypeId=$activityTypeId, repetitions=$repetitions, weight=$weight)"

@@ -3,14 +3,22 @@
 
     <item
         android:id="@+id/nav_statistics"
-        android:icon="@drawable/ic_baseline_home_24"
+        android:icon="@drawable/ic_baseline_data_usage_24"
         android:title="@string/nav_statistics" />
+
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_baseline_home_24"
         android:title="@string/nav_home" />
+
+    <item
+        android:id="@+id/nav_weight"
+        android:icon="@drawable/ic_baseline_line_weight_24"
+        android:title="Weight" />
+
     <item
         android:id="@+id/nav_settings"
         android:icon="@drawable/ic_baseline_settings_24"
         android:title="@string/nav_Settings" />
+
 </menu>

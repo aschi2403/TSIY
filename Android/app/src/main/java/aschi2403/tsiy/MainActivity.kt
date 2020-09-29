@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import aschi2403.tsiy.screens.HomeFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -14,6 +15,7 @@ class MainActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()
     private val statisticsFragment = StatisticsFragment()
     private val settingsFragment = SettingsFragment()
+    private val weightFragment = WeightFragment()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +43,10 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.nav_statistics -> {
                     setFragment(statisticsFragment)
+                }
+
+                R.id.nav_weight -> {
+                    setFragment(weightFragment)
                 }
             }
             true

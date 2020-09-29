@@ -5,8 +5,10 @@ import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import aschi2403.tsiy.model.relations.IActivity
 
 @Entity(
+    tableName = "GeneralActivity",
     foreignKeys = [
         ForeignKey(
             entity = ActivityType::class,

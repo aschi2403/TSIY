@@ -3,10 +3,7 @@ package aschi2403.tsiy.repository
 import android.content.Context
 import androidx.lifecycle.LiveData
 import aschi2403.tsiy.db.*
-import aschi2403.tsiy.model.ActivityType
-import aschi2403.tsiy.model.GeneralActivity
-import aschi2403.tsiy.model.PowerActivity
-import aschi2403.tsiy.model.PowerActivityType
+import aschi2403.tsiy.model.*
 
 class WorkoutRepo(context: Context) {
     private var db = WorkoutDatabase.getInstance(context)
@@ -14,6 +11,7 @@ class WorkoutRepo(context: Context) {
     private var powerActivityTypeDao: PowerActivityTypeDao = db.powerActivityTypeDao()
     private var activityTypeDao: ActivityTypeDao = db.activityTypeDao()
     private var generalActivityDao: GeneralActivityDao = db.generalActivityDao()
+    private var weightEntryDao: WeightEntryDao = db.weightEntryDao()
 
 
     // PowerActivity
@@ -29,7 +27,13 @@ class WorkoutRepo(context: Context) {
     val allPowerActivities: /*LiveData<*/List<PowerActivity>
         /*>*/
         get() {
-            return powerActivityDao.loadAll()
+            val list = powerActivityDao.loadAll()
+
+            list.forEach {
+                it.powerActivityType = powerActivityTypeById(it.activityTypeId)
+            }
+
+            return list
         }
 
     fun powerActivityById(id: Long) = powerActivityDao.loadPowerActivity(id)
@@ -69,6 +73,7 @@ class WorkoutRepo(context: Context) {
     fun powerActivityTypeById(id: Long) = powerActivityTypeDao.loadPowerActivityType(id)
 
     // ActivityType
+
     fun addActivityType(activityType: ActivityType): Long? {
         val newId = activityTypeDao.insertActivityType(activityType)
         activityType.id = newId
@@ -84,4 +89,19 @@ class WorkoutRepo(context: Context) {
 
     fun activityTypeById(id: Long) = activityTypeDao.loadActivityType(id)
 
+    // WeightEntry
+    fun addWeightEntry(weightEntry: WeightEntry): Long? {
+        val newId = weightEntryDao.insertWeightEntry(weightEntry)
+        weightEntry.id = newId
+        return newId
+    }
+
+    fun createWeightEntry() = WeightEntry()
+
+    val allWeightEntries: List<WeightEntry>
+        get() {
+            return weightEntryDao.loadAll()
+        }
+
+    fun weightEntryById(id: Long) = weightEntryDao.loadWeightEntry(id)
 }

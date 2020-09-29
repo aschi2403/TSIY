@@ -1,4 +1,4 @@
-package aschi2403.tsiy.model
+package aschi2403.tsiy.model.relations
 
 interface IActivityType {
     var id: Long?

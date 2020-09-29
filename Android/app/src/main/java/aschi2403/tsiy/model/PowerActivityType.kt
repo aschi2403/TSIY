@@ -3,8 +3,9 @@ package aschi2403.tsiy.model
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import aschi2403.tsiy.model.relations.IActivityType
 
-@Entity(indices = [Index("id")])
+@Entity(tableName = "PowerActivityType", indices = [Index("id")])
 class PowerActivityType(
     @PrimaryKey(autoGenerate = true)
     override var id: Long? = null,
