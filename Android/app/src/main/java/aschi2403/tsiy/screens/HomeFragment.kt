@@ -1,5 +1,6 @@
 package aschi2403.tsiy.screens
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +8,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import aschi2403.tsiy.ChooseActivityType
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentHomeBinding
+import kotlinx.android.synthetic.main.activity_main.*
+
 
 /**
  * A simple [Fragment] subclass.
@@ -33,7 +39,14 @@ class HomeFragment : Fragment() {
         binding.homeViewModel = viewModel
         binding.lifecycleOwner = this
 
+        binding.startNewActivity.setOnClickListener { onAdd() }
+
         return binding.root
+    }
+
+    private fun onAdd() {
+        val i = Intent(requireView().context, ChooseActivityType::class.java)
+        startActivity(i)
     }
 
 }

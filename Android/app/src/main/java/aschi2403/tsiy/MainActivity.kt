@@ -22,13 +22,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val mFab = findViewById<FloatingActionButton>(R.id.home_fab)
-
-        mFab.setOnClickListener {
-            val intent = Intent(this, ChooseActivityType::class.java).apply { }
-            startActivity(intent)
-        }
-
 
 
         main_nav.setOnNavigationItemSelectedListener { item ->
