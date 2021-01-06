@@ -12,7 +12,7 @@ import aschi2403.tsiy.model.*
         ActivityType::class,
         GeneralActivity::class,
         WeightEntry::class],
-    version = 3
+    version = 4
 )
 abstract class WorkoutDatabase : RoomDatabase() {
     abstract fun powerActivityDao(): PowerActivityDao

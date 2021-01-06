@@ -17,6 +17,11 @@
     <string name="settings">settings</string>
     <string name="krafttraining">Krafttraining</string>
     <string name="pause_time">Pause time</string>
+    <string name="activity">Activity</string>
+    <string name="weight">Weight</string>
+    <string name="repetition">Repetition</string>
+    <string name="kg">Kg</string>
+    <string name="continueLabel">Continue</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -26,9 +31,7 @@
     <string name="nav_home">Home</string>
     <string name="nav_statistics">Statistics</string>
     <string name="nav_Settings">Settings</string>
-    <string name="activity">Activity</string>
-    <string name="weight">Weight</string>
-    <string name="repetition">Repetition</string>
+
     <string name="continueValue">Continue</string>
     <string name="name">Name</string>
     <string name="icon">Icon</string>

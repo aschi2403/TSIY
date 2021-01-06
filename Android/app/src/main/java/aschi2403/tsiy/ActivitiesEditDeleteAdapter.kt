@@ -9,13 +9,12 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import aschi2403.tsiy.ActivitiesAdapter.DataViewHolder
 import aschi2403.tsiy.model.ActivityType
 import aschi2403.tsiy.screens.AddEditActivity
 import com.google.android.material.card.MaterialCardView
 
-class ActivitiesAdapter(private var data: List<ActivityType>?, private val context: Context) :
-    RecyclerView.Adapter<DataViewHolder>() {
+class ActivitiesEditDeleteAdapter(private var data: List<ActivityType>?, private val context: Context) :
+    RecyclerView.Adapter<ActivitiesEditDeleteAdapter.DataViewHolder>() {
 
     class DataViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val icon //TODO: implement

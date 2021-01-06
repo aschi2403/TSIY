@@ -2,11 +2,10 @@ package aschi2403.tsiy.screens;
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Note
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import aschi2403.tsiy.ActivitiesAdapter
+import aschi2403.tsiy.ActivitiesEditDeleteAdapter
 import aschi2403.tsiy.R
 import aschi2403.tsiy.model.ActivityType
 import aschi2403.tsiy.repository.WorkoutRepo
@@ -15,7 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ListActivities : AppCompatActivity() {
 
-    private lateinit var adapter: ActivitiesAdapter
+    private lateinit var editDeleteAdapter: ActivitiesEditDeleteAdapter
     private lateinit var database: WorkoutRepo
     private var type: Boolean? = false
 
@@ -40,8 +39,8 @@ class ListActivities : AppCompatActivity() {
         rv.setHasFixedSize(true)
         val llm = LinearLayoutManager(this)
         rv.layoutManager = llm
-        adapter = ActivitiesAdapter(data, this);
-        rv.adapter = adapter;
+        editDeleteAdapter = ActivitiesEditDeleteAdapter(data, this)
+        rv.adapter = editDeleteAdapter;
     }
 
     private fun getData(type: Boolean): List<ActivityType> {
@@ -53,7 +52,7 @@ class ListActivities : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        adapter.setData(getData(type!!))
-        adapter.notifyDataSetChanged()
+        editDeleteAdapter.setData(getData(type!!))
+        editDeleteAdapter.notifyDataSetChanged()
     }
 }

@@ -12,7 +12,9 @@ class ActivityType(
     override var name: String = "",
     override var icon: String = "",
     override var description: String = "",
-    override var powerActivity: Boolean
+    override var powerActivity: Boolean,
+    override var caloriesPerMinute: Double,
+    override var cardioPointsPerMinute: Double
 ) : IActivityType {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -25,6 +27,8 @@ class ActivityType(
         if (icon != other.icon) return false
         if (description != other.description) return false
         if (powerActivity != other.powerActivity) return false
+        if (caloriesPerMinute != other.caloriesPerMinute) return false
+        if (cardioPointsPerMinute != other.cardioPointsPerMinute) return false
 
         return true
     }
@@ -35,10 +39,13 @@ class ActivityType(
         result = 31 * result + icon.hashCode()
         result = 31 * result + description.hashCode()
         result = 31 * result + powerActivity.hashCode()
+        result = 31 * result + caloriesPerMinute.hashCode()
+        result = 31 * result + cardioPointsPerMinute.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "ActivityType(id=$id, name='$name', icon='$icon', description='$description', powerActivity=$powerActivity)"
+        return "ActivityType(id=$id, name='$name', icon='$icon', description='$description', powerActivity=$powerActivity, caloriesPerMinute=$caloriesPerMinute, cardioPointsPerMinute=$cardioPointsPerMinute)"
     }
+
 }

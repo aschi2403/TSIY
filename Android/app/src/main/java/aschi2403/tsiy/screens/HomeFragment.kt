@@ -5,13 +5,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavHostController
-import androidx.navigation.fragment.NavHostFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import aschi2403.tsiy.ActivitiesEditDeleteAdapter
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentHomeBinding
+import aschi2403.tsiy.model.ActivityType
+import aschi2403.tsiy.model.relations.IActivity
+import aschi2403.tsiy.repository.WorkoutRepo
 
 
 /**
@@ -38,6 +43,11 @@ class HomeFragment : Fragment() {
         binding.lifecycleOwner = this
 
         binding.startNewActivity.setOnClickListener { onAdd() }
+
+        val database = WorkoutRepo(this.requireContext())
+        val mergedList = ArrayList<IActivity>()
+        mergedList.addAll(database.allPowerActivities)
+        mergedList.addAll(database.allGeneralActivities)
 
         return binding.root
     }

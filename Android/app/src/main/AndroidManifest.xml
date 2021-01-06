@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".screens.ChooseActivityType"
+            android:name=".screens.ChoosePowerActivityType"
             android:label="@string/title_activity_choose_type"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
@@ -19,6 +19,19 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".screens.AddEditActivity"
+            android:label="@string/title_activity_choose_type"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity
+            android:name=".screens.ChooseActivityType"
+            android:label="@string/title_activity_choose_type"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".screens.WorkoutScreen"
+            android:label="@string/title_activity_choose_type"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".screens.PauseScreen"
             android:label="@string/title_activity_choose_type"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity

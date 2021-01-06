@@ -22,8 +22,6 @@ class WorkoutRepo(context: Context) {
         return newId
     }
 
-    fun createPowerActivity() = PowerActivity()
-
     val allPowerActivities: /*LiveData<*/List<PowerActivity>
         /*>*/
         get() {
@@ -45,8 +43,6 @@ class WorkoutRepo(context: Context) {
         generalActivity.id = newId
         return newId
     }
-
-    fun createGeneralActivity() = GeneralActivity()
 
     val allGeneralActivities: List<GeneralActivity>
         get() {

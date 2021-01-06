@@ -21,6 +21,8 @@ class AddEditActivity : AppCompatActivity() {
         val database = WorkoutRepo(this)
         var activity: ActivityType
 
+        //TODO: provide an input for cardio points and calories
+
         val activityName = findViewById<TextInputEditText>(R.id.activityType)
         val description = findViewById<TextInputEditText>(R.id.descriptionValue)
 
@@ -47,7 +49,9 @@ class AddEditActivity : AppCompatActivity() {
                     // TODO: icon
                     "icon",
                     description.text.toString(),
-                    powerActivity!!
+                    powerActivity!!,
+                    10.0, //TODO: change
+                    10.0 //TODO: change
                 )
                 if (!newActivity && idOfActivity != null) {
                     database.updateActivityType(activity)

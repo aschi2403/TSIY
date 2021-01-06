@@ -6,6 +6,8 @@ interface IActivityType {
     var icon: String
     var description: String
     var powerActivity: Boolean
+    var caloriesPerMinute: Double
+    var cardioPointsPerMinute: Double
 
     override fun toString(): String
 }
