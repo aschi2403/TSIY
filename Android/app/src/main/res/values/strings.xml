@@ -20,9 +20,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="manage_power_activities">manage_power_activities</string>
-    <string name="connect_to_google_fit">connect_to_google_fit</string>
-    <string name="manage_activities">manage_activities</string>
+    <string name="manage_power_activities">manage power activities</string>
+    <string name="connect_to_google_fit">connect to google fit</string>
+    <string name="manage_activities">manage activities</string>
     <string name="nav_home">Home</string>
     <string name="nav_statistics">Statistics</string>
     <string name="nav_Settings">Settings</string>
