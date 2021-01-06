@@ -10,7 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ChooseActivityType"
+            android:name=".screens.ChooseActivityType"
+            android:label="@string/title_activity_choose_type"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".screens.ListActivities"
+            android:label="@string/title_activity_choose_type"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".screens.AddEditActivity"
             android:label="@string/title_activity_choose_type"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity

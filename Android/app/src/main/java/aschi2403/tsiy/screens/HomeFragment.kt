@@ -8,12 +8,10 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavHostController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
-import aschi2403.tsiy.ChooseActivityType
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentHomeBinding
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 /**

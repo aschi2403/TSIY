@@ -5,6 +5,7 @@ interface IActivityType {
     var name: String
     var icon: String
     var description: String
+    var powerActivity: Boolean
 
     override fun toString(): String
 }

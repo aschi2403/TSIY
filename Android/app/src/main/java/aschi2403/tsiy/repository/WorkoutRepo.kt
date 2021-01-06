@@ -57,15 +57,8 @@ class WorkoutRepo(context: Context) {
 
     // PowerActivityType
 
-    fun addPowerActivityType(powerActivityType: PowerActivityType): Long? {
-        val newId = powerActivityTypeDao.insertPowerActivityType(powerActivityType)
-        powerActivityType.id = newId
-        return newId
-    }
 
-    fun createPowerActivityType() = PowerActivityType()
-
-    val allPowerActivityTypes: LiveData<List<PowerActivityType>>
+    val allPowerActivityTypes: List<ActivityType>
         get() {
             return powerActivityTypeDao.loadAll()
         }
@@ -80,7 +73,10 @@ class WorkoutRepo(context: Context) {
         return newId
     }
 
-    fun createActivityType() = ActivityType()
+    fun updateActivityType(activityType: ActivityType){
+        activityTypeDao.updateActivityType(activityType);
+    }
+
 
     val allActivityTypes: List<ActivityType>
         get() {

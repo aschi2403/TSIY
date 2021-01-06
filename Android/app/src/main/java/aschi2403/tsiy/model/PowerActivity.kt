@@ -7,7 +7,7 @@ import aschi2403.tsiy.model.relations.IActivity
     tableName = "PowerActivity",
     foreignKeys = [
         ForeignKey(
-            entity = PowerActivityType::class,
+            entity = ActivityType::class,
             parentColumns = ["id"],
             childColumns = ["activityTypeId"],
             onDelete = ForeignKey.CASCADE
@@ -22,7 +22,7 @@ class PowerActivity(
     var weight: Double = 0.0
 ) : IActivity {
     @Ignore
-    lateinit var powerActivityType: PowerActivityType
+    lateinit var powerActivityType: ActivityType
 
     override fun toString(): String {
         return "PowerActivity(id=$id, activityTypeId=$activityTypeId, repetitions=$repetitions, weight=$weight)"

@@ -11,13 +11,9 @@ class ActivityType(
     override var id: Long? = 0,
     override var name: String = "",
     override var icon: String = "",
-    override var description: String = ""
+    override var description: String = "",
+    override var powerActivity: Boolean
 ) : IActivityType {
-
-    override fun toString(): String {
-        return "ActivityType(id=$id, name='$name', icon='$icon', description='$description')"
-    }
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -28,6 +24,7 @@ class ActivityType(
         if (name != other.name) return false
         if (icon != other.icon) return false
         if (description != other.description) return false
+        if (powerActivity != other.powerActivity) return false
 
         return true
     }
@@ -37,8 +34,11 @@ class ActivityType(
         result = 31 * result + name.hashCode()
         result = 31 * result + icon.hashCode()
         result = 31 * result + description.hashCode()
+        result = 31 * result + powerActivity.hashCode()
         return result
     }
 
-
+    override fun toString(): String {
+        return "ActivityType(id=$id, name='$name', icon='$icon', description='$description', powerActivity=$powerActivity)"
+    }
 }

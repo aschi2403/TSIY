@@ -1,39 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/iactivity_card"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/SensibleDefaultsMaterialCard">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/text_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+
+            <ImageView android:layout_width="50dp"
+                       android:layout_height="50dp"
+                       android:id="@+id/imageOfActivity"
+                       android:layout_marginStart="20dp"
+                       android:contentDescription="@string/imageofactivity"/>
 
             <TextView
-                android:id="@+id/list_activityType"
+                android:id="@+id/nameOfActivity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Activity Type" />
+                android:text="fgedgfgsd"
+                android:layout_marginStart="20dp"
+                android:textSize="24sp"/>
 
-            <TextView
-                android:id="@+id/property_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="one" />
+            <ImageButton android:id="@+id/editActivity"
+                         android:layout_width="50dp"
+                         android:layout_height="50dp"
+                         android:src="@drawable/baseline_edit_black_48dp"
+                         android:contentDescription="@string/edit_activity"
+                         android:layout_marginStart="20dp"/>
 
-            <TextView
-                android:id="@+id/property_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="two" />
+            <ImageButton android:id="@+id/deleteActivity"
+                         android:layout_width="50dp"
+                         android:layout_height="50dp"
+                         android:layout_marginStart="20dp"
+                         android:layout_marginEnd="20dp"
+                         android:contentDescription="@string/delete_activity"
+                         android:src="@drawable/baseline_delete_black_48dp"/>
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

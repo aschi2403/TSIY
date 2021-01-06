@@ -8,13 +8,13 @@ import aschi2403.tsiy.model.ActivityType
 
 @Dao
 interface ActivityTypeDao {
-    @Query("SELECT * FROM ActivityType")
+    @Query("SELECT * FROM ActivityType WHERE powerActivity = 0")
     fun loadAll(): List<ActivityType>
 
-    @Query("SELECT * FROM ActivityType WHERE id=:activityTypeId")
+    @Query("SELECT * FROM ActivityType WHERE id=:activityTypeId AND powerActivity = 0")
     fun loadActivityType(activityTypeId: Long): ActivityType
 
-    @Query("SELECT * FROM ActivityType WHERE id=:activityTypeId")
+    @Query("SELECT * FROM ActivityType WHERE id=:activityTypeId AND powerActivity = 0")
     fun loadLiveActivityType(activityTypeId: Long): LiveData<ActivityType>
 
     @Insert(onConflict = IGNORE)

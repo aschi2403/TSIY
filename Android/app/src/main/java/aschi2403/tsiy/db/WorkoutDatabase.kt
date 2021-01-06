@@ -7,14 +7,12 @@ import androidx.room.RoomDatabase
 import aschi2403.tsiy.model.*
 
 @Database(
-    entities = arrayOf(
+    entities = [
         PowerActivity::class,
-        PowerActivityType::class,
         ActivityType::class,
         GeneralActivity::class,
-        WeightEntry::class
-    ),
-    version = 2
+        WeightEntry::class],
+    version = 3
 )
 abstract class WorkoutDatabase : RoomDatabase() {
     abstract fun powerActivityDao(): PowerActivityDao
@@ -32,7 +30,7 @@ abstract class WorkoutDatabase : RoomDatabase() {
                     context.applicationContext,
                     WorkoutDatabase::class.java,
                     "Workout.db"
-                )/*.createFromAsset("database/Workout_temp.db")*/.build()
+                ).allowMainThreadQueries()/*.createFromAsset("database/Workout_temp.db")*/.build()
             }
             return instance as WorkoutDatabase
         }

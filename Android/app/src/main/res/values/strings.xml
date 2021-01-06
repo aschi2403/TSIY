@@ -16,12 +16,13 @@
     <string name="home">home</string>
     <string name="settings">settings</string>
     <string name="krafttraining">Krafttraining</string>
+    <string name="pause_time">Pause time</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="manage_power_activities">manage_power_activities</string>
     <string name="connect_to_google_fit">connect_to_google_fit</string>
     <string name="manage_activities">manage_activities</string>
-    <string name="pause_time">pause_time</string>
     <string name="nav_home">Home</string>
     <string name="nav_statistics">Statistics</string>
     <string name="nav_Settings">Settings</string>
@@ -38,4 +39,7 @@
     <string name="pause">Pause</string>
     <string name="statistics_are_coming_soon">Statistics are coming soon</string>
     <string name="title_activity_choose_type">ChooseActivityType</string>
+    <string name="imageofactivity">Image of activity</string>
+    <string name="edit_activity">Edit activity</string>
+    <string name="delete_activity">Delete activity</string>
 </resources>

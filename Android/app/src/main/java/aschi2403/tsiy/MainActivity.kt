@@ -1,13 +1,12 @@
 package aschi2403.tsiy
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import aschi2403.tsiy.screens.HomeFragment
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import aschi2403.tsiy.screens.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -24,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        main_nav.setOnNavigationItemSelectedListener { item ->
+        `main_nav`.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
                     setFragment(homeFragment)
