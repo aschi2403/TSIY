@@ -2,6 +2,7 @@ package aschi2403.tsiy.model
 
 import androidx.room.*
 import aschi2403.tsiy.model.relations.IActivity
+import java.util.*
 
 @Entity(
     tableName = "PowerActivity",
@@ -21,8 +22,10 @@ class PowerActivity(
     var repetitions: Int = 0,
     var sets: Int,
     var weight: Double = 0.0,
-    var cardioPoints: Double,
-    var calories: Double
+    override var time: Long = 0,
+    override var cardioPoints: Double,
+    var calories: Double,
+    override var date: Long
 ) : IActivity {
     @Ignore
     lateinit var powerActivityType: ActivityType

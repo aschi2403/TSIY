@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.ActivitiesEditDeleteAdapter
+import aschi2403.tsiy.HomeListAdapter
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentHomeBinding
 import aschi2403.tsiy.model.ActivityType
@@ -26,6 +27,8 @@ import aschi2403.tsiy.repository.WorkoutRepo
  */
 class HomeFragment : Fragment() {
 
+    private lateinit var database: WorkoutRepo
+    private lateinit var editDeleteAdapter: HomeListAdapter
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
 
@@ -44,17 +47,35 @@ class HomeFragment : Fragment() {
 
         binding.startNewActivity.setOnClickListener { onAdd() }
 
-        val database = WorkoutRepo(this.requireContext())
-        val mergedList = ArrayList<IActivity>()
-        mergedList.addAll(database.allPowerActivities)
-        mergedList.addAll(database.allGeneralActivities)
+        database = WorkoutRepo(this.requireContext())
 
+
+
+        val rv = binding.listOfActivities
+        rv.setHasFixedSize(true)
+        val llm = LinearLayoutManager(this.context)
+        rv.layoutManager = llm
+        editDeleteAdapter = HomeListAdapter(getData(), this.requireContext())
+        rv.adapter = editDeleteAdapter;
         return binding.root
     }
 
     private fun onAdd() {
         val i = Intent(requireView().context, ChooseActivityType::class.java)
         startActivity(i)
+    }
+
+    private fun getData(): List<IActivity> {
+        val mergedList = ArrayList<IActivity>()
+        mergedList.addAll(database.allPowerActivities)
+        mergedList.addAll(database.allGeneralActivities)
+        return mergedList;
+    }
+
+    override fun onResume() {
+        super.onResume()
+        editDeleteAdapter.setData(getData())
+        editDeleteAdapter.notifyDataSetChanged()
     }
 
 }

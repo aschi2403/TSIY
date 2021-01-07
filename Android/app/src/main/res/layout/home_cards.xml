@@ -28,15 +28,6 @@
                     android:src="@android:drawable/ic_media_pause"/>
 
                 <TextView
-                    android:id="@+id/secondLine"
-                    android:layout_width="fill_parent"
-                    android:layout_height="26dip"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_toEndOf="@id/icon"
-                    android:textSize="12sp"/>
-
-                <TextView
                     android:id="@+id/firstLine"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -47,6 +38,16 @@
                     android:layout_toEndOf="@id/icon"
                     android:gravity="center_vertical"
                     android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/secondLine"
+                    android:layout_width="fill_parent"
+                    android:layout_height="26dip"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_toEndOf="@id/icon"
+                    android:textSize="12sp"/>
+
 
             </RelativeLayout>
             <LinearLayout

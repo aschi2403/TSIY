@@ -6,6 +6,7 @@ import androidx.room.ForeignKey.CASCADE
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import aschi2403.tsiy.model.relations.IActivity
+import java.util.*
 
 @Entity(
     tableName = "GeneralActivity",
@@ -23,9 +24,10 @@ class GeneralActivity(
     override var id: Long? = null,
     override var activityTypeId: Long = 0,
     // time in milliseconds from start
-    var time: Long = 0,
-    var cardioPoints: Double,
-    var calories: Double
+    override var time: Long = 0,
+    override var cardioPoints: Double = 0.0,
+    var calories: Double = 0.0,
+    override var date: Long
 ) : IActivity {
 
     override fun equals(other: Any?): Boolean {

@@ -10,6 +10,7 @@ import aschi2403.tsiy.model.GeneralActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import kotlinx.android.synthetic.main.workout_screen.*
 
+
 class WorkoutScreen : AppCompatActivity() {
     var set = 0;
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,11 +47,12 @@ class WorkoutScreen : AppCompatActivity() {
                 GeneralActivity(
                     null,
                     id,
-                    timer.base,
+                    SystemClock.elapsedRealtime() - timer.base,
                     0.0,
-                    0.0
+                    0.0,
+                    System.currentTimeMillis()
                 )
-            ); //TODO: calculate cardioPoints and calories
+            ) //TODO: calculate cardioPoints and calories
         } else {
             val intent = Intent(this, ChoosePowerActivityType::class.java)
             intent.putExtra("id", id)

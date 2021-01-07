@@ -16,17 +16,11 @@
         android:layout_height="match_parent">
 
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical" tools:ignore="MissingConstraints">
-
-            <ListView
-                android:id="@+id/listview_home"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listOfActivities"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/startNewActivity"
