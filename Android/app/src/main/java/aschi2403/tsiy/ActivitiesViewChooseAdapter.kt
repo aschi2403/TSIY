@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.model.ActivityType
-import aschi2403.tsiy.screens.AddEditActivity
 import aschi2403.tsiy.screens.WorkoutScreen
 import com.google.android.material.card.MaterialCardView
 

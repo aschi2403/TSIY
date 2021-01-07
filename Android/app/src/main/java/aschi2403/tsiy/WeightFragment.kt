@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import aschi2403.tsiy.databinding.FragmentHomeBinding
 import aschi2403.tsiy.databinding.FragmentWeightBinding
 
 
