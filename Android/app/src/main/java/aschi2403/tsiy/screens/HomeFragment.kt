@@ -18,6 +18,7 @@ import aschi2403.tsiy.databinding.FragmentHomeBinding
 import aschi2403.tsiy.model.ActivityType
 import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
+import java.util.stream.Collectors
 
 
 /**
@@ -50,7 +51,6 @@ class HomeFragment : Fragment() {
         database = WorkoutRepo(this.requireContext())
 
 
-
         val rv = binding.listOfActivities
         rv.setHasFixedSize(true)
         val llm = LinearLayoutManager(this.context)
@@ -69,7 +69,7 @@ class HomeFragment : Fragment() {
         val mergedList = ArrayList<IActivity>()
         mergedList.addAll(database.allPowerActivities)
         mergedList.addAll(database.allGeneralActivities)
-        return mergedList;
+        return mergedList.stream().sorted(Comparator.comparing(IActivity::date).reversed()).collect(Collectors.toList());
     }
 
     override fun onResume() {
