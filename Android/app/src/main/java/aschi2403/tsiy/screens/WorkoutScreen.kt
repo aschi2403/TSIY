@@ -7,22 +7,44 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import aschi2403.tsiy.R
 import aschi2403.tsiy.model.GeneralActivity
+import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import kotlinx.android.synthetic.main.workout_screen.*
 
 
 class WorkoutScreen : AppCompatActivity() {
-    var set = 0;
+    private lateinit var database: WorkoutRepo
+    private var idOfActivity: Long = -1
+    private var set = 0;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.workout_screen)
+        val activityTypeId = intent.extras?.getLong("activityTypeId")!!
+
+        database = WorkoutRepo(this)
+
+
         activity.text = intent.extras?.getString("name")
         if (!intent.extras?.getBoolean("type")!!) { //normal activity
             next.visibility = View.INVISIBLE
+            idOfActivity = database.addGeneralActivity(
+                GeneralActivity(
+                    date = System.currentTimeMillis(),
+                    activityTypeId = activityTypeId
+                )
+            )!!
         } else {
+            idOfActivity = database.addPowerActivity(
+                PowerActivity(
+                    date = System.currentTimeMillis(),
+                    activityTypeId = activityTypeId
+                )
+            )!!
             next.setOnClickListener {
                 set++;
                 val intent = Intent(this, ChoosePowerActivityType::class.java)
+                intent.putExtra("idOfPowerActivity", idOfActivity)
                 startActivityForResult(intent, 1);
             }
         }
@@ -33,31 +55,39 @@ class WorkoutScreen : AppCompatActivity() {
             pause()
         }
         close.setOnClickListener {
-            saveInDatabase()
+            saveInDatabase(activityTypeId)
             finish()
         }
     }
 
-    private fun saveInDatabase() {
-        val database = WorkoutRepo(this)
-        val id = intent.extras?.getLong("id")!!
+    private fun saveInDatabase(activityTypeId: Long) {
         val type = intent.extras?.getBoolean("type")!!
-        if (!type) { //normal activity
-            database.addGeneralActivity(
+        if (!type) { // normal activity
+            database.updateActivity(
                 GeneralActivity(
-                    null,
-                    id,
-                    SystemClock.elapsedRealtime() - timer.base,
-                    0.0,
-                    0.0,
-                    System.currentTimeMillis()
+                    id = idOfActivity,
+                    activityTypeId = activityTypeId,
+                    date = database.generalActivityById(idOfActivity).date,
+                    time = SystemClock.elapsedRealtime() - timer.base,
+                    calories = 0.0,
+                    cardioPoints = 0.0
                 )
             ) //TODO: calculate cardioPoints and calories
-        } else {
+        } else { // power activity
             val intent = Intent(this, ChoosePowerActivityType::class.java)
-            intent.putExtra("id", id)
-            intent.putExtra("type", type)
+            intent.putExtra("idOfPowerActivity", idOfActivity)
             startActivity(intent)
+            database.updatePowerActivity(
+                PowerActivity(
+                    id = idOfActivity,
+                    activityTypeId = activityTypeId,
+                    date = database.powerActivityById(idOfActivity).date,
+                    time = SystemClock.elapsedRealtime() - timer.base,
+                    calories = 0.0,
+                    cardioPoints = 0.0,
+                    sets = set
+                )
+            )
         }
     }
 

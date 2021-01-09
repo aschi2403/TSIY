@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.model.ActivityType
+import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.WorkoutScreen
 import com.google.android.material.card.MaterialCardView
 
@@ -43,7 +44,8 @@ class ActivitiesViewChooseAdapter(private var data: List<ActivityType>?, private
             holder.name.text = data!![position].name
             holder.cv.setOnClickListener { view: View ->
                 val intent = Intent(view.context, WorkoutScreen::class.java)
-                intent.putExtra("id", data!![position].id)
+
+                intent.putExtra("activityTypeId", data!![position].id)
                 intent.putExtra("name", data!![position].name)
                 intent.putExtra("type", data!![position].powerActivity)
                 context.startActivity(intent)

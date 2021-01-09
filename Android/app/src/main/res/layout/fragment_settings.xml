@@ -25,6 +25,12 @@
                 android:layout_marginStart="16dp"
                 android:text="30"
                 android:textSize="16sp"/>
+            <Spinner
+                android:id="@+id/time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:entries="@array/time"/>
         </LinearLayout>
 
         <Button

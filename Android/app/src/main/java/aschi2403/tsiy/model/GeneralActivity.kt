@@ -1,10 +1,7 @@
 package aschi2403.tsiy.model
 
-import androidx.room.Entity
-import androidx.room.ForeignKey
+import androidx.room.*
 import androidx.room.ForeignKey.CASCADE
-import androidx.room.Index
-import androidx.room.PrimaryKey
 import aschi2403.tsiy.model.relations.IActivity
 import java.util.*
 
@@ -27,8 +24,10 @@ class GeneralActivity(
     override var time: Long = 0,
     override var cardioPoints: Double = 0.0,
     var calories: Double = 0.0,
-    override var date: Long
+    override var date: Long = 0
 ) : IActivity {
+    @Ignore
+    lateinit var activityType: ActivityType
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

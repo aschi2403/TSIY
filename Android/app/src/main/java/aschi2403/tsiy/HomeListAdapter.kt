@@ -7,15 +7,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import aschi2403.tsiy.model.GeneralActivity
+import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.model.relations.IActivity
+import aschi2403.tsiy.repository.WorkoutRepo
 import com.google.android.material.card.MaterialCardView
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class HomeListAdapter(private var data: List<IActivity>?, private val context: Context) :
+class HomeListAdapter(private var data: List<IActivity>?, context: Context) :
     RecyclerView.Adapter<HomeListAdapter.DataViewHolder>() {
+    val database = WorkoutRepo(context)
 
     class DataViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val icon //TODO: implement
@@ -56,9 +60,17 @@ class HomeListAdapter(private var data: List<IActivity>?, private val context: C
             val minutes = data!![position].time / 1000 / 60
             val seconds = data!![position].time / 1000 % 60
 
-            holder.timeValue.text = "$minutes minutes and $seconds seconds."
+            holder.timeValue.text = "$minutes minutes and $seconds seconds"
             holder.cardioPointsValue.text = data!![position].cardioPoints.toString()
-            holder.firstLine.text = data!![position].activityTypeId.toString()
+            val name: String
+            name = if (data!![position] is PowerActivity) {
+                val activity = data!![position] as PowerActivity
+                activity.powerActivityType.name
+            } else {
+                val activity = data!![position] as GeneralActivity
+                activity.activityType.name
+            }
+            holder.firstLine.text = name
 
             val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy")
             val date = simpleDateFormat.format(Date(data!![position].date))

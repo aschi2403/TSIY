@@ -6,8 +6,11 @@ import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import aschi2403.tsiy.R
 import aschi2403.tsiy.model.ActivityType
+import aschi2403.tsiy.model.SetEntry
 import aschi2403.tsiy.repository.WorkoutRepo
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.choose_power_activity_type.*
+import org.w3c.dom.Text
 
 
 class ChoosePowerActivityType : AppCompatActivity() {
@@ -15,8 +18,22 @@ class ChoosePowerActivityType : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.choose_power_activity_type)
+        val idOfPowerActivity = intent.extras?.getLong("idOfPowerActivity")!!
 
-        //TODO: save weight, repetitions
-        continueButton.setOnClickListener { finish() }
+        continueButton.setOnClickListener {
+            saveDataInDatabase(idOfPowerActivity)
+            finish()
+        }
+    }
+
+    private fun saveDataInDatabase(idOfPowerActivity: Long) {
+        val database = WorkoutRepo(this)
+        database.insertSetEntry(
+            SetEntry(
+                weight = weightValue.text.toString().toDouble(),
+                repetitions = repetitionsValue.text.toString().toInt(),
+                powerActivityId = idOfPowerActivity
+            )
+        )
     }
 }

@@ -28,7 +28,7 @@
                 android:layout_weight="1"
                 android:text="@string/weight"/>
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/weight"
+                android:id="@+id/weightValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/weight"
@@ -45,13 +45,13 @@
         </TableRow>
         <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
             <TextView
-                android:id="@+id/repetitionLabel"
+                android:id="@+id/repetitionsLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/repetition"/>
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/repetition"
+                android:id="@+id/repetitionsValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/repetition"
