@@ -35,6 +35,15 @@ class SettingsFragment : Fragment() {
         sharedPreferences =
             this.requireContext().getSharedPreferences("settings", Context.MODE_PRIVATE)
 
+        binding.pausetimeValue.setText(sharedPreferences.getLong("pauseTime", 20).toString())
+        binding.timeUnit.setSelection(
+            if (sharedPreferences.getBoolean("timeUnitSeconds", true))
+                1
+            else
+                0
+
+        )
+
         binding.lifecycleOwner = this
 
         return binding.root
