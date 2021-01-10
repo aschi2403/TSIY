@@ -3,6 +3,7 @@ package aschi2403.tsiy.screens
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import aschi2403.tsiy.R
 import aschi2403.tsiy.model.ActivityType
@@ -21,8 +22,12 @@ class ChoosePowerActivityType : AppCompatActivity() {
         val idOfPowerActivity = intent.extras?.getLong("idOfPowerActivity")!!
 
         continueButton.setOnClickListener {
-            saveDataInDatabase(idOfPowerActivity)
-            finish()
+            if (weightValue.text.isNullOrEmpty() || repetitionsValue.text.isNullOrEmpty()) {
+                Toast.makeText(this, "Please insert all data for the activity", Toast.LENGTH_LONG).show()
+            } else {
+                saveDataInDatabase(idOfPowerActivity)
+                finish()
+            }
         }
     }
 

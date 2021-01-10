@@ -1,5 +1,7 @@
 package aschi2403.tsiy.screens
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.widget.Button
@@ -7,19 +9,30 @@ import android.widget.Chronometer
 import androidx.appcompat.app.AppCompatActivity
 import aschi2403.tsiy.R
 import kotlinx.android.synthetic.main.pause_screen.*
+import java.util.concurrent.TimeUnit
 
 class PauseScreen : AppCompatActivity(), Chronometer.OnChronometerTickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pause_screen)
+
+        val sharedPreferences: SharedPreferences =
+            this.baseContext.getSharedPreferences("settings", Context.MODE_PRIVATE)
+
         countdown.isCountDown = true
-        countdown.base = SystemClock.elapsedRealtime() + 20000 //TODO: use users choice
+        val pauseTime =
+            if (sharedPreferences.getBoolean("timeUnitSeconds", true)) {
+                TimeUnit.SECONDS.toMillis(sharedPreferences.getLong("pauseTime", 20))
+            } else {
+                TimeUnit.MINUTES.toMillis(sharedPreferences.getLong("pauseTime", 1))
+            }
+        countdown.base = SystemClock.elapsedRealtime() + pauseTime
         countdown.start()
         countdown.onChronometerTickListener = this
         var timerIsCounting = true;
 
         findViewById<Button>(R.id.skip).setOnClickListener { this.finish() }
-        findViewById<Button>(R.id.plusmin).setOnClickListener {countdown.base += 60000}
+        findViewById<Button>(R.id.plusmin).setOnClickListener { countdown.base += 60000 }
         val pause = findViewById<Button>(R.id.pause)
         pause.setOnClickListener {
             if (timerIsCounting) {
@@ -37,7 +50,9 @@ class PauseScreen : AppCompatActivity(), Chronometer.OnChronometerTickListener {
     override fun onChronometerTick(chronometer: Chronometer?) {
         if (chronometer != null) {
             when (chronometer.text) {
-                "00:00" -> {finish()}
+                "00:00" -> {
+                    finish()
+                }
             }
         }
     }

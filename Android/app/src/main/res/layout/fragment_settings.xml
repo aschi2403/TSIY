@@ -24,9 +24,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="30"
+                android:inputType="numberDecimal"
                 android:textSize="16sp"/>
             <Spinner
-                android:id="@+id/time"
+                android:id="@+id/timeUnit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

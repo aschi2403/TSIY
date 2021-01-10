@@ -1,11 +1,15 @@
 package aschi2403.tsiy.screens
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentSettingsBinding
@@ -16,6 +20,7 @@ import aschi2403.tsiy.databinding.FragmentSettingsBinding
  * create an instance of this fragment.
  */
 class SettingsFragment : Fragment() {
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var binding: FragmentSettingsBinding
 
     override fun onCreateView(
@@ -27,8 +32,10 @@ class SettingsFragment : Fragment() {
         )
         binding.manageactivities.setOnClickListener { manageActivities() }
         binding.managepoweractivities.setOnClickListener { managePowerActivities() }
-        binding.lifecycleOwner = this
+        sharedPreferences =
+            this.requireContext().getSharedPreferences("settings", Context.MODE_PRIVATE)
 
+        binding.lifecycleOwner = this
 
         return binding.root
     }
@@ -44,6 +51,15 @@ class SettingsFragment : Fragment() {
         val i = Intent(requireView().context, ListActivities::class.java)
         i.putExtra("type", false)
         startActivity(i)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putBoolean("timeUnitSeconds", binding.timeUnit.selectedItemPosition == 1)
+        editor.putLong("pauseTime", binding.pausetimeValue.text.toString().toLong())
+        editor.apply()
+        editor.commit()
     }
 
 }
