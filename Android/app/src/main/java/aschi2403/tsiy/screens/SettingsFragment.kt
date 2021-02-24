@@ -11,8 +11,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
+import aschi2403.tsiy.Legal_NoticeFragment
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentSettingsBinding
+import kotlinx.android.synthetic.main.fragment_settings.*
 
 /**
  * A simple [Fragment] subclass.
@@ -32,6 +34,7 @@ class SettingsFragment : Fragment() {
         )
         binding.manageactivities.setOnClickListener { manageActivities() }
         binding.managepoweractivities.setOnClickListener { managePowerActivities() }
+        binding.legalNotice.setOnClickListener { legal_notice() }
         sharedPreferences =
             this.requireContext().getSharedPreferences("settings", Context.MODE_PRIVATE)
 
@@ -60,6 +63,11 @@ class SettingsFragment : Fragment() {
         val i = Intent(requireView().context, ListActivities::class.java)
         i.putExtra("type", false)
         startActivity(i)
+    }
+
+
+    private fun legal_notice() {
+
     }
 
     override fun onStop() {
