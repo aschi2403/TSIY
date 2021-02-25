@@ -2,22 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_statistics"
+        android:id="@+id/statisticsFragment"
         android:icon="@drawable/ic_baseline_data_usage_24"
         android:title="@string/nav_statistics" />
 
     <item
-        android:id="@+id/nav_home"
+        android:id="@+id/homeFragment"
         android:icon="@drawable/ic_baseline_home_24"
         android:title="@string/nav_home" />
 
     <item
-        android:id="@+id/nav_weight"
+        android:id="@+id/weightFragment"
         android:icon="@drawable/ic_baseline_line_weight_24"
         android:title="Weight" />
 
     <item
-        android:id="@+id/nav_settings"
+        android:id="@+id/settingsFragment"
         android:icon="@drawable/ic_baseline_settings_24"
         android:title="@string/nav_Settings" />
 

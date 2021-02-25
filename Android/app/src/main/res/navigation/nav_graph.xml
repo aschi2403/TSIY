@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/legal_NoticeFragment"
+        android:name="aschi2403.tsiy.Legal_NoticeFragment"
+        android:label="fragment_legal__notice"
+        tools:layout="@layout/fragment_legal__notice" />
+    <activity
+        android:id="@+id/listActivities"
+        android:name="aschi2403.tsiy.screens.ListActivities"
+        android:label="ListActivities" />
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="aschi2403.tsiy.StatisticsFragment"
+        android:label="fragment_statistics"
+        tools:layout="@layout/fragment_statistics" />
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="aschi2403.tsiy.screens.HomeFragment"
+        android:label="HomeFragment" />
+    <fragment
+        android:id="@+id/weightFragment"
+        android:name="aschi2403.tsiy.WeightFragment"
+        android:label="fragment_weight"
+        tools:layout="@layout/fragment_weight" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="aschi2403.tsiy.screens.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+</navigation>

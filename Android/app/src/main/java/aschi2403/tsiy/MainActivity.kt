@@ -5,54 +5,30 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import aschi2403.tsiy.screens.HomeFragment
 import aschi2403.tsiy.screens.SettingsFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
-    private val homeFragment = HomeFragment()
-    private val statisticsFragment = StatisticsFragment()
-    private val settingsFragment = SettingsFragment()
-    private val weightFragment = WeightFragment()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-
-        `main_nav`.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    setFragment(homeFragment)
-                }
-
-                R.id.nav_settings -> {
-                    setFragment(settingsFragment)
-                }
-
-                R.id.nav_statistics -> {
-                    setFragment(statisticsFragment)
-                }
-
-                R.id.nav_weight -> {
-                    setFragment(weightFragment)
-                }
-            }
-            true
-        }
-
-        main_nav.selectedItemId = R.id.nav_home
-        setFragment(homeFragment)
-
+        setupView()
     }
 
-    private fun setFragment(fragment: Fragment) {
-        var fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.main_frame, fragment)
-        fragmentTransaction.commit()
+    fun setupView() {
+        // Finding the Navigation Controller
+        var navController = findNavController(R.id.fragNavHost)
+
+        // Setting Navigation Controller with the BottomNavigationView
+        main_nav.setupWithNavController(navController)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
