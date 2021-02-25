@@ -32,5 +32,9 @@
         android:id="@+id/settingsFragment"
         android:name="aschi2403.tsiy.screens.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_legal_NoticeFragment"
+            app:destination="@id/legal_NoticeFragment" />
+    </fragment>
 </navigation>

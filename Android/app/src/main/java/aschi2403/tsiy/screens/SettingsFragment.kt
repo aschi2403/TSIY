@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.Legal_NoticeFragment
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentSettingsBinding
@@ -67,7 +68,7 @@ class SettingsFragment : Fragment() {
 
 
     private fun legal_notice() {
-
+        findNavController().navigate(R.id.action_settingsFragment_to_legal_NoticeFragment)
     }
 
     override fun onStop() {
