@@ -27,7 +27,11 @@
         android:id="@+id/weightFragment"
         android:name="aschi2403.tsiy.WeightFragment"
         android:label="fragment_weight"
-        tools:layout="@layout/fragment_weight" />
+        tools:layout="@layout/fragment_weight" >
+        <action
+            android:id="@+id/action_weightFragment_to_addWeightFragment"
+            app:destination="@id/addWeightFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="aschi2403.tsiy.screens.SettingsFragment"
@@ -37,4 +41,9 @@
             android:id="@+id/action_settingsFragment_to_legal_NoticeFragment"
             app:destination="@id/legal_NoticeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/addWeightFragment"
+        android:name="aschi2403.tsiy.AddWeightFragment"
+        android:label="fragment_add_weight"
+        tools:layout="@layout/fragment_add_weight" />
 </navigation>
