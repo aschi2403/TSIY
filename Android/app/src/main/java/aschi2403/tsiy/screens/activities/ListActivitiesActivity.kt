@@ -1,23 +1,21 @@
-package aschi2403.tsiy.screens;
+package aschi2403.tsiy.screens.activities;
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Note
 import android.widget.SearchView
 import android.widget.SearchView.OnQueryTextListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import aschi2403.tsiy.ActivitiesEditDeleteAdapter
+import aschi2403.tsiy.screens.adapters.ActivitiesEditDeleteAdapter
 import aschi2403.tsiy.R
 import aschi2403.tsiy.model.ActivityType
-import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.stream.Collectors
 
 
-class ListActivities : AppCompatActivity() {
+class ListActivitiesActivity : AppCompatActivity() {
 
     private lateinit var editDeleteAdapter: ActivitiesEditDeleteAdapter
     private lateinit var database: WorkoutRepo
@@ -45,7 +43,11 @@ class ListActivities : AppCompatActivity() {
         rv.setHasFixedSize(true)
         val llm = LinearLayoutManager(this)
         rv.layoutManager = llm
-        editDeleteAdapter = ActivitiesEditDeleteAdapter(data, this)
+        editDeleteAdapter =
+            ActivitiesEditDeleteAdapter(
+                data,
+                this
+            )
         rv.adapter = editDeleteAdapter;
 
         findViewById<SearchView>(R.id.search).setOnQueryTextListener(object : OnQueryTextListener {

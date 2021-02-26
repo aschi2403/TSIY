@@ -1,4 +1,4 @@
-package aschi2403.tsiy.screens;
+package aschi2403.tsiy.screens.activities;
 
 import android.R.attr
 import android.content.Intent
@@ -11,7 +11,6 @@ import aschi2403.tsiy.R
 import aschi2403.tsiy.model.ActivityType
 import aschi2403.tsiy.repository.WorkoutRepo
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.android.synthetic.main.home_cards.*
 
 
 class AddEditActivity : AppCompatActivity() {
@@ -73,6 +72,7 @@ class AddEditActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1) {
             if (attr.data == null) {
                 //Display an error

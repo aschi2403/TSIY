@@ -1,4 +1,4 @@
-package aschi2403.tsiy
+package aschi2403.tsiy.screens.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentAddWeightBinding
-import aschi2403.tsiy.databinding.FragmentWeightBinding
 
 /**
  * A simple [Fragment] subclass.
@@ -22,7 +22,8 @@ class AddWeightFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_add_weight, container, false
+            inflater,
+            R.layout.fragment_add_weight, container, false
         )
         return binding.root
     }

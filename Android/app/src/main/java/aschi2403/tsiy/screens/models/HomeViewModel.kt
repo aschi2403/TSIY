@@ -1,4 +1,4 @@
-package aschi2403.tsiy.screens
+package aschi2403.tsiy.screens.models
 
 import androidx.lifecycle.ViewModel
 

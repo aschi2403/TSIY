@@ -1,4 +1,4 @@
-package aschi2403.tsiy.screens
+package aschi2403.tsiy.screens.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,17 +9,17 @@ import aschi2403.tsiy.R
 import aschi2403.tsiy.model.GeneralActivity
 import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.repository.WorkoutRepo
-import kotlinx.android.synthetic.main.workout_screen.*
+import kotlinx.android.synthetic.main.activity_workout_screen.*
 
 
-class WorkoutScreen : AppCompatActivity() {
+class WorkoutScreenActivity : AppCompatActivity() {
     private lateinit var database: WorkoutRepo
     private var idOfActivity: Long = -1
     private var set = 0;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.workout_screen)
+        setContentView(R.layout.activity_workout_screen)
         val activityTypeId = intent.extras?.getLong("activityTypeId")!!
 
         database = WorkoutRepo(this)
@@ -93,7 +93,7 @@ class WorkoutScreen : AppCompatActivity() {
 
     private fun pause() {
         timer.stop() //TODO: timer isn't stopping
-        val intent = Intent(this, PauseScreen::class.java)
+        val intent = Intent(this, PauseScreenActivity::class.java)
         startActivityForResult(intent, 2)
     }
 

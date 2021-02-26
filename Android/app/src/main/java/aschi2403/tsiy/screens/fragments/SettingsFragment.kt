@@ -1,4 +1,4 @@
-package aschi2403.tsiy.screens
+package aschi2403.tsiy.screens.fragments
 
 import android.content.Context
 import android.content.Intent
@@ -8,14 +8,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
-import aschi2403.tsiy.Legal_NoticeFragment
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentSettingsBinding
-import kotlinx.android.synthetic.main.fragment_settings.*
+import aschi2403.tsiy.screens.activities.ListActivitiesActivity
 
 /**
  * A simple [Fragment] subclass.
@@ -54,14 +51,14 @@ class SettingsFragment : Fragment() {
     }
 
     private fun managePowerActivities() {
-        val i = Intent(requireView().context, ListActivities::class.java)
+        val i = Intent(requireView().context, ListActivitiesActivity::class.java)
         i.putExtra("type", true)
         startActivity(i)
 
     }
 
     private fun manageActivities() {
-        val i = Intent(requireView().context, ListActivities::class.java)
+        val i = Intent(requireView().context, ListActivitiesActivity::class.java)
         i.putExtra("type", false)
         startActivity(i)
     }

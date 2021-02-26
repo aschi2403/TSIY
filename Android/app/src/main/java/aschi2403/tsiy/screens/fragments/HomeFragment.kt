@@ -1,23 +1,21 @@
-package aschi2403.tsiy.screens
+package aschi2403.tsiy.screens.fragments
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import aschi2403.tsiy.ActivitiesEditDeleteAdapter
-import aschi2403.tsiy.HomeListAdapter
+import aschi2403.tsiy.screens.adapters.HomeListAdapter
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentHomeBinding
-import aschi2403.tsiy.model.ActivityType
 import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
+import aschi2403.tsiy.screens.models.HomeViewModel
+import aschi2403.tsiy.screens.activities.ChooseActivityType
 import java.util.stream.Collectors
 
 
@@ -55,7 +53,10 @@ class HomeFragment : Fragment() {
         rv.setHasFixedSize(true)
         val llm = LinearLayoutManager(this.context)
         rv.layoutManager = llm
-        editDeleteAdapter = HomeListAdapter(getData(), this.requireContext())
+        editDeleteAdapter = HomeListAdapter(
+            getData(),
+            this.requireContext()
+        )
         rv.adapter = editDeleteAdapter;
         return binding.root
     }

@@ -1,4 +1,4 @@
-package aschi2403.tsiy.screens
+package aschi2403.tsiy.screens.activities
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -8,13 +8,13 @@ import android.widget.Button
 import android.widget.Chronometer
 import androidx.appcompat.app.AppCompatActivity
 import aschi2403.tsiy.R
-import kotlinx.android.synthetic.main.pause_screen.*
+import kotlinx.android.synthetic.main.activity_pause_screen.*
 import java.util.concurrent.TimeUnit
 
-class PauseScreen : AppCompatActivity(), Chronometer.OnChronometerTickListener {
+class PauseScreenActivity : AppCompatActivity(), Chronometer.OnChronometerTickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.pause_screen)
+        setContentView(R.layout.activity_pause_screen)
 
         val sharedPreferences: SharedPreferences =
             this.baseContext.getSharedPreferences("settings", Context.MODE_PRIVATE)

@@ -1,4 +1,4 @@
-package aschi2403.tsiy
+package aschi2403.tsiy.screens.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,14 +7,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import aschi2403.tsiy.R
 import aschi2403.tsiy.model.GeneralActivity
 import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import com.google.android.material.card.MaterialCardView
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class HomeListAdapter(private var data: List<IActivity>?, context: Context) :

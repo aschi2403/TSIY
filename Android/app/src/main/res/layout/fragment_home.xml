@@ -8,7 +8,7 @@
 
         <variable
             name="homeViewModel"
-            type="aschi2403.tsiy.screens.HomeViewModel"/>
+            type="aschi2403.tsiy.screens.models.HomeViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

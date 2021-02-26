@@ -7,25 +7,25 @@
 
     <fragment
         android:id="@+id/legal_NoticeFragment"
-        android:name="aschi2403.tsiy.Legal_NoticeFragment"
+        android:name="aschi2403.tsiy.screens.fragments.Legal_NoticeFragment"
         android:label="fragment_legal__notice"
         tools:layout="@layout/fragment_legal__notice" />
     <activity
         android:id="@+id/listActivities"
-        android:name="aschi2403.tsiy.screens.ListActivities"
+        android:name="aschi2403.tsiy.screens.activities.ListActivitiesActivity"
         android:label="ListActivities" />
     <fragment
         android:id="@+id/statisticsFragment"
-        android:name="aschi2403.tsiy.StatisticsFragment"
+        android:name="aschi2403.tsiy.screens.fragments.StatisticsFragment"
         android:label="fragment_statistics"
         tools:layout="@layout/fragment_statistics" />
     <fragment
         android:id="@+id/homeFragment"
-        android:name="aschi2403.tsiy.screens.HomeFragment"
+        android:name="aschi2403.tsiy.screens.fragments.HomeFragment"
         android:label="HomeFragment" />
     <fragment
         android:id="@+id/weightFragment"
-        android:name="aschi2403.tsiy.WeightFragment"
+        android:name="aschi2403.tsiy.screens.fragments.WeightFragment"
         android:label="fragment_weight"
         tools:layout="@layout/fragment_weight" >
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="aschi2403.tsiy.screens.SettingsFragment"
+        android:name="aschi2403.tsiy.screens.fragments.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" >
         <action
@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/addWeightFragment"
-        android:name="aschi2403.tsiy.AddWeightFragment"
+        android:name="aschi2403.tsiy.screens.fragments.AddWeightFragment"
         android:label="fragment_add_weight"
         tools:layout="@layout/fragment_add_weight" />
 </navigation>

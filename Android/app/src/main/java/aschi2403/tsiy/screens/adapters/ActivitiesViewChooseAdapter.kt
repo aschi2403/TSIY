@@ -1,4 +1,4 @@
-package aschi2403.tsiy
+package aschi2403.tsiy.screens.adapters
 
 import android.content.Context
 import android.content.Intent
@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import aschi2403.tsiy.R
 import aschi2403.tsiy.model.ActivityType
-import aschi2403.tsiy.repository.WorkoutRepo
-import aschi2403.tsiy.screens.WorkoutScreen
+import aschi2403.tsiy.screens.activities.WorkoutScreenActivity
 import com.google.android.material.card.MaterialCardView
 
 class ActivitiesViewChooseAdapter(private var data: List<ActivityType>?, private val context: Context) :
@@ -36,14 +36,16 @@ class ActivitiesViewChooseAdapter(private var data: List<ActivityType>?, private
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): DataViewHolder {
         val v =
             LayoutInflater.from(viewGroup.context).inflate(R.layout.list_of_activities, viewGroup, false)
-        return DataViewHolder(v)
+        return DataViewHolder(
+            v
+        )
     }
 
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
         if (data != null) {
             holder.name.text = data!![position].name
             holder.cv.setOnClickListener { view: View ->
-                val intent = Intent(view.context, WorkoutScreen::class.java)
+                val intent = Intent(view.context, WorkoutScreenActivity::class.java)
 
                 intent.putExtra("activityTypeId", data!![position].id)
                 intent.putExtra("name", data!![position].name)

@@ -1,4 +1,4 @@
-package aschi2403.tsiy
+package aschi2403.tsiy.screens.adapters
 
 import android.content.Context
 import android.content.Intent
@@ -9,8 +9,9 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import aschi2403.tsiy.R
 import aschi2403.tsiy.model.ActivityType
-import aschi2403.tsiy.screens.AddEditActivity
+import aschi2403.tsiy.screens.activities.AddEditActivity
 import com.google.android.material.card.MaterialCardView
 
 class ActivitiesEditDeleteAdapter(private var data: List<ActivityType>?, private val context: Context) :
@@ -40,7 +41,9 @@ class ActivitiesEditDeleteAdapter(private var data: List<ActivityType>?, private
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): DataViewHolder {
         val v =
             LayoutInflater.from(viewGroup.context).inflate(R.layout.list_iactivity, viewGroup, false)
-        return DataViewHolder(v)
+        return DataViewHolder(
+            v
+        )
     }
 
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) {

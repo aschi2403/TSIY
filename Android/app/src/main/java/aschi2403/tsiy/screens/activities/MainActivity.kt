@@ -1,16 +1,12 @@
-package aschi2403.tsiy
+package aschi2403.tsiy.screens.activities
 
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import aschi2403.tsiy.screens.HomeFragment
-import aschi2403.tsiy.screens.SettingsFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import aschi2403.tsiy.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 
