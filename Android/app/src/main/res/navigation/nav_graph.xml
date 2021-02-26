@@ -45,5 +45,9 @@
         android:id="@+id/addWeightFragment"
         android:name="aschi2403.tsiy.screens.fragments.AddWeightFragment"
         android:label="fragment_add_weight"
-        tools:layout="@layout/fragment_add_weight" />
+        tools:layout="@layout/fragment_add_weight" >
+        <action
+            android:id="@+id/action_addWeightFragment_to_weightFragment"
+            app:destination="@id/weightFragment" />
+    </fragment>
 </navigation>
