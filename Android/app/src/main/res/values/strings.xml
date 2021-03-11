@@ -53,8 +53,10 @@
     <string name="legal_notice">Legal Notice</string>
     <string name="table_of_contents">Table of contents</string>
     <string name="license">License</string>
-    <string name="license_content">Copyright 2020-2021 Jakob Aschauer, Alexander Schönberger Licensed under the GNU Affero General Public License v3.0</string>
+    <string name="license_content">Copyright 2020\-2021 Jakob Aschauer, Alexander Schönberger Licensed under the GNU Affero General Public License v3.0</string>
     <string name="dependencies">Dependencies</string>
     <string name="dependencies_content">MPAndroidChart</string>
     <string name="description_content">Track your activities</string>
+    <string name="date">Date</string>
+    <string name="add">Add</string>
 </resources>

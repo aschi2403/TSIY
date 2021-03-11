@@ -1,45 +1,60 @@
 package aschi2403.tsiy.screens.fragments
 
+import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentAddWeightBinding
 import aschi2403.tsiy.model.WeightEntry
 import aschi2403.tsiy.repository.WorkoutRepo
-import kotlinx.android.synthetic.main.fragment_add_weight.*
+import java.lang.System.currentTimeMillis
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 /**
  * A simple [Fragment] subclass.
- * Use the [AddWeightFragment.newInstance] factory method to
- * create an instance of this fragment.
  */
 class AddWeightFragment : Fragment() {
     private lateinit var binding: FragmentAddWeightBinding
     private var repo: WorkoutRepo? = null
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("SimpleDateFormat")
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_add_weight, container, false
+                inflater,
+                R.layout.fragment_add_weight, container, false
         )
 
-        binding.confirmButton.setOnClickListener { confirm_button() }
+        binding.confirmButton.setOnClickListener { confirmButton() }
+
+        binding.dateValue.setText(SimpleDateFormat("dd.MM.yyyy HH:mm").format(Date(currentTimeMillis())).toString())
 
         repo = activity?.let { WorkoutRepo(it) }
+
+        if (!repo?.allWeightEntries.isNullOrEmpty()) {
+            binding.weightValue.setText(repo?.allWeightEntries?.last()?.weight.toString())
+        }
 
         return binding.root
     }
 
     //handler for onClick of confirm button
-    fun confirm_button() {
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun confirmButton() {
         // get text if input field
         val text: String = binding.weightValue.text.toString()
 
@@ -48,12 +63,18 @@ class AddWeightFragment : Fragment() {
 
         // if value is valid add new database entry
         if (value != null) {
-            val weightEntry = WeightEntry(date = System.currentTimeMillis(), weight = value)
+            val sdf = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMAN)
+            val date = sdf.parse(binding.dateValue.text.toString())!!
+            val millis = date.time
+            val weightEntry = WeightEntry(date = millis, weight = value)
 
             repo?.addWeightEntry(weightEntry)
+
+            // navigate back to weight-fragment
+            findNavController().navigate(R.id.action_addWeightFragment_to_weightFragment)
+        } else {
+            Toast.makeText(context, "Please insert a correct weight", Toast.LENGTH_LONG).show()
         }
 
-        // navigate back to weight-fragment
-        findNavController().navigate(R.id.action_addWeightFragment_to_weightFragment)
     }
 }
