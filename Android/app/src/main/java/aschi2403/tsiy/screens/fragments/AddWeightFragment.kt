@@ -17,9 +17,8 @@ import aschi2403.tsiy.model.WeightEntry
 import aschi2403.tsiy.repository.WorkoutRepo
 import java.lang.System.currentTimeMillis
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.math.round
 
 /**
  * A simple [Fragment] subclass.
@@ -31,15 +30,27 @@ class AddWeightFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SimpleDateFormat")
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(
-                inflater,
-                R.layout.fragment_add_weight, container, false
+            inflater,
+            R.layout.fragment_add_weight, container, false
         )
 
         binding.confirmButton.setOnClickListener { confirmButton() }
+
+        binding.addWeight.setOnClickListener {
+            binding.weightValue.setText(
+                (binding.weightValue.text.toString().toDouble() + 0.1).round().toString()
+            )
+        }
+
+        binding.removeWeight.setOnClickListener {
+            binding.weightValue.setText(
+                (binding.weightValue.text.toString().toDouble() - 0.1).round().toString()
+            )
+        }
 
         binding.dateValue.setText(SimpleDateFormat("dd.MM.yyyy HH:mm").format(Date(currentTimeMillis())).toString())
 
@@ -51,6 +62,8 @@ class AddWeightFragment : Fragment() {
 
         return binding.root
     }
+
+    fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
 
     //handler for onClick of confirm button
     @RequiresApi(Build.VERSION_CODES.O)
