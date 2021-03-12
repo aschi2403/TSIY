@@ -59,4 +59,5 @@
     <string name="description_content">Track your activities</string>
     <string name="date">Date</string>
     <string name="add">Add</string>
+    <string name="remove">Remove</string>
 </resources>
