@@ -7,11 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
 import aschi2403.tsiy.model.ActivityType
-import aschi2403.tsiy.screens.activities.WorkoutScreenActivity
+import aschi2403.tsiy.screens.activities.MainWorkoutActivity
+import aschi2403.tsiy.screens.fragments.ChoosePowerActivityTypeFragmentArgs
+import aschi2403.tsiy.screens.fragments.WorkoutScreenFragment
 import com.google.android.material.card.MaterialCardView
+
 
 class ActivitiesViewChooseAdapter(private var data: List<ActivityType>?, private val context: Context) :
     RecyclerView.Adapter<ActivitiesViewChooseAdapter.DataViewHolder>() {
@@ -45,8 +49,7 @@ class ActivitiesViewChooseAdapter(private var data: List<ActivityType>?, private
         if (data != null) {
             holder.name.text = data!![position].name
             holder.cv.setOnClickListener { view: View ->
-                val intent = Intent(view.context, WorkoutScreenActivity::class.java)
-
+                val intent = Intent(view.context, MainWorkoutActivity::class.java)
                 intent.putExtra("activityTypeId", data!![position].id)
                 intent.putExtra("name", data!![position].name)
                 intent.putExtra("type", data!![position].powerActivity)

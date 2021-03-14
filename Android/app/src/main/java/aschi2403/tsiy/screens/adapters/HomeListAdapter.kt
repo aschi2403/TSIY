@@ -1,22 +1,27 @@
 package aschi2403.tsiy.screens.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
 import aschi2403.tsiy.model.GeneralActivity
 import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
+import aschi2403.tsiy.screens.fragments.HomeFragmentDirections
+import aschi2403.tsiy.screens.fragments.ViewFinishedActivityFragment
 import com.google.android.material.card.MaterialCardView
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HomeListAdapter(private var data: List<IActivity>?, context: Context) :
+
+class HomeListAdapter(private var data: List<IActivity>?, val context: Context) :
     RecyclerView.Adapter<HomeListAdapter.DataViewHolder>() {
     val database = WorkoutRepo(context)
 
@@ -53,7 +58,12 @@ class HomeListAdapter(private var data: List<IActivity>?, context: Context) :
         if (data != null) {
             //holder.name.text = data!![position].
             holder.cv.setOnClickListener {
-                // TODO: implement edit, view activity
+                Navigation.findNavController(it).navigate(
+                    HomeFragmentDirections.actionHomeFragmentToFragmentViewFinishedActivity(
+                        type = data!![position] is PowerActivity,
+                        id = data!![position].id!!
+                    )
+                )
             }
 
             val minutes = data!![position].time / 1000 / 60

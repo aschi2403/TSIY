@@ -1,10 +1,11 @@
-package aschi2403.tsiy.screens.activities;
+package aschi2403.tsiy.screens.activities
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.SearchView
 import android.widget.SearchView.OnQueryTextListener
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.screens.adapters.ActivitiesEditDeleteAdapter
@@ -23,7 +24,7 @@ class ListActivitiesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_list_activities);
+        setContentView(R.layout.fragment_list_activities)
         database = WorkoutRepo(this)
         type = intent.extras?.getBoolean("type")
 
@@ -48,7 +49,7 @@ class ListActivitiesActivity : AppCompatActivity() {
                 data,
                 this
             )
-        rv.adapter = editDeleteAdapter;
+        rv.adapter = editDeleteAdapter
 
         findViewById<SearchView>(R.id.search).setOnQueryTextListener(object : OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -80,7 +81,7 @@ class ListActivitiesActivity : AppCompatActivity() {
         if (type) {
             return database.allPowerActivityTypes
         }
-        return database.allActivityTypes;
+        return database.allActivityTypes
     }
 
     override fun onResume() {

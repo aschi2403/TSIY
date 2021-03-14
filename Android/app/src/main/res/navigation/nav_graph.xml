@@ -1,53 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/nav_graph"
+            app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/legal_NoticeFragment"
         android:name="aschi2403.tsiy.screens.fragments.Legal_NoticeFragment"
         android:label="fragment_legal__notice"
-        tools:layout="@layout/fragment_legal__notice" />
-    <activity
-        android:id="@+id/listActivities"
-        android:name="aschi2403.tsiy.screens.activities.ListActivitiesActivity"
-        android:label="ListActivities" />
+        tools:layout="@layout/fragment_legal__notice"/>
     <fragment
         android:id="@+id/statisticsFragment"
         android:name="aschi2403.tsiy.screens.fragments.StatisticsFragment"
         android:label="fragment_statistics"
-        tools:layout="@layout/fragment_statistics" />
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="aschi2403.tsiy.screens.fragments.HomeFragment"
-        android:label="HomeFragment" />
+        tools:layout="@layout/fragment_statistics"/>
     <fragment
         android:id="@+id/weightFragment"
         android:name="aschi2403.tsiy.screens.fragments.WeightFragment"
         android:label="fragment_weight"
-        tools:layout="@layout/fragment_weight" >
+        tools:layout="@layout/fragment_weight">
         <action
             android:id="@+id/action_weightFragment_to_addWeightFragment"
-            app:destination="@id/addWeightFragment" />
+            app:destination="@id/addWeightFragment"/>
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="aschi2403.tsiy.screens.fragments.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" >
+        tools:layout="@layout/fragment_settings">
         <action
             android:id="@+id/action_settingsFragment_to_legal_NoticeFragment"
-            app:destination="@id/legal_NoticeFragment" />
+            app:destination="@id/legal_NoticeFragment"/>
     </fragment>
     <fragment
         android:id="@+id/addWeightFragment"
         android:name="aschi2403.tsiy.screens.fragments.AddWeightFragment"
         android:label="fragment_add_weight"
-        tools:layout="@layout/fragment_add_weight" >
+        tools:layout="@layout/fragment_add_weight">
         <action
             android:id="@+id/action_addWeightFragment_to_weightFragment"
-            app:destination="@id/weightFragment" />
+            app:destination="@id/weightFragment"/>
     </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="aschi2403.tsiy.screens.fragments.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_chooseActivityFragment"
+            app:destination="@id/fragment_choose_activity_type"/>
+        <action android:id="@+id/action_homeFragment_to_fragment_view_finished_activity"
+                app:destination="@id/fragment_view_finished_activity"/>
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_choose_activity_type"
+        android:name="aschi2403.tsiy.screens.fragments.ChooseActivityTypeFragment"
+        android:label="fragment_choose_activity_type"
+        tools:layout="@layout/fragment_choose_activity_type">
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_view_finished_activity"
+        android:name="aschi2403.tsiy.screens.fragments.ViewFinishedActivityFragment"
+        android:label="fragment_view_finished_activity"
+        tools:layout="@layout/fragment_viewfinishedactivity">
+        <argument android:name="type" app:argType="boolean"/>
+        <argument android:name="id" app:argType="long"/>
+    </fragment>
+
 </navigation>

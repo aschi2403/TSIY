@@ -58,6 +58,6 @@ class PowerActivity(
     }
 
     override fun toString(): String {
-        return "PowerActivity(id=$id, activityTypeId=$activityTypeId, sets=$sets, time=$time, cardioPoints=$cardioPoints, calories=$calories, date=$date, powerActivityType=$powerActivityType)"
+        return "PowerActivity(id=$id, activityTypeId=$activityTypeId, sets=$sets, time=$time, cardioPoints=$cardioPoints, calories=$calories, date=$date"
     }
 }

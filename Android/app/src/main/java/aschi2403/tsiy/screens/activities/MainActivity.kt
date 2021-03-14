@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import aschi2403.tsiy.R
@@ -21,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     fun setupView() {
         // Finding the Navigation Controller
-        var navController = findNavController(R.id.fragNavHost)
+        val navController = findNavController(R.id.fragNavHost)
 
         // Setting Navigation Controller with the BottomNavigationView
         main_nav.setupWithNavController(navController)
