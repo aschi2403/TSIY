@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit
 class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
 
     private lateinit var binding: FragmentPauseScreenBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -60,7 +61,7 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
     }
 
     override fun onChronometerTick(chronometer: Chronometer?) {
-     /*   if (chronometer != null) {
+      /*  if (chronometer != null) {
             when (chronometer.text) {
                 "00:00" -> {
                     fragNavHost.close

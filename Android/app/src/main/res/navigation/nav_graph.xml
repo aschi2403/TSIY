@@ -32,6 +32,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_legal_NoticeFragment"
             app:destination="@id/legal_NoticeFragment"/>
+        <action
+            android:id="@+id/action_settingsFragment_to_listActivitiesFragment"
+            app:destination="@id/listActivitiesFragment" />
     </fragment>
     <fragment
         android:id="@+id/addWeightFragment"
@@ -67,6 +70,36 @@
         tools:layout="@layout/fragment_viewfinishedactivity">
         <argument android:name="type" app:argType="boolean"/>
         <argument android:name="id" app:argType="long"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_add_edit_fragment"
+        android:name="aschi2403.tsiy.screens.fragments.AddEditFragment"
+        android:label="fragment_choose_activity_type"
+        tools:layout="@layout/fragment_editnormalactivity">
+        <argument
+            android:name="new"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="id"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <argument
+            android:name="type"
+            app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/listActivitiesFragment"
+        android:name="aschi2403.tsiy.screens.fragments.ListActivitiesFragment"
+        android:label="fragment_list_activities"
+        tools:layout="@layout/fragment_list_activities" >
+        <action
+            android:id="@+id/action_listActivitiesFragment_to_fragment_add_edit_fragment"
+            app:destination="@id/fragment_add_edit_fragment" />
+        <argument
+            android:name="type"
+            app:argType="boolean" />
     </fragment>
 
 </navigation>

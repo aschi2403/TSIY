@@ -8,14 +8,17 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
 import aschi2403.tsiy.model.ActivityType
-import aschi2403.tsiy.screens.activities.AddEditActivity
+import aschi2403.tsiy.screens.fragments.AddEditFragment
+import aschi2403.tsiy.screens.fragments.ListActivitiesFragmentDirections
 import com.google.android.material.card.MaterialCardView
 
 class ActivitiesEditDeleteAdapter(private var data: List<ActivityType>?, private val context: Context) :
-    RecyclerView.Adapter<ActivitiesEditDeleteAdapter.DataViewHolder>() {
+        RecyclerView.Adapter<ActivitiesEditDeleteAdapter.DataViewHolder>() {
 
     class DataViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val icon //TODO: implement
@@ -40,9 +43,9 @@ class ActivitiesEditDeleteAdapter(private var data: List<ActivityType>?, private
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): DataViewHolder {
         val v =
-            LayoutInflater.from(viewGroup.context).inflate(R.layout.list_iactivity, viewGroup, false)
+                LayoutInflater.from(viewGroup.context).inflate(R.layout.list_iactivity, viewGroup, false)
         return DataViewHolder(
-            v
+                v
         )
     }
 
@@ -51,10 +54,7 @@ class ActivitiesEditDeleteAdapter(private var data: List<ActivityType>?, private
             holder.name.text = data!![position].name
             holder.delete.setOnClickListener {/*TODO: implement delete*/ }
             holder.edit.setOnClickListener { view: View ->
-                val intent = Intent(view.context, AddEditActivity::class.java)
-                intent.putExtra("id", data!![position].id)
-                intent.putExtra("type", data!![position].powerActivity)
-                context.startActivity(intent)
+                Navigation.findNavController(view).navigate(ListActivitiesFragmentDirections.actionListActivitiesFragmentToFragmentAddEditFragment(id = data!![position].id!!, type = data!![position].powerActivity))
             }
         }
     }

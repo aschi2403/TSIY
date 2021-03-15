@@ -30,12 +30,10 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="56dp"
-        android:layout_marginTop="56dp"
+        app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/workout_nav_graph"/>
+        app:navGraph="@navigation/workout_nav_graph" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
