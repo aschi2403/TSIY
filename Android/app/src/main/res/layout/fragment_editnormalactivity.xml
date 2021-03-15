@@ -11,9 +11,10 @@
         <TableLayout
             android:id="@+id/tableLayout2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="16dp"
+            tools:ignore="MissingConstraints">
 
 
             <TableRow
@@ -54,8 +55,8 @@
                     android:layout_height="fill_parent"
                     android:layout_marginEnd="15dp"
                     android:layout_weight="1"
-                    android:src="@android:drawable/ic_media_pause"
-                    android:contentDescription="@string/pause" />
+                    android:contentDescription="@string/pause"
+                    android:src="@android:drawable/ic_media_pause" />
             </TableRow>
 
             <TableRow
@@ -130,16 +131,17 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:gravity="bottom"
-            app:layout_constraintBottom_toBottomOf="@+id/tableLayout2"
-            tools:ignore="MissingConstraints">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
             <Button
                 android:id="@+id/close"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
                 android:layout_marginStart="75dp"
                 android:text="@string/close"
                 android:textSize="16sp" />
@@ -150,6 +152,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
                 android:layout_marginEnd="75dp"
                 android:text="@string/save"
                 android:textSize="16sp" />
