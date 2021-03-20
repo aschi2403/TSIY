@@ -100,6 +100,7 @@ class WorkoutScreenFragment : Fragment() {
                     cardioPoints = 0.0
                 )
             ) //TODO: calculate cardioPoints and calories
+            activity?.finish()
         } else { // power activity
             Navigation.findNavController(requireActivity(), R.id.fragNavWorkoutHost).navigate(
                 WorkoutScreenFragmentDirections.actionWorkoutScreenToChoosePowerActivityType(
