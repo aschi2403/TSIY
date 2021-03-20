@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentChooseActivityTypeBinding
 import aschi2403.tsiy.databinding.FragmentChoosePowerActivityTypeBinding
@@ -41,7 +42,7 @@ class ChoosePowerActivityTypeFragment : Fragment() {
                 if (finished) {
                     activity?.finish()
                 } else {
-                    activity?.onBackPressed()
+                    findNavController().navigate(ChoosePowerActivityTypeFragmentDirections.actionChoosePowerActivityTypeToPauseScreen())
                 }
             }
         }

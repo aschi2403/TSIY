@@ -10,7 +10,7 @@
         android:label="fragment_workout_screen"
         tools:layout="@layout/fragment_workout_screen">
         <action android:id="@+id/action_workout_screen_to_pause_screen"
-                app:destination="@id/pause_screen"/>
+                app:destination="@id/pause_screen" app:popUpTo="@id/workout_screen" app:popUpToInclusive="false"/>
         <action android:id="@+id/action_workout_screen_to_choose_power_activity_type"
                 app:destination="@id/choose_power_activity_type"/>
         <argument android:name="activityTypeId" app:argType="long"/>
@@ -24,6 +24,8 @@
         tools:layout="@layout/fragment_choose_power_activity_type">
         <argument android:name="idOfPowerActivity" app:argType="long"/>
         <argument android:name="finished" app:argType="boolean" android:defaultValue="true"/>
+        <action android:id="@+id/action_choose_power_activity_type_to_pause_screen" app:destination="@id/pause_screen"
+                app:popUpTo="@id/workout_screen" app:popUpToInclusive="false"/>
     </fragment>
 
     <fragment
