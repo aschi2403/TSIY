@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Chronometer
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentPauseScreenBinding
 import kotlinx.android.synthetic.main.activity_main.*
@@ -44,7 +45,7 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
         binding.countdown.onChronometerTickListener = this
         var timerIsCounting = true
 
-        binding.skip.setOnClickListener { activity?.onBackPressed() }
+        binding.skip.setOnClickListener { findNavController().popBackStack() }
         binding.plusmin.setOnClickListener { binding.countdown.base += 60000 }
         binding.pause.setOnClickListener {
             if (timerIsCounting) {
@@ -61,12 +62,12 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
     }
 
     override fun onChronometerTick(chronometer: Chronometer?) {
-      /*  if (chronometer != null) {
+        if (chronometer != null) {
             when (chronometer.text) {
                 "00:00" -> {
-                    fragNavHost.close
+                    findNavController().popBackStack()
                 }
             }
-        }*/
+        }
     }
 }

@@ -18,12 +18,6 @@ class MainWorkoutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workout_main)
-
-        /*  intent.extras.getLong("activityTypeId")
-          intent.extras.getString("name")
-          intent.extras.getBoolean("type")*/
-
-
         findNavController(R.id.fragNavWorkoutHost).setGraph(R.navigation.workout_nav_graph, intent.extras)
     }
 }
