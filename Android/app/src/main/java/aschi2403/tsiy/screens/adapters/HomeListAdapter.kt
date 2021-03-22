@@ -1,7 +1,6 @@
 package aschi2403.tsiy.screens.adapters
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,6 @@ import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.fragments.HomeFragmentDirections
-import aschi2403.tsiy.screens.fragments.ViewFinishedActivityFragment
 import com.google.android.material.card.MaterialCardView
 import java.text.SimpleDateFormat
 import java.util.*
@@ -66,8 +64,8 @@ class HomeListAdapter(private var data: List<IActivity>?, val context: Context) 
                 )
             }
 
-            val minutes = data!![position].time / 1000 / 60
-            val seconds = data!![position].time / 1000 % 60
+            val minutes = data!![position].duration / 1000 / 60
+            val seconds = data!![position].duration / 1000 % 60
 
             holder.timeValue.text = "$minutes minutes and $seconds seconds"
             holder.cardioPointsValue.text = data!![position].cardioPoints.toString()
@@ -82,7 +80,7 @@ class HomeListAdapter(private var data: List<IActivity>?, val context: Context) 
             holder.firstLine.text = name
 
             val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy")
-            val date = simpleDateFormat.format(Date(data!![position].date))
+            val date = simpleDateFormat.format(Date(data!![position].startDate))
             holder.secondLine.text = date
         }
     }

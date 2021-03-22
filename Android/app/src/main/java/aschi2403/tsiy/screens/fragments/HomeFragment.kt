@@ -1,6 +1,5 @@
 package aschi2403.tsiy.screens.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -68,7 +67,7 @@ class HomeFragment : Fragment() {
         val mergedList = ArrayList<IActivity>()
         mergedList.addAll(database.allPowerActivities)
         mergedList.addAll(database.allGeneralActivities)
-        return mergedList.stream().sorted(Comparator.comparing(IActivity::date).reversed()).collect(Collectors.toList())
+        return mergedList.stream().sorted(Comparator.comparing(IActivity::startDate).reversed()).collect(Collectors.toList())
     }
 
     override fun onResume() {

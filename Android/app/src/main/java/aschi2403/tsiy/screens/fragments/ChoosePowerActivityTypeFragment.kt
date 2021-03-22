@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
-import aschi2403.tsiy.databinding.FragmentChooseActivityTypeBinding
 import aschi2403.tsiy.databinding.FragmentChoosePowerActivityTypeBinding
 import aschi2403.tsiy.model.SetEntry
 import aschi2403.tsiy.repository.WorkoutRepo

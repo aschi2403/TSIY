@@ -37,29 +37,28 @@ class WorkoutScreenFragment : Fragment() {
 
 
         binding.activity.text = arguments?.getString("name")
+
         if (!arguments?.getBoolean("type")!!) { //normal activity
             binding.next.visibility = View.INVISIBLE
-            idOfActivity = viewModel.values.getLong(
-                "idOfActivity",
-                database.addGeneralActivity(
-                    GeneralActivity(
-                        date = System.currentTimeMillis(),
-                        activityTypeId = activityTypeId
-                    )
-                )!!
-            )
+            if (idOfActivity == -1L) {
+                idOfActivity =
+                    database.addGeneralActivity(
+                        GeneralActivity(
+                            startDate = System.currentTimeMillis(),
+                            activityTypeId = activityTypeId
+                        )
+                    )!!
+            }
         } else {
-            idOfActivity = viewModel.values.getLong(
-                "idOfActivity",
-                database.addPowerActivity(
+            if (idOfActivity == -1L) {
+                idOfActivity = database.addPowerActivity(
                     PowerActivity(
-                        date = System.currentTimeMillis(),
+                        startDate = System.currentTimeMillis(),
                         activityTypeId = activityTypeId
                     )
                 )!!
-            )
+            }
             binding.next.setOnClickListener {
-                set = viewModel.values.getInt("set", 0)
                 set++
                 Navigation.findNavController(requireActivity(), R.id.fragNavWorkoutHost).navigate(
                     WorkoutScreenFragmentDirections.actionWorkoutScreenToChoosePowerActivityType(
@@ -68,8 +67,6 @@ class WorkoutScreenFragment : Fragment() {
                 )
             }
         }
-        println(SystemClock.elapsedRealtime() - viewModel.values.getLong("stopTime", 0))
-        println(binding.timer.base)
         binding.timer.base = SystemClock.elapsedRealtime() - viewModel.values.getLong("stopTime", 0)
         binding.timer.start()
 
@@ -94,28 +91,31 @@ class WorkoutScreenFragment : Fragment() {
                 GeneralActivity(
                     id = idOfActivity,
                     activityTypeId = activityTypeId,
-                    date = database.generalActivityById(idOfActivity).date,
-                    time = SystemClock.elapsedRealtime() - timer.base,
+                    startDate = database.generalActivityById(idOfActivity).startDate,
+                    duration = SystemClock.elapsedRealtime() - timer.base,
                     calories = 0.0,
-                    cardioPoints = 0.0
+                    cardioPoints = 0.0,
+                    endDate = System.currentTimeMillis()
                 )
             ) //TODO: calculate cardioPoints and calories
             activity?.finish()
         } else { // power activity
-            Navigation.findNavController(requireActivity(), R.id.fragNavWorkoutHost).navigate(
-                WorkoutScreenFragmentDirections.actionWorkoutScreenToChoosePowerActivityType(
-                    idOfPowerActivity = idOfActivity, finished = true
-                )
-            )
+
             database.updatePowerActivity(
                 PowerActivity(
                     id = idOfActivity,
                     activityTypeId = activityTypeId,
-                    date = database.powerActivityById(idOfActivity).date,
-                    time = SystemClock.elapsedRealtime() - timer.base,
+                    startDate = database.powerActivityById(idOfActivity).startDate,
+                    duration = SystemClock.elapsedRealtime() - timer.base,
                     calories = 0.0,
                     cardioPoints = 0.0,
-                    sets = set
+                    sets = set,
+                    endDate = System.currentTimeMillis()
+                )
+            )
+            Navigation.findNavController(requireActivity(), R.id.fragNavWorkoutHost).navigate(
+                WorkoutScreenFragmentDirections.actionWorkoutScreenToChoosePowerActivityType(
+                    idOfPowerActivity = idOfActivity, finished = true
                 )
             )
         }
@@ -123,10 +123,7 @@ class WorkoutScreenFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.values.putLong("idOfActivity", idOfActivity)
-        viewModel.values.putInt("set", set)
         viewModel.values.putLong("stopTime", SystemClock.elapsedRealtime() - binding.timer.base)
-
     }
 }
 
