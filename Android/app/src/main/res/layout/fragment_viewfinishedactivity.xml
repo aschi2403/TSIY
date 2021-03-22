@@ -14,9 +14,132 @@
             android:textSize="32sp"
             android:gravity="center"/>
         <TextView
-            android:id="@+id/date"
+            android:id="@+id/startDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"/>
+        <TextView
+            android:id="@+id/endDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"/>
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp">
+
+            <TableRow android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:gravity="center">
+                <TextView
+                    android:id="@+id/durationLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/time"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/pauseDurationLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:text="@string/pause_time"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+            </TableRow>
+            <TableRow android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:gravity="center">
+                <TextView
+                    android:id="@+id/duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"/>
+                <TextView
+                    android:id="@+id/pause"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:textSize="18sp"/>
+            </TableRow>
+            <TableRow android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_marginTop="16dp"
+                      android:gravity="center">
+                <TextView
+                    android:id="@+id/cardioPointsLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cardiopoints"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/caloriesLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:text="@string/calories"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+            </TableRow>
+            <TableRow android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:gravity="center">
+                <TextView
+                    android:id="@+id/cardiopoints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"/>
+                <TextView
+                    android:id="@+id/caloriesValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:textSize="18sp"/>
+            </TableRow>
+        </TableLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TableLayout
+                android:id="@+id/sets"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="16dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+                    <TextView
+                        android:id="@+id/set"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/id"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/weightLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:text="@string/weight"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/repetitionsLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:text="@string/repetitions"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+                </TableRow>
+            </TableLayout>
+
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 </layout>

@@ -11,12 +11,12 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="cardiopoints">Cardiopoints</string>
     <string name="calories">Calories</string>
-    <string name="time">time</string>
+    <string name="time">Duration</string>
     <string name="statistics">statistics</string>
     <string name="home">home</string>
     <string name="settings">settings</string>
     <string name="krafttraining">Krafttraining</string>
-    <string name="pause_time">Pause time</string>
+    <string name="pause_time">Pause duration</string>
     <string name="activity">Activity</string>
     <string name="weight">Weight</string>
     <string name="repetition">Repetition</string>
@@ -63,4 +63,6 @@
     <string name="resume">Resume</string>
     <string name="_1min">+1min</string>
     <string name="finish">Finish</string>
+    <string name="id">ID</string>
+    <string name="repetitions">Repetitions</string>
 </resources>
