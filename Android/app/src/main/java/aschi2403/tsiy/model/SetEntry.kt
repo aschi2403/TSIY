@@ -16,7 +16,7 @@ import androidx.room.PrimaryKey
 )
 class SetEntry(
     @PrimaryKey(autoGenerate = true)
-    var id: Long? = 0,
+    var id: Long? = null,
     var weight: Double = 0.0,
     var repetitions: Int = 0,
     var powerActivityId: Long = 0
