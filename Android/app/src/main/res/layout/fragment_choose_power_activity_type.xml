@@ -1,60 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".screens.fragments.ChoosePowerActivityTypeFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".screens.fragments.ChoosePowerActivityTypeFragment">
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TableLayout
             android:id="@+id/tableLayout"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="15dp"
             android:layout_marginTop="70dp"
             android:layout_marginEnd="15dp"
             android:layout_marginBottom="15dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
-            <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
                 <TextView
                     android:id="@+id/weightLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/weight"/>
+                    android:text="@string/weight" />
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/weightValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/weight"
-
                     android:layout_weight="1"
-                    android:inputType="number"/>
+
+                    android:hint="@string/weight"
+                    android:inputType="numberDecimal" />
+
                 <TextView
                     android:id="@+id/weightType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="@string/kg"/>
+                    android:text="@string/kg" />
+
+                <ImageView
+                    android:id="@+id/addWeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/add"
+                    android:src="@drawable/ic_baseline_add_24" />
+
+                <ImageView
+                    android:id="@+id/removeWeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/remove"
+                    android:src="@drawable/ic_baseline_remove_24" />
 
             </TableRow>
-            <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
                 <TextView
                     android:id="@+id/repetitionsLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/repetition"/>
+                    android:text="@string/repetition" />
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/repetitionsValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/repetition"
                     android:layout_weight="1"
-                    android:inputType="number"/>
+                    android:hint="@string/repetition"
+                    android:inputType="number" />
+                <Space/>
+                <ImageView
+                    android:id="@+id/addRepetition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_baseline_add_24"
+                    android:contentDescription="@string/add"/>
+                <ImageView
+                    android:id="@+id/removeRepetition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_baseline_remove_24"
+                    android:contentDescription="@string/remove"/>
             </TableRow>
         </TableLayout>
 
@@ -65,7 +106,7 @@
             android:layout_gravity="center_horizontal"
             android:text="@string/continueLabel"
             app:layout_anchor="@+id/tableLayout"
-            app:layout_anchorGravity="bottom|center"/>
+            app:layout_anchorGravity="bottom|center" />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

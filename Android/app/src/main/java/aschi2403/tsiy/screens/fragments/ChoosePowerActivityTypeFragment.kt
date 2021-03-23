@@ -17,6 +17,9 @@ import kotlinx.android.synthetic.main.fragment_choose_power_activity_type.*
 class ChoosePowerActivityTypeFragment : Fragment() {
 
     private lateinit var binding: FragmentChoosePowerActivityTypeBinding
+
+    lateinit var database: WorkoutRepo
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -24,6 +27,9 @@ class ChoosePowerActivityTypeFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_choose_power_activity_type, container, false
         )
+
+
+        database = context?.let { WorkoutRepo(it) }!!
 
         val idOfPowerActivity = arguments?.getLong("idOfPowerActivity")!!
 
@@ -35,7 +41,11 @@ class ChoosePowerActivityTypeFragment : Fragment() {
 
         binding.continueButton.setOnClickListener {
             if (weightValue.text.isNullOrEmpty() || repetitionsValue.text.isNullOrEmpty()) {
-                Toast.makeText(context, "Please insert all data for the activity", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    "Please insert all data for the activity",
+                    Toast.LENGTH_LONG
+                ).show()
             } else {
                 saveDataInDatabase(idOfPowerActivity)
                 if (finished) {
@@ -45,11 +55,48 @@ class ChoosePowerActivityTypeFragment : Fragment() {
                 }
             }
         }
+
+        val sets = database.getSetEntriesByPowerActivityId(idOfPowerActivity)
+        if (sets.isNotEmpty()) {
+            binding.repetitionsValue.setText(sets.last().repetitions.toString())
+            binding.weightValue.setText(sets.last().weight.toString())
+        }
+
+        binding.addWeight.setOnClickListener {
+            binding.weightValue.setText(
+                preventNegativeValues(toDoubleOrZero(binding.weightValue.text.toString()) + 1.0)
+                    .toString()
+            )
+        }
+        binding.removeWeight.setOnClickListener {
+            binding.weightValue.setText(
+                preventNegativeValues(toDoubleOrZero(binding.weightValue.text.toString()) - 1.0).toString()
+            )
+        }
+        binding.addRepetition.setOnClickListener {
+            binding.repetitionsValue.setText(
+                preventNegativeValues(toIntOrZero(binding.repetitionsValue.text.toString()) + 1).toString()
+            )
+        }
+        binding.removeRepetition.setOnClickListener {
+            binding.repetitionsValue.setText(
+                preventNegativeValues(toIntOrZero(binding.repetitionsValue.text.toString()) - 1).toString()
+            )
+        }
         return binding.root
     }
 
+    private fun preventNegativeValues(number: Number): Any {
+        if (number.toDouble() < 0) {
+            if (number is Double) {
+                return 0.0
+            }
+            return 0
+        }
+        return number
+    }
+
     private fun saveDataInDatabase(idOfPowerActivity: Long) {
-        val database = context?.let { WorkoutRepo(it) }!!
         database.insertSetEntry(
             SetEntry(
                 weight = weightValue.text.toString().toDouble(),
@@ -57,5 +104,13 @@ class ChoosePowerActivityTypeFragment : Fragment() {
                 powerActivityId = idOfPowerActivity
             )
         )
+    }
+
+    private fun toDoubleOrZero(textToConvert: String): Double {
+        return textToConvert.toDoubleOrNull() ?: return 0.0
+    }
+
+    private fun toIntOrZero(textToConvert: String): Int {
+        return textToConvert.toIntOrNull() ?: return 0
     }
 }
