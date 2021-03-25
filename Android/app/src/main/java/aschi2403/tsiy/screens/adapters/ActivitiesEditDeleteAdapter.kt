@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
 import aschi2403.tsiy.model.ActivityType
 import aschi2403.tsiy.repository.WorkoutRepo
-import aschi2403.tsiy.screens.fragments.AddEditFragment
 import aschi2403.tsiy.screens.fragments.ListActivitiesFragmentDirections
 import com.google.android.material.card.MaterialCardView
 

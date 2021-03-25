@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentViewfinishedactivityBinding
 import aschi2403.tsiy.repository.WorkoutRepo
-import kotlinx.android.synthetic.main.fragment_viewfinishedactivity.view.*
 import kotlinx.android.synthetic.main.table_row.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -62,8 +61,7 @@ class ViewFinishedActivityFragment : Fragment() {
         if (powerActivity) {
             val sets = database.getSetEntriesByPowerActivityId(idOfActivity).toTypedArray()
             if (sets.isNotEmpty()) {
-             //   binding.header.visibility = View.VISIBLE
-                binding.sets.visibility = View.VISIBLE
+                binding.header.visibility = View.VISIBLE
             }
             sets.forEach {
                 val row = LayoutInflater.from(context).inflate(R.layout.table_row, null)

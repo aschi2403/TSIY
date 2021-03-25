@@ -53,7 +53,7 @@ class ListActivitiesFragment : Fragment() {
         rv.layoutManager = llm
         editDeleteAdapter =
                 ActivitiesEditDeleteAdapter(
-                        data,
+                        data.toMutableList(),
                         requireContext()
                 )
         rv.adapter = editDeleteAdapter
