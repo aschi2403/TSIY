@@ -13,12 +13,17 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
 import aschi2403.tsiy.model.ActivityType
+import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.fragments.AddEditFragment
 import aschi2403.tsiy.screens.fragments.ListActivitiesFragmentDirections
 import com.google.android.material.card.MaterialCardView
 
-class ActivitiesEditDeleteAdapter(private var data: List<ActivityType>?, private val context: Context) :
-        RecyclerView.Adapter<ActivitiesEditDeleteAdapter.DataViewHolder>() {
+class ActivitiesEditDeleteAdapter(
+    private var data: MutableList<ActivityType>,
+    context: Context
+) :
+    RecyclerView.Adapter<ActivitiesEditDeleteAdapter.DataViewHolder>() {
+    val database = WorkoutRepo(context)
 
     class DataViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val icon //TODO: implement
@@ -38,29 +43,37 @@ class ActivitiesEditDeleteAdapter(private var data: List<ActivityType>?, private
     }
 
     override fun getItemCount(): Int {
-        return data!!.size
+        return data.size
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): DataViewHolder {
         val v =
-                LayoutInflater.from(viewGroup.context).inflate(R.layout.list_iactivity, viewGroup, false)
+            LayoutInflater.from(viewGroup.context)
+                .inflate(R.layout.list_iactivity, viewGroup, false)
         return DataViewHolder(
-                v
+            v
         )
     }
 
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
-        if (data != null) {
-            holder.name.text = data!![position].name
-            holder.delete.setOnClickListener {/*TODO: implement delete*/ }
-            holder.edit.setOnClickListener { view: View ->
-                Navigation.findNavController(view).navigate(ListActivitiesFragmentDirections.actionListActivitiesFragmentToFragmentAddEditFragment(id = data!![position].id!!, type = data!![position].powerActivity))
-            }
+        holder.name.text = data[position].name
+        holder.delete.setOnClickListener {
+            database.deleteActivityType(data[position])
+            data.removeAt(position)
+            notifyDataSetChanged()
+        }
+        holder.edit.setOnClickListener { view: View ->
+            Navigation.findNavController(view).navigate(
+                ListActivitiesFragmentDirections.actionListActivitiesFragmentToFragmentAddEditFragment(
+                    id = data[position].id!!,
+                    type = data[position].powerActivity
+                )
+            )
         }
     }
 
     fun setData(data: List<ActivityType>?) {
-        this.data = data
+        this.data = data!!.toMutableList()
     }
 
 }

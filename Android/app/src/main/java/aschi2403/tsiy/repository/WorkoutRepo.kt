@@ -86,7 +86,11 @@ class WorkoutRepo(context: Context) {
     }
 
     fun updateActivityType(activityType: ActivityType) {
-        activityTypeDao.updateActivityType(activityType);
+        activityTypeDao.updateActivityType(activityType)
+    }
+
+    fun deleteActivityType(activityType: ActivityType) {
+        activityTypeDao.deleteActivityType(activityType)
     }
 
 
