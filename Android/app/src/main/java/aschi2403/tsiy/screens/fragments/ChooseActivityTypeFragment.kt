@@ -7,10 +7,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.screens.adapters.ActivitiesViewChooseAdapter
 import aschi2403.tsiy.R
-import aschi2403.tsiy.databinding.FragmentAddWeightBinding
 import aschi2403.tsiy.databinding.FragmentChooseActivityTypeBinding
 import aschi2403.tsiy.model.ActivityType
 import aschi2403.tsiy.repository.WorkoutRepo
@@ -38,6 +36,10 @@ class ChooseActivityTypeFragment : Fragment() {
         val mergedList = ArrayList<ActivityType>()
         mergedList.addAll(database.allPowerActivityTypes)
         mergedList.addAll(database.allActivityTypes)
+
+        if (mergedList.isEmpty()) {
+            binding.noActivityInfoText.visibility = View.VISIBLE
+        }
         val adapter =
             ActivitiesViewChooseAdapter(
                 mergedList,
