@@ -41,30 +41,11 @@ class AddWeightFragment : Fragment() {
         binding.confirmButton.setOnClickListener { confirmButton() }
 
         binding.addWeight.setOnClickListener {
-            // otherwise if the user hasn't put in a number yet and the user presses the increase button the app crashes (java.lang.NumberFormatException: empty String)
-            if (!binding.weightValue.text.isNullOrEmpty()) {
-                binding.weightValue.setText(
-                    (binding.weightValue.text.toString().toDouble() + 0.1).round().toString()
-                )
-            } else {
-                binding.weightValue.setText(
-                    (0.1.round()).toString()
-                )
-            }
+            increaseButtonHandler()
         }
 
         binding.removeWeight.setOnClickListener {
-            // otherwise if the user hasn't put in a number yet and the user presses the decrease button the app crashes (java.lang.NumberFormatException: empty String)
-            if (!binding.weightValue.text.isNullOrEmpty()) {
-                val newValue: Double = binding.weightValue.text.toString().toDouble() - 0.1
-
-                // prevent weight value from getting negative
-                if (newValue >= 0) {
-                    binding.weightValue.setText(
-                        newValue.round().toString()
-                    )
-                }
-            }
+            decreaseButtonHandler()
         }
 
         binding.dateValue.setText(SimpleDateFormat("dd.MM.yyyy HH:mm").format(Date(currentTimeMillis())).toString())
@@ -76,6 +57,33 @@ class AddWeightFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun decreaseButtonHandler() {
+        // otherwise if the user hasn't put in a number yet and the user presses the decrease button the app crashes (java.lang.NumberFormatException: empty String)
+        if (!binding.weightValue.text.isNullOrEmpty()) {
+            val newValue: Double = binding.weightValue.text.toString().toDouble() - 0.1
+
+            // prevent weight value from getting negative
+            if (newValue >= 0) {
+                binding.weightValue.setText(
+                    newValue.round().toString()
+                )
+            }
+        }
+    }
+
+    private fun increaseButtonHandler() {
+        // otherwise if the user hasn't put in a number yet and the user presses the increase button the app crashes (java.lang.NumberFormatException: empty String)
+        if (!binding.weightValue.text.isNullOrEmpty()) {
+            binding.weightValue.setText(
+                (binding.weightValue.text.toString().toDouble() + 0.1).round().toString()
+            )
+        } else {
+            binding.weightValue.setText(
+                (0.1.round()).toString()
+            )
+        }
     }
 
     fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
