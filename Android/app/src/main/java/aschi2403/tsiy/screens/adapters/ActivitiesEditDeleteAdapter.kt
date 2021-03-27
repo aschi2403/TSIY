@@ -61,14 +61,23 @@ class ActivitiesEditDeleteAdapter(
             data.removeAt(position)
             notifyDataSetChanged()
         }
-        holder.edit.setOnClickListener { view: View ->
-            Navigation.findNavController(view).navigate(
-                ListActivitiesFragmentDirections.actionListActivitiesFragmentToFragmentAddEditFragment(
-                    id = data[position].id!!,
-                    type = data[position].powerActivity
-                )
-            )
+
+        holder.cv.setOnClickListener {
+            editActivityType(it, position)
         }
+
+        holder.edit.setOnClickListener {
+            editActivityType(it, position)
+        }
+    }
+
+    private fun editActivityType(view: View, position: Int) {
+        Navigation.findNavController(view).navigate(
+            ListActivitiesFragmentDirections.actionListActivitiesFragmentToFragmentAddEditFragment(
+                id = data[position].id!!,
+                type = data[position].powerActivity
+            )
+        )
     }
 
     fun setData(data: List<ActivityType>?) {
