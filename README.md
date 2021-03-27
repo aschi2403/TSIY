@@ -16,3 +16,4 @@ Licensed under the [GNU General Public License v3.0](https://github.com/aschi240
 
 ## Dependencies
 [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
+[Icon picker dialog](https://github.com/maltaisn/icondialoglib)
