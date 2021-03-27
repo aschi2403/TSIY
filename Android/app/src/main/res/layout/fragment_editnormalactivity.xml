@@ -154,7 +154,6 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="85dp"
                 android:layout_marginEnd="75dp"
-                android:layout_toEndOf="@+id/close"
                 android:text="@string/save"
                 android:textSize="16sp"/>
 
