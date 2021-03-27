@@ -1,6 +1,7 @@
 package aschi2403.tsiy.screens.adapters
 
 import android.content.Context
+import android.graphics.drawable.Icon
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,17 +16,17 @@ import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.fragments.HomeFragmentDirections
 import com.google.android.material.card.MaterialCardView
+import com.maltaisn.icondialog.pack.IconPack
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class HomeListAdapter(private var data: List<IActivity>?, val context: Context) :
+class HomeListAdapter(private var data: List<IActivity>?, val context: Context, private val iconPack: IconPack) :
     RecyclerView.Adapter<HomeListAdapter.DataViewHolder>() {
     val database = WorkoutRepo(context)
 
     class DataViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val icon //TODO: implement
-                : ImageView
+        val icon: ImageView
         val firstLine: TextView
         val secondLine: TextView
         val cv: MaterialCardView
@@ -69,19 +70,20 @@ class HomeListAdapter(private var data: List<IActivity>?, val context: Context) 
 
             holder.timeValue.text = "$minutes minutes and $seconds seconds"
             holder.cardioPointsValue.text = data!![position].cardioPoints.toString()
-            val name: String
-            name = if (data!![position] is PowerActivity) {
+            if (data!![position] is PowerActivity) {
                 val activity = data!![position] as PowerActivity
-                activity.powerActivityType.name
+                holder.firstLine.text = activity.powerActivityType.name
+                holder.icon.setImageDrawable(iconPack.getIcon(activity.powerActivityType.icon)!!.drawable)
             } else {
                 val activity = data!![position] as GeneralActivity
-                activity.activityType.name
+                holder.firstLine.text = activity.activityType.name
+                holder.icon.setImageDrawable(iconPack.getIcon(activity.activityType.icon)!!.drawable)
             }
-            holder.firstLine.text = name
 
             val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy")
             val date = simpleDateFormat.format(Date(data!![position].startDate))
             holder.secondLine.text = date
+
         }
     }
 

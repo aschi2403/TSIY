@@ -10,7 +10,7 @@ class ActivityType(
     @PrimaryKey(autoGenerate = true)
     override var id: Long? = 0,
     override var name: String = "",
-    override var icon: String = "",
+    override var icon: Int = 0,
     override var description: String = "",
     override var powerActivity: Boolean,
     override var caloriesPerMinute: Double,
