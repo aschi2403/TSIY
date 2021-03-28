@@ -15,5 +15,5 @@ Copyright 2020-2021 Jakob Aschauer, Alexander Schönberger
 Licensed under the [GNU General Public License v3.0](https://github.com/aschi2403/TSIY/blob/master/LICENSE)
 
 ## Dependencies
-[MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
-[Icon picker dialog](https://github.com/maltaisn/icondialoglib)
+- [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
+- [Icon picker dialog](https://github.com/maltaisn/icondialoglib)
