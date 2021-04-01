@@ -13,8 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentPauseScreenBinding
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_workout_screen.*
 import kotlinx.android.synthetic.main.fragment_pause_screen.*
 import java.util.concurrent.TimeUnit
 

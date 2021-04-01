@@ -66,4 +66,5 @@
     <string name="id">ID</string>
     <string name="repetitions">Repetitions</string>
     <string name="no_activity_type">Please create a new activity type</string>
+    <string name="pick_date">Pick Date</string>
 </resources>
