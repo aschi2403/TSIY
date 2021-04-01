@@ -53,9 +53,9 @@
     <string name="legal_notice">Legal Notice</string>
     <string name="table_of_contents">Table of contents</string>
     <string name="license">License</string>
-    <string name="license_content">Copyright 2020\-2021 Jakob Aschauer, Alexander Schönberger Licensed under the GNU Affero General Public License v3.0</string>
+    <string name="license_content">Copyright 2020\-2021 Jakob Aschauer, Alexander Schönberger Licensed under the GNU General Public License v3.0</string>
     <string name="dependencies">Dependencies</string>
-    <string name="dependencies_content">MPAndroidChart</string>
+    <string name="MPAndroidChart">MPAndroidChart by PhilJay</string>
     <string name="description_content">Track your activities</string>
     <string name="date">Date</string>
     <string name="add">Add</string>
@@ -66,5 +66,7 @@
     <string name="id">ID</string>
     <string name="repetitions">Repetitions</string>
     <string name="no_activity_type">Please create a new activity type</string>
+    <string name="icondialoglib">icondialoglib by maltaisn</string>
+    <string name="the_strength_is_yours">The strength is yours</string>
     <string name="pick_date">Pick Date</string>
 </resources>

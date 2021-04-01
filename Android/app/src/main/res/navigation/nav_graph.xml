@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/legal_NoticeFragment"
-        android:name="aschi2403.tsiy.screens.fragments.Legal_NoticeFragment"
+        android:name="aschi2403.tsiy.screens.fragments.LegalNoticeFragment"
         android:label="fragment_legal__notice"
         tools:layout="@layout/fragment_legal__notice"/>
     <fragment

@@ -11,8 +11,9 @@ The Strengh is Yours
 ## Description
 
 ## Licence
-Copyright 2020-2021 Jakob Aschauer, Alexander Schönberger
+Copyright 2020-2021 Jakob Aschauer, Alexander Schönberger<br>
 Licensed under the [GNU General Public License v3.0](https://github.com/aschi2403/TSIY/blob/master/LICENSE)
 
 ## Dependencies
-[MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
+- [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
+- [Icon picker dialog](https://github.com/maltaisn/icondialoglib)

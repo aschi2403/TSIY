@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import aschi2403.tsiy.screens.adapters.HomeListAdapter
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentHomeBinding
+import aschi2403.tsiy.helper.IconPackProvider
 import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.models.HomeViewModel
@@ -50,10 +51,12 @@ class HomeFragment : Fragment() {
         val rv = binding.listOfActivities
         rv.setHasFixedSize(true)
         val llm = LinearLayoutManager(this.context)
+
         rv.layoutManager = llm
         editDeleteAdapter = HomeListAdapter(
             getData(),
-            this.requireContext()
+            this.requireContext(),
+            IconPackProvider(this.requireContext()).loadIconPack()
         )
         rv.adapter = editDeleteAdapter
         return binding.root
