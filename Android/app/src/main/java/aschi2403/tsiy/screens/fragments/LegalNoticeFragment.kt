@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentLegalNoticeBinding
+import aschi2403.tsiy.screens.activities.MainActivity
 
 
 class LegalNoticeFragment : Fragment() {
@@ -30,6 +31,8 @@ class LegalNoticeFragment : Fragment() {
         binding.icondialoglib.setOnClickListener {
             openBrowser("https://github.com/maltaisn/icondialoglib")
         }
+
+        (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         return binding.root
     }

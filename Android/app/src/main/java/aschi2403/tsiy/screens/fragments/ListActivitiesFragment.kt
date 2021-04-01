@@ -19,6 +19,7 @@ import aschi2403.tsiy.databinding.FragmentChooseActivityTypeBinding
 import aschi2403.tsiy.databinding.FragmentListActivitiesBinding
 import aschi2403.tsiy.model.ActivityType
 import aschi2403.tsiy.repository.WorkoutRepo
+import aschi2403.tsiy.screens.activities.MainActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.stream.Collectors
 
@@ -39,6 +40,9 @@ class ListActivitiesFragment : Fragment() {
                 inflater,
                 R.layout.fragment_list_activities, container, false
         )
+
+        (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
         database = WorkoutRepo(requireContext())
         type = arguments?.getBoolean("type")
 

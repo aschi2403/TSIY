@@ -13,6 +13,7 @@ import aschi2403.tsiy.databinding.FragmentEditnormalactivityBinding
 import aschi2403.tsiy.helper.IconPackProvider
 import aschi2403.tsiy.model.ActivityType
 import aschi2403.tsiy.repository.WorkoutRepo
+import aschi2403.tsiy.screens.activities.MainActivity
 import com.maltaisn.icondialog.IconDialog
 import com.maltaisn.icondialog.IconDialogSettings
 import com.maltaisn.icondialog.data.Icon
@@ -34,6 +35,8 @@ class AddEditFragment : Fragment(), IconDialog.Callback {
             inflater,
             R.layout.fragment_editnormalactivity, container, false
         )
+
+        (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         iconPack = IconPackProvider(this.requireContext()).loadIconPack()
 

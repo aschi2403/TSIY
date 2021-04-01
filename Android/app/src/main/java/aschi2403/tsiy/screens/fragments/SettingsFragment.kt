@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentSettingsBinding
+import aschi2403.tsiy.screens.activities.MainActivity
 
 /**
  * A simple [Fragment] subclass.
@@ -27,6 +28,9 @@ class SettingsFragment : Fragment() {
         binding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_settings, container, false
         )
+
+        (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+
         binding.manageactivities.setOnClickListener { manageActivities() }
         binding.managepoweractivities.setOnClickListener { managePowerActivities() }
         binding.legalNotice.setOnClickListener { legal_notice() }

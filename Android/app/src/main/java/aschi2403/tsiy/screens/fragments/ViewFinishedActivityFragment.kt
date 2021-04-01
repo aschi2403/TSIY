@@ -29,6 +29,8 @@ class ViewFinishedActivityFragment : Fragment() {
             inflater, R.layout.fragment_viewfinishedactivity, container, false
         )
 
+        (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
         val idOfActivity = arguments?.getLong("id")
         val powerActivity = arguments?.getBoolean("type")
 

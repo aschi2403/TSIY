@@ -12,6 +12,7 @@ import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentChooseActivityTypeBinding
 import aschi2403.tsiy.model.ActivityType
 import aschi2403.tsiy.repository.WorkoutRepo
+import aschi2403.tsiy.screens.activities.MainActivity
 
 class ChooseActivityTypeFragment : Fragment() {
 
@@ -25,6 +26,9 @@ class ChooseActivityTypeFragment : Fragment() {
             inflater,
             R.layout.fragment_choose_activity_type, container, false
         )
+
+        (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
 
         val database = context?.let { WorkoutRepo(it) }!!
 
