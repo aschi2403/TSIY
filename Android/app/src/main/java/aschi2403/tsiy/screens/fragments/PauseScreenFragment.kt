@@ -19,6 +19,8 @@ import java.util.concurrent.TimeUnit
 class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
 
     private lateinit var binding: FragmentPauseScreenBinding
+    private var lastCountdownPaused: Long = 0
+    private var timerIsCounting = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +43,8 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
         binding.countdown.base = SystemClock.elapsedRealtime() + pauseTime
         binding.countdown.start()
         binding.countdown.onChronometerTickListener = this
-        var timerIsCounting = true
+        timerIsCounting = true
+
 
         binding.skip.setOnClickListener { findNavController().popBackStack() }
         binding.plusmin.setOnClickListener { binding.countdown.base += 60000 }
@@ -49,9 +52,11 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
             if (timerIsCounting) {
                 binding.pause.text = getString(R.string.resume)
                 countdown.stop()
+                lastCountdownPaused = SystemClock.elapsedRealtime()
                 timerIsCounting = false
             } else {
                 binding.pause.text = getString(R.string.pause)
+                countdown.base = countdown.base + SystemClock.elapsedRealtime() - lastCountdownPaused
                 countdown.start()
                 timerIsCounting = true
             }
@@ -68,4 +73,19 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
             }
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        lastCountdownPaused = SystemClock.elapsedRealtime()
+        binding.countdown.stop()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (timerIsCounting && lastCountdownPaused != 0L) {
+            countdown.base = countdown.base + SystemClock.elapsedRealtime() - lastCountdownPaused
+            countdown.start()
+        }
+    }
+
 }
