@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentViewfinishedactivityBinding
 import aschi2403.tsiy.repository.WorkoutRepo
+import aschi2403.tsiy.screens.activities.MainActivity
 import kotlinx.android.synthetic.main.table_row.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -65,7 +66,6 @@ class ViewFinishedActivityFragment : Fragment() {
             }
             sets.forEach {
                 val row = LayoutInflater.from(context).inflate(R.layout.table_row, null)
-                row.setValue.text = it.id.toString()
                 row.repetitionsValue.text = it.repetitions.toString()
                 row.weightValue.text = it.weight.toString()
                 binding.sets.addView(row)
