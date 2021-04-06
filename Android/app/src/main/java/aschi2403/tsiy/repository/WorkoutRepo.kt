@@ -40,6 +40,10 @@ class WorkoutRepo(context: Context) {
         powerActivityDao.updatePowerActivity(powerActivity)
     }
 
+    fun deletePowerActivity(powerActivity: PowerActivity) {
+        powerActivityDao.deletePowerActivity(powerActivity)
+    }
+
     // GeneralActivity
 
     fun addGeneralActivity(generalActivity: GeneralActivity): Long? {
@@ -65,6 +69,9 @@ class WorkoutRepo(context: Context) {
 
     fun generalActivityById(id: Long) = generalActivityDao.loadGeneralActivity(id)
 
+    fun deleteGeneralActivity(generalActivity: GeneralActivity) {
+        generalActivityDao.deleteGeneralActivity(generalActivity)
+    }
     // PowerActivityType
 
     fun generatePowerActivity() = PowerActivity()

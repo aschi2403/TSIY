@@ -5,10 +5,14 @@ import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentViewfinishedactivityBinding
+import aschi2403.tsiy.model.GeneralActivity
+import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.activities.MainActivity
 import kotlinx.android.synthetic.main.table_row.view.*
@@ -39,6 +43,17 @@ class ViewFinishedActivityFragment : Fragment() {
             database.powerActivityById(idOfActivity!!)
         } else {
             database.generalActivityById(idOfActivity!!)
+        }
+
+        val deleteButton = requireActivity().findViewById<Button>(R.id.deleteButtonAppBar)
+        deleteButton.visibility = View.VISIBLE
+        deleteButton.setOnClickListener {
+            if (powerActivity) {
+                database.deletePowerActivity(iActivity as PowerActivity)
+            } else {
+                database.deleteGeneralActivity(iActivity as GeneralActivity)
+            }
+            findNavController().popBackStack()
         }
 
         val sdf = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.GERMAN)
@@ -85,5 +100,10 @@ class ViewFinishedActivityFragment : Fragment() {
             return "0"
         }
         return ""
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        requireActivity().findViewById<Button>(R.id.deleteButtonAppBar).visibility = View.GONE
     }
 }
