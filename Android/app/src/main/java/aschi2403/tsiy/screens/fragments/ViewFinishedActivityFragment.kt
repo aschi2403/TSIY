@@ -27,7 +27,7 @@ class ViewFinishedActivityFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_viewfinishedactivity, container, false
@@ -63,9 +63,10 @@ class ViewFinishedActivityFragment : Fragment() {
         binding.duration.text =
             durationLeadingZero(iActivity.duration) + DateUtils.formatElapsedTime(iActivity.duration / 1000)
 
-        val pauseDuration = iActivity.endDate - iActivity.startDate - iActivity.duration
+        val pauseDuration =
+            iActivity.endDate / 1000 - iActivity.startDate / 1000 - iActivity.duration / 1000
         binding.pause.text = durationLeadingZero(pauseDuration) +
-                DateUtils.formatElapsedTime(pauseDuration / 1000)
+                DateUtils.formatElapsedTime(pauseDuration)
 
         binding.cardiopoints.text = iActivity.cardioPoints.toString()
         binding.caloriesValue.text = iActivity.calories.toString()
