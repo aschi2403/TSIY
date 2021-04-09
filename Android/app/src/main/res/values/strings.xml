@@ -65,11 +65,12 @@
     <string name="finish">Finish</string>
     <string name="id">ID</string>
     <string name="repetitions">Repetitions</string>
-    <string name="no_activity_type">Please create a new activity type</string>
+    <string name="no_activity_type">Please create a new (power) activity type in settings\n</string>
     <string name="icondialoglib">icondialoglib by maltaisn</string>
     <string name="the_strength_is_yours">The strength is yours</string>
     <string name="pick_date">Pick Date</string>
     <string name="delete">Delete</string>
     <string name="github">Github</string>
     <string name="attention">Attention</string>
+    <string name="go_to_settings">Go to settings</string>
 </resources>

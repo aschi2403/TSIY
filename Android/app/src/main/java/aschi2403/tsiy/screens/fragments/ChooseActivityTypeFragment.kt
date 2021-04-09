@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import aschi2403.tsiy.screens.adapters.ActivitiesViewChooseAdapter
 import aschi2403.tsiy.R
@@ -21,7 +22,7 @@ class ChooseActivityTypeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_choose_activity_type, container, false
@@ -43,6 +44,10 @@ class ChooseActivityTypeFragment : Fragment() {
 
         if (mergedList.isEmpty()) {
             binding.noActivityInfoText.visibility = View.VISIBLE
+            binding.gotToSettings.visibility = View.VISIBLE
+            binding.gotToSettings.setOnClickListener {
+                findNavController().navigate(R.id.action_fragment_choose_activity_type_to_settingsFragment)
+            }
         }
         val adapter =
             ActivitiesViewChooseAdapter(

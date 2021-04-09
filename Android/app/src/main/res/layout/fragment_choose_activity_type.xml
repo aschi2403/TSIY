@@ -14,18 +14,29 @@
             android:layout_height="wrap_content"
             tools:ignore="MissingConstraints" />
 
-
         <TextView
             android:id="@+id/noActivityInfoText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/no_activity_type"
             android:visibility="gone"
+            android:text="@string/no_activity_type"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/gotToSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/go_to_settings"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/noActivityInfoText"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

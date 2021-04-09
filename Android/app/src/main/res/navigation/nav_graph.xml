@@ -61,6 +61,9 @@
         android:name="aschi2403.tsiy.screens.fragments.ChooseActivityTypeFragment"
         android:label="fragment_choose_activity_type"
         tools:layout="@layout/fragment_choose_activity_type">
+        <action
+            android:id="@+id/action_fragment_choose_activity_type_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
 
     <fragment
