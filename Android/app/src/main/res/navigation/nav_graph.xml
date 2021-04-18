@@ -35,6 +35,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_listActivitiesFragment"
             app:destination="@id/listActivitiesFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_listWorkoutPlansFragment"
+            app:destination="@id/listWorkoutPlansFragment" />
     </fragment>
     <fragment
         android:id="@+id/addWeightFragment"
@@ -55,6 +58,12 @@
             app:destination="@id/fragment_choose_activity_type"/>
         <action android:id="@+id/action_homeFragment_to_fragment_view_finished_activity"
                 app:destination="@id/fragment_view_finished_activity"/>
+        <action
+            android:id="@+id/action_homeFragment_to_listActivitiesFragment"
+            app:destination="@id/listActivitiesFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_chooseWorkoutPlanFragment"
+            app:destination="@id/chooseWorkoutPlanFragment" />
     </fragment>
     <fragment
         android:id="@+id/fragment_choose_activity_type"
@@ -64,6 +73,19 @@
         <action
             android:id="@+id/action_fragment_choose_activity_type_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <argument
+            android:name="generalActivity"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_fragment_choose_activity_type_to_fragment_add_edit_fragment"
+            app:destination="@id/fragment_add_edit_fragment" >
+            <argument
+                android:name="new"
+                android:defaultValue="true" />
+            <argument
+                android:name="type"
+                android:defaultValue="false" />
+        </action>
     </fragment>
 
     <fragment
@@ -77,9 +99,9 @@
 
     <fragment
         android:id="@+id/fragment_add_edit_fragment"
-        android:name="aschi2403.tsiy.screens.fragments.AddEditFragment"
+        android:name="aschi2403.tsiy.screens.fragments.AddEditActivityTypeFragment"
         android:label="fragment_choose_activity_type"
-        tools:layout="@layout/fragment_editnormalactivity">
+        tools:layout="@layout/fragment_addeditactivitytype">
         <argument
             android:name="new"
             app:argType="boolean"
@@ -96,7 +118,7 @@
         android:id="@+id/listActivitiesFragment"
         android:name="aschi2403.tsiy.screens.fragments.ListActivitiesFragment"
         android:label="fragment_list_activities"
-        tools:layout="@layout/fragment_list_activities" >
+        tools:layout="@layout/fragment_list_view" >
         <action
             android:id="@+id/action_listActivitiesFragment_to_fragment_add_edit_fragment"
             app:destination="@id/fragment_add_edit_fragment" />
@@ -104,5 +126,25 @@
             android:name="type"
             app:argType="boolean" />
     </fragment>
-
+    <fragment
+        android:id="@+id/listWorkoutPlansFragment"
+        android:name="aschi2403.tsiy.screens.fragments.ListWorkoutPlansFragment"
+        android:label="ListWorkoutPlansFragment" >
+        <action
+            android:id="@+id/action_listWorkoutPlansFragment_to_createEditWorkoutFragment"
+            app:destination="@id/createEditWorkoutFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createEditWorkoutFragment"
+        android:name="aschi2403.tsiy.screens.fragments.CreateEditWorkoutFragment"
+        android:label="fragment_create_edit_workout"
+        tools:layout="@layout/fragment_create_edit_workout" >
+        <argument
+            android:name="id"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/chooseWorkoutPlanFragment"
+        android:name="aschi2403.tsiy.screens.fragments.ChooseWorkoutPlanFragment"
+        android:label="ChooseWorkoutPlanFragment" />
 </navigation>

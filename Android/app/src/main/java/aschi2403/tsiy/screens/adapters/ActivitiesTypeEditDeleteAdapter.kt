@@ -18,28 +18,29 @@ import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.fragments.ListActivitiesFragmentDirections
 import com.google.android.material.card.MaterialCardView
+import com.maltaisn.icondialog.pack.IconPack
 
 
-class ActivitiesEditDeleteAdapter(
+class ActivitiesTypeEditDeleteAdapter(
     private var data: MutableList<ActivityType>,
-    var context: Context
+    var context: Context,
+    private val iconPack: IconPack
 ) :
-    RecyclerView.Adapter<ActivitiesEditDeleteAdapter.DataViewHolder>() {
+    RecyclerView.Adapter<ActivitiesTypeEditDeleteAdapter.DataViewHolder>() {
     val database = WorkoutRepo(context)
 
     class DataViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val icon //TODO: implement
-                : ImageView
+        val icon: ImageView
         val name: TextView
         val edit: ImageButton
         val delete: ImageButton
         val cv: MaterialCardView
 
         init {
-            cv = itemView.findViewById(R.id.iactivity_card)
-            name = itemView.findViewById(R.id.nameOfActivity)
-            edit = itemView.findViewById(R.id.editActivity)
-            delete = itemView.findViewById(R.id.deleteActivity)
+            cv = itemView.findViewById(R.id.item_card)
+            name = itemView.findViewById(R.id.nameOfItem)
+            edit = itemView.findViewById(R.id.editItem)
+            delete = itemView.findViewById(R.id.deleteItem)
             icon = itemView.findViewById(R.id.imageOfActivity)
         }
     }
@@ -51,7 +52,7 @@ class ActivitiesEditDeleteAdapter(
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): DataViewHolder {
         val v =
             LayoutInflater.from(viewGroup.context)
-                .inflate(R.layout.list_iactivity, viewGroup, false)
+                .inflate(R.layout.list_edit_delete_item, viewGroup, false)
         return DataViewHolder(
             v
         )
@@ -59,14 +60,16 @@ class ActivitiesEditDeleteAdapter(
 
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
         holder.name.text = data[position].name
+        holder.icon.setImageDrawable(iconPack.getIcon(data[position].icon)!!.drawable)
         holder.delete.setOnClickListener {
-
-            val items = if (data[position].powerActivity) {
+            val items = if (data[position].isPowerActivity) {
                 database.allPowerActivities.stream()
-                    .filter { activity: PowerActivity -> activity.activityTypeId == data[position].id }.count()
+                    .filter { activity: PowerActivity -> activity.activityTypeId == data[position].id }
+                    .count()
             } else {
                 database.allGeneralActivities.stream()
-                    .filter { activity: GeneralActivity -> activity.activityTypeId == data[position].id }.count()
+                    .filter { activity: GeneralActivity -> activity.activityTypeId == data[position].id }
+                    .count()
             }
             if (items > 0) {
                 showAlertDialog(items, position)
@@ -88,13 +91,13 @@ class ActivitiesEditDeleteAdapter(
         Navigation.findNavController(view).navigate(
             ListActivitiesFragmentDirections.actionListActivitiesFragmentToFragmentAddEditFragment(
                 id = data[position].id!!,
-                type = data[position].powerActivity
+                type = data[position].isPowerActivity
             )
         )
     }
 
-    fun setData(data: List<ActivityType>?) {
-        this.data = data!!.toMutableList()
+    fun setData(data: MutableList<ActivityType>) {
+        this.data = data
     }
 
     private fun showAlertDialog(items: Long, position: Int) {
@@ -105,7 +108,11 @@ class ActivitiesEditDeleteAdapter(
             "YES"
         ) { _, _ ->
             deleteData(position)
-            Toast.makeText(context, "Activity type and saved activities deleted.", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                context,
+                "Activity type and saved activities deleted.",
+                Toast.LENGTH_LONG
+            ).show()
         }
         alertDialog.setNegativeButton(
             "NO"

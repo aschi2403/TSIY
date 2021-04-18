@@ -16,6 +16,9 @@
         <argument android:name="activityTypeId" app:argType="long"/>
         <argument android:name="name" app:argType="string"/>
         <argument android:name="type" app:argType="boolean"/>
+        <argument
+            android:name="workoutId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/choose_power_activity_type"
@@ -33,14 +36,5 @@
         android:name="aschi2403.tsiy.screens.fragments.PauseScreenFragment"
         android:label="fragment_pause_screen"
         tools:layout="@layout/fragment_pause_screen"/>
-
-    <fragment
-        android:id="@+id/choose_activity_type"
-        android:name="aschi2403.tsiy.screens.fragments.ChooseActivityTypeFragment"
-        android:label="fragment_choose_activity_type"
-        tools:layout="@layout/fragment_choose_activity_type">
-        <action android:id="@+id/action_choose_activity_type_to_workout_screen"
-                app:destination="@id/workout_screen"/>
-    </fragment>
 
 </navigation>

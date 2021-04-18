@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import aschi2403.tsiy.screens.adapters.ActivitiesViewChooseAdapter
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentChooseActivityTypeBinding
-import aschi2403.tsiy.model.ActivityType
+import aschi2403.tsiy.helper.IconPackProvider
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.activities.MainActivity
 
@@ -30,29 +30,45 @@ class ChooseActivityTypeFragment : Fragment() {
 
         (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-
         val database = context?.let { WorkoutRepo(it) }!!
-
 
         val rv = binding.listActivitiesRV
         rv.setHasFixedSize(true)
         val llm = LinearLayoutManager(context)
         rv.layoutManager = llm
-        val mergedList = ArrayList<ActivityType>()
-        mergedList.addAll(database.allPowerActivityTypes)
-        mergedList.addAll(database.allActivityTypes)
 
-        if (mergedList.isEmpty()) {
-            binding.noActivityInfoText.visibility = View.VISIBLE
-            binding.gotToSettings.visibility = View.VISIBLE
-            binding.gotToSettings.setOnClickListener {
-                findNavController().navigate(R.id.action_fragment_choose_activity_type_to_settingsFragment)
+        val generalActivity = arguments?.getBoolean("generalActivity", false)!!
+        val list = if (generalActivity) {
+            database.allActivityTypes
+        } else {
+            database.allPowerActivityTypes
+        }
+
+        if (list.isEmpty()) {
+            if (generalActivity) {
+                binding.createOne.setOnClickListener {
+                    findNavController().navigate(
+                        R.id.action_fragment_choose_activity_type_to_fragment_add_edit_fragment
+                    )
+                }
+            } else {
+                binding.noActivityInfoText.text =
+                    resources.getString(R.string.no_power_activity_type)
+                binding.createOne.setOnClickListener {
+                    findNavController().navigate(
+                        R.id.action_fragment_choose_activity_type_to_fragment_add_edit_fragment
+                    )
+                }
             }
+            binding.noActivityInfoText.visibility = View.VISIBLE
+            binding.createOne.visibility = View.VISIBLE
+
         }
         val adapter =
             ActivitiesViewChooseAdapter(
-                mergedList,
-                requireContext()
+                list.toMutableList(),
+                requireContext(),
+                IconPackProvider(this.requireContext()).loadIconPack()
             )
         rv.adapter = adapter
         return binding.root

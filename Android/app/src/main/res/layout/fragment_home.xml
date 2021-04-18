@@ -23,6 +23,48 @@
             tools:ignore="MissingConstraints"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/startWorkout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:backgroundTint="#FFFFFF"
+            app:backgroundTint="#FFFFFF"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/startPowerActivity"
+            app:layout_constraintEnd_toEndOf="@+id/startPowerActivity"
+            app:layout_constraintStart_toStartOf="@+id/startPowerActivity"
+            app:srcCompat="@drawable/ic_baseline_add_24"
+            android:contentDescription="@string/start_workout" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/startPowerActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:backgroundTint="#FFFFFF"
+            app:backgroundTint="#FFFFFF"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/startGeneralActivity"
+            app:layout_constraintEnd_toEndOf="@+id/startGeneralActivity"
+            app:layout_constraintStart_toStartOf="@+id/startGeneralActivity"
+            app:srcCompat="@drawable/ic_baseline_fitness_center_24"
+            android:contentDescription="@string/start_power_activity" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/startGeneralActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:backgroundTint="#FFFFFF"
+            app:backgroundTint="#FFFFFF"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/startNewActivity"
+            app:layout_constraintEnd_toEndOf="@+id/startNewActivity"
+            app:layout_constraintStart_toStartOf="@+id/startNewActivity"
+            app:srcCompat="@drawable/ic_baseline_directions_bike_24"
+            android:contentDescription="@string/start_activity" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/startNewActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,7 +74,8 @@
             app:backgroundTint="#FFFFFF"
             app:srcCompat="@drawable/ic_baseline_add_24"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/start_new_activity" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,7 +1,6 @@
 package aschi2403.tsiy.screens.fragments
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -22,27 +21,32 @@ class SettingsFragment : Fragment() {
     private lateinit var binding: FragmentSettingsBinding
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_settings, container, false
+            inflater, R.layout.fragment_settings, container, false
         )
 
         (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(false)
 
         binding.manageactivities.setOnClickListener { manageActivities() }
         binding.managepoweractivities.setOnClickListener { managePowerActivities() }
+        binding.manageworkouts.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_settingsFragment_to_listWorkoutPlansFragment
+            )
+        }
         binding.legalNotice.setOnClickListener { legal_notice() }
         sharedPreferences =
-                this.requireContext().getSharedPreferences("settings", Context.MODE_PRIVATE)
+            this.requireContext().getSharedPreferences("settings", Context.MODE_PRIVATE)
 
         binding.pausetimeValue.setText(sharedPreferences.getLong("pauseTime", 20).toString())
         binding.timeUnit.setSelection(
-                if (sharedPreferences.getBoolean("timeUnitSeconds", true))
-                    1
-                else
-                    0
+            if (sharedPreferences.getBoolean("timeUnitSeconds", true))
+                1
+            else
+                0
 
         )
 
@@ -52,12 +56,20 @@ class SettingsFragment : Fragment() {
     }
 
     private fun managePowerActivities() {
-        findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToListActivitiesFragment(type = true))
+        findNavController().navigate(
+            SettingsFragmentDirections.actionSettingsFragmentToListActivitiesFragment(
+                type = true
+            )
+        )
 
     }
 
     private fun manageActivities() {
-        findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToListActivitiesFragment(type = false))
+        findNavController().navigate(
+            SettingsFragmentDirections.actionSettingsFragmentToListActivitiesFragment(
+                type = false
+            )
+        )
     }
 
 

@@ -12,8 +12,10 @@ import aschi2403.tsiy.model.*
         ActivityType::class,
         GeneralActivity::class,
         WeightEntry::class,
-        SetEntry::class],
-    version = 5
+        SetEntry::class,
+        WorkoutEntry::class,
+        WorkoutPlan::class],
+    version = 6
 )
 abstract class WorkoutDatabase : RoomDatabase() {
     abstract fun powerActivityDao(): PowerActivityDao
@@ -21,7 +23,9 @@ abstract class WorkoutDatabase : RoomDatabase() {
     abstract fun activityTypeDao(): ActivityTypeDao
     abstract fun generalActivityDao(): GeneralActivityDao
     abstract fun weightEntryDao(): WeightEntryDao
-    abstract  fun setEntryDao(): SetEntryDao
+    abstract fun setEntryDao(): SetEntryDao
+    abstract fun workoutPlanDao(): WorkoutPlanDao
+    abstract fun workoutEntryDao(): WorkoutEntryDao
 
     companion object {
         private var instance: WorkoutDatabase? = null

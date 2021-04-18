@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -17,7 +19,6 @@ import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.adapters.HomeListAdapter
 import aschi2403.tsiy.screens.models.HomeViewModel
-import java.util.stream.Collectors
 
 
 /**
@@ -34,7 +35,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         binding = DataBindingUtil.inflate(
@@ -46,7 +47,47 @@ class HomeFragment : Fragment() {
         binding.homeViewModel = viewModel
         binding.lifecycleOwner = this
 
-        binding.startNewActivity.setOnClickListener { onAdd() }
+        binding.startNewActivity.setOnClickListener {
+            if (binding.startGeneralActivity.isVisible) {
+                binding.startGeneralActivity.visibility = View.GONE
+                binding.startPowerActivity.visibility = View.GONE
+                binding.startWorkout.visibility = View.GONE
+                binding.startNewActivity.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this.requireContext(),
+                        R.drawable.ic_baseline_add_24
+                    )
+                )
+            } else {
+                binding.startGeneralActivity.visibility = View.VISIBLE
+                binding.startPowerActivity.visibility = View.VISIBLE
+                binding.startWorkout.visibility = View.VISIBLE
+                binding.startNewActivity.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this.requireContext(),
+                        R.drawable.ic_baseline_close_24
+                    )
+                )
+            }
+        }
+
+        binding.startGeneralActivity.setOnClickListener {
+            findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToChooseActivityFragment(
+                    generalActivity = true
+                )
+            )
+        }
+        binding.startPowerActivity.setOnClickListener {
+            findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToChooseActivityFragment(
+                    generalActivity = false
+                )
+            )
+        }
+        binding.startWorkout.setOnClickListener {
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToChooseWorkoutPlanFragment())
+        }
 
         database = WorkoutRepo(this.requireContext())
 
@@ -65,15 +106,10 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    private fun onAdd() {
-        findNavController().navigate(R.id.action_homeFragment_to_chooseActivityFragment)
-    }
-
-    private fun getData(): List<IActivity> {
-        val mergedList = ArrayList<IActivity>()
-        mergedList.addAll(database.allPowerActivities)
-        mergedList.addAll(database.allGeneralActivities)
-        return mergedList.stream().sorted(Comparator.comparing(IActivity::startDate).reversed()).collect(Collectors.toList())
+    private fun getData(): MutableList<IActivity> {
+        val mergedList =
+            database.allPowerActivities.plus(database.allGeneralActivities)
+        return mergedList.sortedByDescending { it.startDate }.toMutableList()
     }
 
     override fun onResume() {
