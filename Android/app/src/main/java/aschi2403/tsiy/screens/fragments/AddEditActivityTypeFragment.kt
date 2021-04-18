@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
-import aschi2403.tsiy.databinding.FragmentEditnormalactivityBinding
+import aschi2403.tsiy.databinding.FragmentAddeditactivitytypeBinding
 import aschi2403.tsiy.helper.IconPackProvider
 import aschi2403.tsiy.model.ActivityType
 import aschi2403.tsiy.repository.WorkoutRepo
@@ -20,20 +20,20 @@ import com.maltaisn.icondialog.data.Icon
 import com.maltaisn.icondialog.pack.IconPack
 
 
-class AddEditFragment : Fragment(), IconDialog.Callback {
+class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
 
     private var iconId: Int = 522 // Cycling icon as standard
-    private lateinit var binding: FragmentEditnormalactivityBinding
+    private lateinit var binding: FragmentAddeditactivitytypeBinding
 
     private lateinit var iconPack: IconPack
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.fragment_editnormalactivity, container, false
+            R.layout.fragment_addeditactivitytype, container, false
         )
 
         (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -75,7 +75,11 @@ class AddEditFragment : Fragment(), IconDialog.Callback {
         binding.close.setOnClickListener { findNavController().popBackStack() }
         binding.save.setOnClickListener {
             if (binding.activityType.text.isNullOrEmpty() || binding.caloriesValue.text.isNullOrEmpty() || binding.cardioPointsValue.text.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), "Please insert all data for the activity", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Please insert all data for the activity",
+                    Toast.LENGTH_LONG
+                ).show()
             } else {
                 activity = ActivityType(
                     idOfActivity,
@@ -98,7 +102,7 @@ class AddEditFragment : Fragment(), IconDialog.Callback {
         return binding.root
     }
 
-    override val iconDialogIconPack: IconPack?
+    override val iconDialogIconPack: IconPack
         get() = iconPack
 
     override fun onIconDialogIconsSelected(dialog: IconDialog, icons: List<Icon>) {

@@ -5,7 +5,7 @@
                 android:orientation="horizontal">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/iactivity_card"
+        android:id="@+id/item_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -22,14 +22,14 @@
                        android:contentDescription="@string/imageofactivity"/>
 
             <TextView
-                android:id="@+id/nameOfActivity"
+                android:id="@+id/nameOfItem"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:textSize="24sp"
                 android:layout_weight="1"/>
 
-            <ImageButton android:id="@+id/editActivity"
+            <ImageButton android:id="@+id/editItem"
                          android:layout_width="wrap_content"
                          android:layout_height="wrap_content"
                          android:layout_marginStart="20dp"
@@ -37,7 +37,7 @@
                          android:contentDescription="@string/edit_activity"
                          android:src="@drawable/ic_edit_black_48dp"/>
 
-            <ImageButton android:id="@+id/deleteActivity"
+            <ImageButton android:id="@+id/deleteItem"
                          android:layout_width="wrap_content"
                          android:layout_height="wrap_content"
                          android:layout_marginStart="20dp"

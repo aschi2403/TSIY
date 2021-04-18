@@ -1,7 +1,6 @@
 package aschi2403.tsiy.screens.adapters
 
 import android.content.Context
-import android.graphics.drawable.Icon
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +20,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class HomeListAdapter(private var data: List<IActivity>?, val context: Context, private val iconPack: IconPack) :
+class HomeListAdapter(
+    private var data: MutableList<IActivity>,
+    val context: Context,
+    private val iconPack: IconPack
+) :
     RecyclerView.Adapter<HomeListAdapter.DataViewHolder>() {
     val database = WorkoutRepo(context)
 
@@ -44,7 +47,7 @@ class HomeListAdapter(private var data: List<IActivity>?, val context: Context, 
     }
 
     override fun getItemCount(): Int {
-        return data!!.size
+        return data.size
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): DataViewHolder {
@@ -54,40 +57,37 @@ class HomeListAdapter(private var data: List<IActivity>?, val context: Context, 
     }
 
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
-        if (data != null) {
-            //holder.name.text = data!![position].
-            holder.cv.setOnClickListener {
-                Navigation.findNavController(it).navigate(
-                    HomeFragmentDirections.actionHomeFragmentToFragmentViewFinishedActivity(
-                        type = data!![position] is PowerActivity,
-                        id = data!![position].id!!
-                    )
+        holder.cv.setOnClickListener {
+            Navigation.findNavController(it).navigate(
+                HomeFragmentDirections.actionHomeFragmentToFragmentViewFinishedActivity(
+                    type = data[position] is PowerActivity,
+                    id = data[position].id!!
                 )
-            }
-
-            val minutes = data!![position].duration / 1000 / 60
-            val seconds = data!![position].duration / 1000 % 60
-
-            holder.timeValue.text = "$minutes minutes and $seconds seconds"
-            holder.cardioPointsValue.text = data!![position].cardioPoints.toString()
-            if (data!![position] is PowerActivity) {
-                val activity = data!![position] as PowerActivity
-                holder.firstLine.text = activity.powerActivityType.name
-                holder.icon.setImageDrawable(iconPack.getIcon(activity.powerActivityType.icon)!!.drawable)
-            } else {
-                val activity = data!![position] as GeneralActivity
-                holder.firstLine.text = activity.activityType.name
-                holder.icon.setImageDrawable(iconPack.getIcon(activity.activityType.icon)!!.drawable)
-            }
-
-            val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy")
-            val date = simpleDateFormat.format(Date(data!![position].startDate))
-            holder.secondLine.text = date
-
+            )
         }
+
+        val minutes = data[position].duration / 1000 / 60
+        val seconds = data[position].duration / 1000 % 60
+
+        holder.timeValue.text = "$minutes minutes and $seconds seconds"
+        holder.cardioPointsValue.text = data[position].cardioPoints.toString()
+        if (data[position] is PowerActivity) {
+            val activity = data[position] as PowerActivity
+            holder.firstLine.text = activity.powerActivityType.name
+            holder.icon.setImageDrawable(iconPack.getIcon(activity.powerActivityType.icon)!!.drawable)
+        } else {
+            val activity = data[position] as GeneralActivity
+            holder.firstLine.text = activity.activityType.name
+            holder.icon.setImageDrawable(iconPack.getIcon(activity.activityType.icon)!!.drawable)
+        }
+
+        val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy")
+        val date = simpleDateFormat.format(Date(data[position].startDate))
+        holder.secondLine.text = date
+
     }
 
-    fun setData(data: List<IActivity>?) {
+    fun setData(data: MutableList<IActivity>) {
         this.data = data
     }
 

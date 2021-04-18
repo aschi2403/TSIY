@@ -25,7 +25,7 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_pause_screen, container, false
         )
@@ -46,7 +46,9 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
         timerIsCounting = true
 
 
-        binding.skip.setOnClickListener { findNavController().popBackStack() }
+        binding.skip.setOnClickListener {
+            findNavController().popBackStack()
+        }
         binding.plusmin.setOnClickListener { binding.countdown.base += 60000 }
         binding.pause.setOnClickListener {
             if (timerIsCounting) {
@@ -56,7 +58,8 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
                 timerIsCounting = false
             } else {
                 binding.pause.text = getString(R.string.pause)
-                countdown.base = countdown.base + SystemClock.elapsedRealtime() - lastCountdownPaused
+                countdown.base =
+                    countdown.base + SystemClock.elapsedRealtime() - lastCountdownPaused
                 countdown.start()
                 timerIsCounting = true
             }

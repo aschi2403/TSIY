@@ -12,7 +12,6 @@ import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentChoosePowerActivityTypeBinding
 import aschi2403.tsiy.model.SetEntry
 import aschi2403.tsiy.repository.WorkoutRepo
-import kotlinx.android.synthetic.main.fragment_choose_power_activity_type.*
 
 class ChoosePowerActivityTypeFragment : Fragment() {
 
@@ -23,7 +22,7 @@ class ChoosePowerActivityTypeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_choose_power_activity_type, container, false
         )
@@ -40,7 +39,7 @@ class ChoosePowerActivityTypeFragment : Fragment() {
         }
 
         binding.continueButton.setOnClickListener {
-            if (weightValue.text.isNullOrEmpty() || repetitionsValue.text.isNullOrEmpty()) {
+            if (binding.weightValue.text.isNullOrEmpty() || binding.repetitionsValue.text.isNullOrEmpty()) {
                 Toast.makeText(
                     context,
                     "Please insert all data for the activity",
@@ -99,8 +98,8 @@ class ChoosePowerActivityTypeFragment : Fragment() {
     private fun saveDataInDatabase(idOfPowerActivity: Long) {
         database.insertSetEntry(
             SetEntry(
-                weight = weightValue.text.toString().toDouble(),
-                repetitions = repetitionsValue.text.toString().toInt(),
+                weight = binding.weightValue.text.toString().toDouble(),
+                repetitions = binding.repetitionsValue.text.toString().toInt(),
                 powerActivityId = idOfPowerActivity
             )
         )

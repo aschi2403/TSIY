@@ -5,7 +5,7 @@ interface IActivityType {
     var name: String
     var icon: Int
     var description: String
-    var powerActivity: Boolean
+    var isPowerActivity: Boolean
     var caloriesPerMinute: Double
     var cardioPointsPerMinute: Double
 
