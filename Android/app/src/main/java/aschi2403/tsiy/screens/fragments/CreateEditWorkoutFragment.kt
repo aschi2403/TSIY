@@ -55,18 +55,36 @@ class CreateEditWorkoutFragment : Fragment() {
         binding.save.setOnClickListener {
             if (binding.nameValue.text!!.isNotBlank() && selectedActivities.isNotEmpty()) {
                 if (id >= 0) {
-                    // TODO: update
+                    val workoutEntries =
+                        database.allWorkoutEntry.filter { a -> a.workoutPlanId == id }
+                    selectedActivities.forEachIndexed { index, activityName ->
+                        if (index < workoutEntries.size) {
+                            val workoutEntry = workoutEntries[index]
+                            workoutEntry.position = index
+                            database.updateWorkoutEntry(workoutEntry)
+                        } else {
+                            val activity = allActivities.find { a -> a.name == activityName }!!
+                            database.insertWorkoutEntry(
+                                WorkoutEntry(
+                                    workoutPlanId = id,
+                                    isPowerActivity = activity.isPowerActivity,
+                                    iActivityTypeId = activity.id!!,
+                                    position = index
+                                )
+                            )
+                        }
+                    }
                 } else {
                     val workoutPlan = WorkoutPlan(name = binding.nameValue.text.toString())
                     database.insertWorkoutPlan(workoutPlan)
 
-                    selectedActivities.forEach { activityName ->
+                    selectedActivities.forEachIndexed { index, activityName ->
                         val activity = allActivities.find { a -> a.name == activityName }!!
                         database.insertWorkoutEntry(
                             WorkoutEntry(
                                 workoutPlanId = workoutPlan.id!!,
                                 iActivityTypeId = activity.id!!,
-                                position = selectedActivities.indexOf(activityName),
+                                position = index,
                                 isPowerActivity = activity.isPowerActivity
                             )
                         )

@@ -173,9 +173,17 @@ class WorkoutRepo(context: Context) {
             .filter { workoutEntry -> workoutEntry.workoutPlanId == workoutPlanId }
     }
 
+    fun updateWorkoutEntry(workoutEntry: WorkoutEntry) {
+        workoutEntryDao.updateWorkoutEntry(workoutEntry)
+    }
+
     fun insertWorkoutEntry(workoutEntry: WorkoutEntry): Long {
         val newId = workoutEntryDao.insertWorkoutEntry(workoutEntry)
         workoutEntry.id = newId
         return newId
+    }
+
+    fun deleteWorkoutEntry(workoutEntry: WorkoutEntry) {
+        workoutEntryDao.deleteWorkoutEntry(workoutEntry)
     }
 }
