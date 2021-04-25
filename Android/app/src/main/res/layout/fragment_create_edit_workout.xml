@@ -32,12 +32,15 @@
         </LinearLayout>
 
 
-        <ListView
-            android:id="@+id/listOfWorkouts"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listOfActivities"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/add"
-            app:layout_constraintTop_toBottomOf="@+id/nameLabelLayout" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameLabelLayout"
+            tools:ignore="MissingConstraints" />
 
         <Button
             android:id="@+id/add"

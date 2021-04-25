@@ -5,14 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
 import aschi2403.tsiy.model.WorkoutPlan
 import aschi2403.tsiy.repository.WorkoutRepo
-import aschi2403.tsiy.screens.fragments.ListActivitiesFragmentDirections
 import aschi2403.tsiy.screens.fragments.ListWorkoutPlansFragmentDirections
 import com.google.android.material.card.MaterialCardView
 

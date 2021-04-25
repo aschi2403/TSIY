@@ -4,19 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentCreateEditWorkoutBinding
+import aschi2403.tsiy.helper.IconPackProvider
 import aschi2403.tsiy.model.WorkoutEntry
 import aschi2403.tsiy.model.WorkoutPlan
 import aschi2403.tsiy.model.relations.IActivityType
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.activities.MainActivity
+import aschi2403.tsiy.screens.adapters.ActivityInWorkoutAdapter
 
 
 class CreateEditWorkoutFragment : Fragment() {
@@ -24,8 +26,8 @@ class CreateEditWorkoutFragment : Fragment() {
 
     lateinit var database: WorkoutRepo
 
-    private lateinit var adapter: ArrayAdapter<String>
-    private lateinit var selectedActivities: MutableList<String>
+    private lateinit var adapter: ActivityInWorkoutAdapter
+    private lateinit var selectedActivities: MutableList<IActivityType>
 
     private lateinit var allActivities: List<IActivityType>
 
@@ -57,18 +59,16 @@ class CreateEditWorkoutFragment : Fragment() {
                 if (id >= 0) {
                     val workoutEntries =
                         database.allWorkoutEntry.filter { a -> a.workoutPlanId == id }
-                    selectedActivities.forEachIndexed { index, activityName ->
-                        if (index < workoutEntries.size) {
-                            val workoutEntry = workoutEntries[index]
-                            workoutEntry.position = index
-                            database.updateWorkoutEntry(workoutEntry)
-                        } else {
-                            val activity = allActivities.find { a -> a.name == activityName }!!
+                    if (!isEqual(selectedActivities, workoutEntries)) {
+                        workoutEntries.forEach {
+                            database.deleteWorkoutEntry(it)
+                        }
+                        selectedActivities.forEachIndexed { index, selectedActivity ->
                             database.insertWorkoutEntry(
                                 WorkoutEntry(
                                     workoutPlanId = id,
-                                    isPowerActivity = activity.isPowerActivity,
-                                    iActivityTypeId = activity.id!!,
+                                    isPowerActivity = selectedActivity.isPowerActivity,
+                                    iActivityTypeId = selectedActivity.id!!,
                                     position = index
                                 )
                             )
@@ -78,14 +78,13 @@ class CreateEditWorkoutFragment : Fragment() {
                     val workoutPlan = WorkoutPlan(name = binding.nameValue.text.toString())
                     database.insertWorkoutPlan(workoutPlan)
 
-                    selectedActivities.forEachIndexed { index, activityName ->
-                        val activity = allActivities.find { a -> a.name == activityName }!!
+                    selectedActivities.forEachIndexed { index, selectedActivity ->
                         database.insertWorkoutEntry(
                             WorkoutEntry(
                                 workoutPlanId = workoutPlan.id!!,
-                                iActivityTypeId = activity.id!!,
+                                iActivityTypeId = selectedActivity.id!!,
                                 position = index,
-                                isPowerActivity = activity.isPowerActivity
+                                isPowerActivity = selectedActivity.isPowerActivity
                             )
                         )
                     }
@@ -104,23 +103,28 @@ class CreateEditWorkoutFragment : Fragment() {
             binding.nameValue.setText(workoutPlan.name)
         }
 
-        val listView = binding.listOfWorkouts
+        val listView = binding.listOfActivities
+        listView.setHasFixedSize(true)
+        val llm = LinearLayoutManager(context)
+        listView.layoutManager = llm
 
         selectedActivities = if (id >= 0) {
             database.workoutEntriesByWorkoutPlanId(id).sortedBy { it.position }
                 .map { workoutEntry ->
                     if (workoutEntry.isPowerActivity) {
-                        database.powerActivityTypeById(workoutEntry.iActivityTypeId).name
+                        database.powerActivityTypeById(workoutEntry.iActivityTypeId)
                     } else {
-                        database.activityTypeById(workoutEntry.iActivityTypeId).name
+                        database.activityTypeById(workoutEntry.iActivityTypeId)
                     }
                 }.toMutableList()
         } else {
             mutableListOf()
         }
-        adapter = ArrayAdapter(
+        adapter = ActivityInWorkoutAdapter(
+            selectedActivities,
             this.requireContext(),
-            android.R.layout.simple_list_item_1, selectedActivities
+            IconPackProvider(this.requireContext()).loadIconPack()
+
         )
 
         listView.adapter = adapter
@@ -141,7 +145,7 @@ class CreateEditWorkoutFragment : Fragment() {
 
 
         builder.setPositiveButton("OK") { _, _ ->
-            selectedActivities.add(activities[checkedItem].name)
+            selectedActivities.add(allActivities[checkedItem])
             adapter.notifyDataSetChanged()
         }
         builder.setNegativeButton("Cancel", null)
@@ -149,5 +153,17 @@ class CreateEditWorkoutFragment : Fragment() {
 
         val dialog = builder.create()
         dialog.show()
+    }
+
+    private fun isEqual(first: MutableList<IActivityType>, second: List<WorkoutEntry>): Boolean {
+        if (first.size != second.size) {
+            return false
+        }
+        first.forEachIndexed { index, itemOfFirst ->
+            if (itemOfFirst.id != second[index].iActivityTypeId) {
+                return false
+            }
+        }
+        return true
     }
 }
