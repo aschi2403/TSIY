@@ -54,6 +54,10 @@ class WorkoutScreenFragment : Fragment() {
                 activities[set].iActivityTypeId
             )
 
+            if(set+1==activities.size){
+                binding.next.visibility = View.INVISIBLE
+            }
+
             if (!activities[set].isPowerActivity && set + 1 < activities.size) {
                 binding.next.visibility = View.VISIBLE
                 binding.next.setOnClickListener {
