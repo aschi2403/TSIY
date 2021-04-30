@@ -2,11 +2,13 @@ package aschi2403.tsiy.screens.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
 import aschi2403.tsiy.model.WorkoutPlan
@@ -52,6 +54,9 @@ class WorkoutPlanViewChooseAdapter(
             intent.putExtra("workoutId", data[position].id!!.toInt())
             context.startActivity(intent)
         }
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
+            holder.icon.setColorFilter(Color.WHITE)
+
     }
 
     fun setData(data: MutableList<WorkoutPlan>) {

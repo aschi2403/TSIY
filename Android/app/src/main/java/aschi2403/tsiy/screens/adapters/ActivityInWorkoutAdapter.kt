@@ -1,12 +1,14 @@
 package aschi2403.tsiy.screens.adapters
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
 import aschi2403.tsiy.model.relations.IActivityType
@@ -56,6 +58,9 @@ class ActivityInWorkoutAdapter(
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
         holder.nameOfActivity.text = data[position].name
         holder.imageOfActivity.setImageDrawable(iconPack.getIcon(data[position].icon)?.drawable)
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
+            holder.imageOfActivity.setColorFilter(Color.WHITE)
+
         if (position == 0) {
             holder.moveUp.visibility = View.GONE
         } else {

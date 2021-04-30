@@ -1,10 +1,12 @@
 package aschi2403.tsiy.screens.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -51,10 +53,6 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
         val iconDialog = childFragmentManager.findFragmentByTag("ICON_DIALOG_TAG") as IconDialog?
             ?: IconDialog.newInstance(IconDialogSettings())
 
-
-
-
-
         if (!newActivity!! && idOfActivity != null) {
             activity = if (powerActivity!!) {
                 database.powerActivityTypeById(idOfActivity)
@@ -71,6 +69,9 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
 
         binding.icon.setOnClickListener { iconDialog.show(childFragmentManager, "ICON_DIALOG_TAG") }
         binding.icon.setImageDrawable(iconPack.getIcon(iconId)!!.drawable)
+
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
+            binding.icon.setColorFilter(Color.WHITE)
 
         binding.close.setOnClickListener { findNavController().popBackStack() }
         binding.save.setOnClickListener {

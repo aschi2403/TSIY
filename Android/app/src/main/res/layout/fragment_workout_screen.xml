@@ -50,8 +50,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginStart="180dp"
                     android:layout_marginEnd="50dp"
-                    android:text="@string/calories"/>
+                    android:layout_toEndOf="@+id/cardioPointsLabel"
+                    android:text="@string/calories" />
 
             </RelativeLayout>
 
@@ -72,7 +74,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="75dp"/>
+                    android:layout_marginStart="261dp"
+                    android:layout_marginEnd="75dp"
+                    android:layout_toEndOf="@+id/cardioPointsValue" />
 
             </RelativeLayout>
 
@@ -82,8 +86,8 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="256dp"
                 android:backgroundTint="#00FFFFFF"
-                android:src="@android:drawable/ic_media_next"
-                android:tint="#000000"/>
+                android:src="@drawable/ic_baseline_skip_next_24"
+                android:contentDescription="@string/next"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -95,8 +99,8 @@
                     android:layout_height="50dp"
                     android:layout_marginStart="75dp"
                     android:backgroundTint="#00FFFFFF"
-                    android:src="@android:drawable/ic_media_pause"
-                    android:tint="#000000"/>
+                    android:src="@drawable/ic_baseline_pause_24"
+                    android:contentDescription="@string/pause"/>
 
                 <ImageButton
                     android:id="@+id/close"
@@ -104,9 +108,9 @@
                     android:layout_height="50dp"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="75dp"
-                    android:backgroundTint="#00FFFFFF"
-                    android:src="@android:drawable/ic_menu_close_clear_cancel"
-                    android:tint="#000000"/>
+                    android:background="#00FFFFFF"
+                    android:src="@drawable/ic_baseline_close_24"
+                    android:contentDescription="@string/close"/>
 
             </RelativeLayout>
         </LinearLayout>

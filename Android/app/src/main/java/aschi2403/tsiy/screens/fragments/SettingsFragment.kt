@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
@@ -30,6 +31,7 @@ class SettingsFragment : Fragment() {
 
         (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(false)
 
+
         binding.manageactivities.setOnClickListener { manageActivities() }
         binding.managepoweractivities.setOnClickListener { managePowerActivities() }
         binding.manageworkouts.setOnClickListener {
@@ -40,6 +42,23 @@ class SettingsFragment : Fragment() {
         binding.legalNotice.setOnClickListener { legal_notice() }
         sharedPreferences =
             this.requireContext().getSharedPreferences("settings", Context.MODE_PRIVATE)
+
+        if (sharedPreferences.getInt("darkMode", 0) == AppCompatDelegate.MODE_NIGHT_YES) {
+            binding.enableDarkMode.isChecked = true
+        }
+
+        binding.enableDarkMode.setOnClickListener {
+            val editor: SharedPreferences.Editor = sharedPreferences.edit()
+            if (binding.enableDarkMode.isChecked) {
+                editor.putInt("darkMode", AppCompatDelegate.MODE_NIGHT_YES)
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                editor.putInt("darkMode", AppCompatDelegate.MODE_NIGHT_NO)
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+            editor.apply()
+            editor.commit()
+        }
 
         binding.pausetimeValue.setText(sharedPreferences.getLong("pauseTime", 20).toString())
         binding.timeUnit.setSelection(

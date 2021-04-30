@@ -1,11 +1,13 @@
 package aschi2403.tsiy.screens.adapters
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
@@ -69,7 +71,9 @@ class HomeListAdapter(
         val minutes = data[position].duration / 1000 / 60
         val seconds = data[position].duration / 1000 % 60
 
-        holder.timeValue.text = "$minutes minutes and $seconds seconds"
+        val timeValueText = "$minutes minutes and $seconds seconds"
+        holder.timeValue.text = timeValueText
+
         holder.cardioPointsValue.text = data[position].cardioPoints.toString()
         if (data[position] is PowerActivity) {
             val activity = data[position] as PowerActivity
@@ -80,8 +84,10 @@ class HomeListAdapter(
             holder.firstLine.text = activity.activityType.name
             holder.icon.setImageDrawable(iconPack.getIcon(activity.activityType.icon)!!.drawable)
         }
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
+            holder.icon.setColorFilter(Color.WHITE)
 
-        val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy")
+        val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN)
         val date = simpleDateFormat.format(Date(data[position].startDate))
         holder.secondLine.text = date
 

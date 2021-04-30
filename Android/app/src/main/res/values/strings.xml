@@ -79,4 +79,5 @@
     <string name="start_activity">start activity</string>
     <string name="start_workout">Start workout</string>
     <string name="start_new_activity">Start new activity</string>
+    <string name="enable_dark_mode">Enable dark mode</string>
 </resources>

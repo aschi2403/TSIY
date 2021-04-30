@@ -2,11 +2,13 @@ package aschi2403.tsiy.screens.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
 import aschi2403.tsiy.model.ActivityType
@@ -50,6 +52,9 @@ class ActivitiesViewChooseAdapter(
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
         holder.name.text = data[position].name
         holder.icon.setImageDrawable(iconPack.getIcon(data[position].icon)!!.drawable)
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
+            holder.icon.setColorFilter(Color.WHITE)
+
         holder.cv.setOnClickListener { view: View ->
             val intent = Intent(view.context, MainWorkoutActivity::class.java)
             intent.putExtra("activityTypeId", data[position].id)
