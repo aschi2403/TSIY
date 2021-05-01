@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentSettingsBinding
+import aschi2403.tsiy.helper.LanguageHelper
 import aschi2403.tsiy.screens.activities.MainActivity
 
 /**
@@ -57,7 +58,6 @@ class SettingsFragment : Fragment() {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
             editor.apply()
-            editor.commit()
         }
 
         binding.pausetimeValue.setText(sharedPreferences.getLong("pauseTime", 20).toString())
@@ -66,8 +66,29 @@ class SettingsFragment : Fragment() {
                 1
             else
                 0
-
         )
+
+        if (sharedPreferences.getString("language", "") == "") {
+            binding.english.isChecked = true
+        } else {
+            binding.german.isChecked = true
+        }
+
+        binding.languageGroup.setOnCheckedChangeListener { _, _ ->
+            val editor: SharedPreferences.Editor = sharedPreferences.edit()
+            if (binding.english.isChecked) {
+                editor.remove("language")
+            } else {
+                editor.putString("language", "de")
+            }
+            LanguageHelper(this.requireContext()).changeLanguage(
+                resources,
+                sharedPreferences.getString("language", "")!!
+            )
+
+            this.requireActivity().recreate()
+            editor.apply()
+        }
 
         binding.lifecycleOwner = this
 

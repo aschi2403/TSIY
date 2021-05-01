@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import aschi2403.tsiy.R
+import aschi2403.tsiy.helper.LanguageHelper
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -17,13 +18,21 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val sharedPreferences = this.getSharedPreferences("settings", Context.MODE_PRIVATE)
+
+
+        LanguageHelper(this).changeLanguage(
+            resources,
+            sharedPreferences.getString("language", "")!!
+        )
+
         setContentView(R.layout.activity_main)
 
         val appBarLayout = findViewById<Toolbar>(R.id.appBarLayout)
         setSupportActionBar(appBarLayout)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        val sharedPreferences = this.getSharedPreferences("settings", Context.MODE_PRIVATE)
         AppCompatDelegate.setDefaultNightMode(sharedPreferences.getInt("darkMode", 0))
 
         setupView()

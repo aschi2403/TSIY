@@ -44,6 +44,38 @@
             android:layout_height="wrap_content"
             android:text="@string/enable_dark_mode" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/language"
+                android:layout_gravity="center"/>
+
+            <RadioGroup
+                android:id="@+id/languageGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/german"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/de" />
+
+                <RadioButton
+                    android:id="@+id/english"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/en" />
+            </RadioGroup>
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/manageactivities"
             style="@style/Widget.MaterialComponents.Button.TextButton"

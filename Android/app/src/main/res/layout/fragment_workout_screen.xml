@@ -5,10 +5,7 @@
         tools:context=".screens.fragments.WorkoutScreenFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:backgroundTint="#00FFFFFF"
-        android:foregroundTint="#000000"
-        tools:ignore="MissingDefaultResource">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"

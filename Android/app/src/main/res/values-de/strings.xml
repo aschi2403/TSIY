@@ -1,0 +1,80 @@
+<resources>
+    <string name="app_name">TSIY</string>
+    <string name="action_settings">Einstellungen</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="next">Weiter</string>
+    <string name="previous">Zurück</string>
+
+    <string name="cardiopoints">Cardiopunkte</string>
+    <string name="calories">Kalorien</string>
+    <string name="time">Dauer</string>
+    <string name="statistics">Statistiken</string>
+    <string name="home">home</string>
+    <string name="settings">settings</string>
+    <string name="krafttraining">Krafttraining</string>
+    <string name="pause_time">Pausendauer</string>
+    <string name="activity">Activity</string>
+    <string name="weight">Gewicht</string>
+    <string name="repetition">Wiederholung</string>
+    <string name="kg">Kg</string>
+    <string name="continueLabel">Weiter</string>
+
+    <string-array name="time">
+        <item>Minuten</item>
+        <item>Sekunden</item>
+    </string-array>
+
+    <string name="manage_power_activities">Kraftübungen verwalten</string>
+    <string name="connect_to_google_fit">Mit Google Fit verbinden</string>
+    <string name="manage_activities">Aktivitäten verwalten</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_statistics">Statistiken</string>
+    <string name="nav_Settings">Einstellungen</string>
+
+    <string name="name">Name</string>
+    <string name="icon">Icon</string>
+    <string name="description">Beschreibung</string>
+    <string name="close">Schließen</string>
+    <string name="save">Speichern</string>
+    <string name="skip">Überspringen</string>
+    <string name="pause">Pause</string>
+    <string name="statistics_are_coming_soon">Statistiken kommen bald</string>
+    <string name="title_activity_choose_type">ChooseActivityType</string>
+    <string name="imageofactivity">Foto von Aktivität</string>
+    <string name="edit_activity">Aktivität ändern</string>
+    <string name="delete_activity">Aktivität löschen</string>
+    <string name="legal_notice">Rechtshinweis</string>
+    <string name="table_of_contents">Table of contents</string>
+    <string name="license">License</string>
+    <string name="license_content">Copyright 2020\-2021 Jakob Aschauer, Alexander Schönberger Licensed under the GNU General Public License v3.0</string>
+    <string name="dependencies">Abhängigkeiten</string>
+    <string name="MPAndroidChart">MPAndroidChart von PhilJay</string>
+    <string name="description_content">Aktivitäten aufzeichnen</string>
+    <string name="date">Datum</string>
+    <string name="add">Hinzufügen</string>
+    <string name="remove">Löschen</string>
+    <string name="resume">Weiter</string>
+    <string name="_1min">+1min</string>
+    <string name="finish">Beenden</string>
+    <string name="id">ID</string>
+    <string name="repetitions">Wiederholungen</string>
+    <string name="no_activity_type">Bitte eine neue Aktivität in den Einstellungen anlegen\n</string>
+    <string name="no_power_activity_type">Bitte eine neue Kraftübung in den Einstellungen anlegen\n</string>
+    <string name="icondialoglib">icondialoglib von maltaisn</string>
+    <string name="the_strength_is_yours">The strength is yours</string>
+    <string name="pick_date">Datum auswählen</string>
+    <string name="delete">Löschen</string>
+    <string name="github">Github</string>
+    <string name="attention">Achtung</string>
+    <string name="create_one">Create one</string>
+    <string name="manage_workouts">Workouts verwalten</string>
+    <string name="start_power_activity">Kraftübung starten</string>
+    <string name="start_activity">Aktivität starten</string>
+    <string name="start_workout">Workout starten</string>
+    <string name="start_new_activity">Neue Aktivität starten</string>
+    <string name="enable_dark_mode">Dunklen Modus aktivieren</string>
+    <string name="de">DE</string>
+    <string name="en">EN</string>
+    <string name="language">Sprache</string>
+
+</resources>

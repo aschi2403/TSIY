@@ -141,7 +141,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="75dp"
+                android:layout_marginStart="60dp"
                 android:text="@string/close"
                 android:textSize="16sp"/>
 
@@ -153,7 +153,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="85dp"
-                android:layout_marginEnd="75dp"
+                android:layout_marginEnd="60dp"
                 android:text="@string/save"
                 android:textSize="16sp"/>
 
