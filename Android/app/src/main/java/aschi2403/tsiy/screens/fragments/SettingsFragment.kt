@@ -3,12 +3,12 @@ package aschi2403.tsiy.screens.fragments
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentSettingsBinding
@@ -33,14 +33,14 @@ class SettingsFragment : Fragment() {
         (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(false)
 
 
-        binding.manageactivities.setOnClickListener { manageActivities() }
-        binding.managepoweractivities.setOnClickListener { managePowerActivities() }
-        binding.manageworkouts.setOnClickListener {
+        binding.manageActivities.setOnClickListener { manageActivities() }
+        binding.managePowerActivities.setOnClickListener { managePowerActivities() }
+        binding.manageWorkouts.setOnClickListener {
             findNavController().navigate(
                 R.id.action_settingsFragment_to_listWorkoutPlansFragment
             )
         }
-        binding.legalNotice.setOnClickListener { legal_notice() }
+        binding.legalNotice.setOnClickListener { moveToLegalNotice() }
         sharedPreferences =
             this.requireContext().getSharedPreferences("settings", Context.MODE_PRIVATE)
 
@@ -60,7 +60,7 @@ class SettingsFragment : Fragment() {
             editor.apply()
         }
 
-        binding.pausetimeValue.setText(sharedPreferences.getLong("pauseTime", 20).toString())
+        binding.pauseTimeValue.setText(sharedPreferences.getLong("pauseTime", 20).toString())
         binding.timeUnit.setSelection(
             if (sharedPreferences.getBoolean("timeUnitSeconds", true))
                 1
@@ -113,7 +113,7 @@ class SettingsFragment : Fragment() {
     }
 
 
-    private fun legal_notice() {
+    private fun moveToLegalNotice() {
         findNavController().navigate(R.id.action_settingsFragment_to_legal_NoticeFragment)
     }
 
@@ -121,7 +121,7 @@ class SettingsFragment : Fragment() {
         super.onStop()
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
         editor.putBoolean("timeUnitSeconds", binding.timeUnit.selectedItemPosition == 1)
-        editor.putLong("pauseTime", binding.pausetimeValue.text.toString().toLong())
+        editor.putLong("pauseTime", binding.pauseTimeValue.text.toString().toLong())
         editor.apply()
         editor.commit()
     }

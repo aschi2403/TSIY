@@ -1,7 +1,6 @@
 package aschi2403.tsiy.db
 
 import androidx.room.*
-import aschi2403.tsiy.model.WeightEntry
 import aschi2403.tsiy.model.WorkoutPlan
 
 @Dao

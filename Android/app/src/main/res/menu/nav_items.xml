@@ -14,7 +14,7 @@
     <item
         android:id="@+id/weightFragment"
         android:icon="@drawable/ic_baseline_line_weight_24"
-        android:title="Weight" />
+        android:title="@string/weight" />
 
     <item
         android:id="@+id/settingsFragment"

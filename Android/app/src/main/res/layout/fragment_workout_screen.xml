@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="50dp"
-                    android:text="@string/cardiopoints" />
+                    android:text="@string/cardioPoints" />
 
                 <TextView
                     android:id="@+id/caloriesLabel"

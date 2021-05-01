@@ -31,21 +31,13 @@ class HomeListAdapter(
     val database = WorkoutRepo(context)
 
     class DataViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val icon: ImageView
-        val firstLine: TextView
-        val secondLine: TextView
-        val cv: MaterialCardView
-        val timeValue: TextView
-        val cardioPointsValue: TextView
+        val icon: ImageView = itemView.findViewById(R.id.icon)
+        val firstLine: TextView = itemView.findViewById(R.id.firstLine)
+        val secondLine: TextView = itemView.findViewById(R.id.secondLine)
+        val cv: MaterialCardView = itemView.findViewById(R.id.card)
+        val timeValue: TextView = itemView.findViewById(R.id.timeValue)
+        val cardioPointsValue: TextView = itemView.findViewById(R.id.cardioPointsValue)
 
-        init {
-            cv = itemView.findViewById(R.id.card)
-            firstLine = itemView.findViewById(R.id.firstLine)
-            secondLine = itemView.findViewById(R.id.secondLine)
-            icon = itemView.findViewById(R.id.icon)
-            timeValue = itemView.findViewById(R.id.timeValue)
-            cardioPointsValue = itemView.findViewById(R.id.cardioPointsValue)
-        }
     }
 
     override fun getItemCount(): Int {

@@ -3,8 +3,6 @@ package aschi2403.tsiy.repository
 import android.content.Context
 import aschi2403.tsiy.db.*
 import aschi2403.tsiy.model.*
-import java.util.function.Predicate
-import java.util.stream.Collectors
 
 class WorkoutRepo(context: Context) {
     private var db = WorkoutDatabase.getInstance(context)
@@ -78,9 +76,6 @@ class WorkoutRepo(context: Context) {
     }
     // PowerActivityType
 
-    fun generatePowerActivity() = PowerActivity()
-
-
     val allPowerActivityTypes: List<ActivityType>
         get() {
             return powerActivityTypeDao.loadAll()
@@ -118,8 +113,6 @@ class WorkoutRepo(context: Context) {
         weightEntry.id = newId
         return newId
     }
-
-    fun createWeightEntry() = WeightEntry()
 
     val allWeightEntries: List<WeightEntry>
         get() {

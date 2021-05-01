@@ -1,19 +1,12 @@
 <resources>
     <string name="app_name">TSIY</string>
-    <string name="action_settings">Einstellungen</string>
     <!-- Strings used for fragments for navigation -->
     <string name="next">Weiter</string>
-    <string name="previous">Zurück</string>
 
-    <string name="cardiopoints">Cardiopunkte</string>
+    <string name="cardioPoints">Cardiopunkte</string>
     <string name="calories">Kalorien</string>
     <string name="time">Dauer</string>
-    <string name="statistics">Statistiken</string>
-    <string name="home">home</string>
-    <string name="settings">settings</string>
-    <string name="krafttraining">Krafttraining</string>
     <string name="pause_time">Pausendauer</string>
-    <string name="activity">Activity</string>
     <string name="weight">Gewicht</string>
     <string name="repetition">Wiederholung</string>
     <string name="kg">Kg</string>
@@ -40,11 +33,10 @@
     <string name="pause">Pause</string>
     <string name="statistics_are_coming_soon">Statistiken kommen bald</string>
     <string name="title_activity_choose_type">ChooseActivityType</string>
-    <string name="imageofactivity">Foto von Aktivität</string>
+    <string name="imageOfActivity">Foto von Aktivität</string>
     <string name="edit_activity">Aktivität ändern</string>
     <string name="delete_activity">Aktivität löschen</string>
     <string name="legal_notice">Rechtshinweis</string>
-    <string name="table_of_contents">Table of contents</string>
     <string name="license">License</string>
     <string name="license_content">Copyright 2020\-2021 Jakob Aschauer, Alexander Schönberger Licensed under the GNU General Public License v3.0</string>
     <string name="dependencies">Abhängigkeiten</string>
@@ -56,7 +48,6 @@
     <string name="resume">Weiter</string>
     <string name="_1min">+1min</string>
     <string name="finish">Beenden</string>
-    <string name="id">ID</string>
     <string name="repetitions">Wiederholungen</string>
     <string name="no_activity_type">Bitte eine neue Aktivität in den Einstellungen anlegen\n</string>
     <string name="no_power_activity_type">Bitte eine neue Kraftübung in den Einstellungen anlegen\n</string>

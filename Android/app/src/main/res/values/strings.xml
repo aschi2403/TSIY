@@ -1,19 +1,12 @@
 <resources>
     <string name="app_name">TSIY</string>
-    <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-     <string name="cardiopoints">Cardiopoints</string>
+    <string name="cardioPoints">Cardio points</string>
     <string name="calories">Calories</string>
     <string name="time">Duration</string>
-    <string name="statistics">statistics</string>
-    <string name="home">home</string>
-    <string name="settings">settings</string>
-    <string name="krafttraining">Krafttraining</string>
     <string name="pause_time">Pause duration</string>
-    <string name="activity">Activity</string>
     <string name="weight">Weight</string>
     <string name="repetition">Repetition</string>
     <string name="kg">Kg</string>
@@ -41,11 +34,10 @@
     <string name="pause">Pause</string>
     <string name="statistics_are_coming_soon">Statistics are coming soon</string>
     <string name="title_activity_choose_type">ChooseActivityType</string>
-    <string name="imageofactivity">Image of activity</string>
+    <string name="imageOfActivity">Image of activity</string>
     <string name="edit_activity">Edit activity</string>
     <string name="delete_activity">Delete activity</string>
     <string name="legal_notice">Legal Notice</string>
-    <string name="table_of_contents">Table of contents</string>
     <string name="license">License</string>
     <string name="license_content">Copyright 2020\-2021 Jakob Aschauer, Alexander Schönberger Licensed under the GNU General Public License v3.0</string>
     <string name="dependencies">Dependencies</string>
@@ -57,7 +49,6 @@
     <string name="resume">Resume</string>
     <string name="_1min">+1min</string>
     <string name="finish">Finish</string>
-    <string name="id">ID</string>
     <string name="repetitions">Repetitions</string>
     <string name="no_activity_type">Please create a new activity type in settings\n</string>
     <string name="no_power_activity_type">Please create a new power activity type in settings\n</string>

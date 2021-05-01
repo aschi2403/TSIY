@@ -25,15 +25,10 @@ class ActivitiesViewChooseAdapter(
     RecyclerView.Adapter<ActivitiesViewChooseAdapter.DataViewHolder>() {
 
     class DataViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val icon: ImageView
-        val name: TextView
-        val cv: MaterialCardView
+        val icon: ImageView = itemView.findViewById(R.id.imageOfActivity)
+        val name: TextView = itemView.findViewById(R.id.nameOfItem)
+        val cv: MaterialCardView = itemView.findViewById(R.id.item_card)
 
-        init {
-            cv = itemView.findViewById(R.id.item_card)
-            name = itemView.findViewById(R.id.nameOfItem)
-            icon = itemView.findViewById(R.id.imageOfActivity)
-        }
     }
 
     override fun getItemCount(): Int {
@@ -62,9 +57,5 @@ class ActivitiesViewChooseAdapter(
             intent.putExtra("type", data[position].isPowerActivity)
             context.startActivity(intent)
         }
-    }
-
-    fun setData(data: MutableList<ActivityType>) {
-        this.data = data
     }
 }

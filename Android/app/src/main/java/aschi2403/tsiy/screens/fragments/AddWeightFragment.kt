@@ -37,7 +37,7 @@ class AddWeightFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_add_weight, container, false
@@ -50,7 +50,7 @@ class AddWeightFragment : Fragment() {
         public_date!!.year = c.get(Calendar.YEAR)
         public_date!!.month = c.get(Calendar.MONTH)
         public_date!!.day = c.get(Calendar.DAY_OF_MONTH)
-        public_date!!.time_millis = c.timeInMillis
+        public_date!!.millis = c.timeInMillis
 
 
         binding.confirmButton.setOnClickListener { confirmButton() }
@@ -65,11 +65,11 @@ class AddWeightFragment : Fragment() {
 
         binding.datePickerButton.setOnClickListener {
             val newFragment = DatePickerFragment()
-            newFragment.show(requireFragmentManager(), "datePicker")
+            newFragment.show(parentFragmentManager, "datePicker")
         }
 
         binding.dateValue.text =
-            SimpleDateFormat("dd.MM.yyyy HH:mm").format(Date(public_date!!.time_millis)).toString()
+            SimpleDateFormat("dd.MM.yyyy HH:mm").format(Date(public_date!!.millis)).toString()
 
         repo = activity?.let { WorkoutRepo(it) }
 
@@ -107,13 +107,14 @@ class AddWeightFragment : Fragment() {
         }
     }
 
-    fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
+    private fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
 
-    fun updateDateField() {
-        binding.dateValue.setText(formatDate(public_date!!.time_millis))
+    private fun updateDateField() {
+        binding.dateValue.text = formatDate(public_date!!.millis)
     }
 
-    private fun formatDate(time_millis: Long) = SimpleDateFormat("dd.MM.yyyy HH:mm").format(Date(time_millis)).toString()
+    private fun formatDate(time_millis: Long) =
+        SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMAN).format(Date(time_millis)).toString()
 
     //handler for onClick of confirm button
     @RequiresApi(Build.VERSION_CODES.O)
@@ -126,7 +127,7 @@ class AddWeightFragment : Fragment() {
 
         // if value is valid add new database entry
         if (value != null) {
-            val weightEntry = WeightEntry(date = public_date!!.time_millis, weight = value)
+            val weightEntry = WeightEntry(date = public_date!!.millis, weight = value)
             repo?.addWeightEntry(weightEntry)
 
             // navigate back to weight-fragment
@@ -157,6 +158,6 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
 
         val calendar = Calendar.getInstance()
         calendar.set(year, month, day)
-        public_date!!.time_millis = calendar.timeInMillis
+        public_date!!.millis = calendar.timeInMillis
     }
 }

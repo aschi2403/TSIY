@@ -23,15 +23,10 @@ class WorkoutPlanViewChooseAdapter(
     RecyclerView.Adapter<WorkoutPlanViewChooseAdapter.DataViewHolder>() {
 
     class DataViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val icon: ImageView
-        val name: TextView
-        val cv: MaterialCardView
+        val icon: ImageView = itemView.findViewById(R.id.imageOfActivity)
+        val name: TextView = itemView.findViewById(R.id.nameOfItem)
+        val cv: MaterialCardView = itemView.findViewById(R.id.item_card)
 
-        init {
-            cv = itemView.findViewById(R.id.item_card)
-            name = itemView.findViewById(R.id.nameOfItem)
-            icon = itemView.findViewById(R.id.imageOfActivity)
-        }
     }
 
     override fun getItemCount(): Int {
@@ -57,9 +52,5 @@ class WorkoutPlanViewChooseAdapter(
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
             holder.icon.setColorFilter(Color.WHITE)
 
-    }
-
-    fun setData(data: MutableList<WorkoutPlan>) {
-        this.data = data
     }
 }

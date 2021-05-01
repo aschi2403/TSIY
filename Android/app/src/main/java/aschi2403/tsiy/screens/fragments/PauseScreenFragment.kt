@@ -49,7 +49,7 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
         binding.skip.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.plusmin.setOnClickListener { binding.countdown.base += 60000 }
+        binding.plusMin.setOnClickListener { binding.countdown.base += 60000 }
         binding.pause.setOnClickListener {
             if (timerIsCounting) {
                 binding.pause.text = getString(R.string.resume)

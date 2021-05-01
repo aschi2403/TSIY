@@ -1,8 +1,5 @@
 package aschi2403.tsiy.data
 
-import aschi2403.tsiy.screens.fragments.AddWeightFragment
-import kotlin.reflect.KFunction1
-
 class MyDate(
     day: Int = 0,
     month: Int = 0,
@@ -25,7 +22,7 @@ class MyDate(
             field = value
             callBack()
         }
-    var time_millis: Long = time_millis
+    var millis: Long = time_millis
         set(value) {
             field = value
             callBack()

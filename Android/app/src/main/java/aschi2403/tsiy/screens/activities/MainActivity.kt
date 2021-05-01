@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         setupView()
     }
 
-    fun setupView() {
+    private fun setupView() {
         // Finding the Navigation Controller
         val navController = findNavController(R.id.fragNavHost)
 

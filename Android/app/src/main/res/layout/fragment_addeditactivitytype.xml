@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".screens.fragments.AddEditActivityTypeFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".screens.fragments.AddEditActivityTypeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/name"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/activityType"
@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16sp"
                     android:layout_marginEnd="15dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
             </TableRow>
 
             <TableRow
@@ -47,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/icon"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/icon"
@@ -55,7 +55,7 @@
                     android:layout_height="fill_parent"
                     android:layout_marginEnd="15dp"
                     android:layout_weight="1"
-                    android:contentDescription="@string/icon"/>
+                    android:contentDescription="@string/icon" />
             </TableRow>
 
             <TableRow
@@ -67,7 +67,7 @@
                     android:id="@+id/descriptionLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/description"/>
+                    android:text="@string/description" />
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/descriptionValue"
@@ -76,7 +76,7 @@
                     android:layout_marginStart="16sp"
                     android:layout_marginEnd="15dp"
                     android:layout_weight="1"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
             </TableRow>
 
@@ -89,7 +89,7 @@
                     android:id="@+id/cardioPointsLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/cardiopoints"/>
+                    android:text="@string/cardioPoints" />
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/cardioPointsValue"
@@ -99,7 +99,7 @@
                     android:layout_marginEnd="15dp"
                     android:layout_weight="1"
                     android:inputType="numberDecimal"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
             </TableRow>
 
@@ -112,7 +112,7 @@
                     android:id="@+id/caloriesLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/calories"/>
+                    android:text="@string/calories" />
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/caloriesValue"
@@ -122,7 +122,7 @@
                     android:layout_marginEnd="15dp"
                     android:layout_weight="1"
                     android:inputType="numberDecimal"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
             </TableRow>
         </TableLayout>
@@ -143,7 +143,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="60dp"
                 android:text="@string/close"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <Button
                 android:id="@+id/save"
@@ -154,8 +154,9 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="85dp"
                 android:layout_marginEnd="60dp"
+                android:layout_toEndOf="@+id/close"
                 android:text="@string/save"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
         </RelativeLayout>
 

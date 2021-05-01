@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
 import aschi2403.tsiy.model.relations.IActivityType
 import aschi2403.tsiy.repository.WorkoutRepo
-import com.google.android.material.card.MaterialCardView
 import com.maltaisn.icondialog.pack.IconPack
 
 
@@ -27,21 +26,12 @@ class ActivityInWorkoutAdapter(
     val database = WorkoutRepo(context)
 
     class DataViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val nameOfActivity: TextView
-        val imageOfActivity: ImageView
-        val cv: MaterialCardView
-        val moveUp: ImageButton
-        val moveDown: ImageButton
-        val delete: ImageButton
+        val nameOfActivity: TextView = itemView.findViewById(R.id.nameOfItem)
+        val imageOfActivity: ImageView = itemView.findViewById(R.id.imageOfActivity)
+        val moveUp: ImageButton = itemView.findViewById(R.id.moveUp)
+        val moveDown: ImageButton = itemView.findViewById(R.id.moveDown)
+        val delete: ImageButton = itemView.findViewById(R.id.deleteItem)
 
-        init {
-            cv = itemView.findViewById(R.id.item_card)
-            nameOfActivity = itemView.findViewById(R.id.nameOfItem)
-            moveUp = itemView.findViewById(R.id.moveUp)
-            moveDown = itemView.findViewById(R.id.moveDown)
-            delete = itemView.findViewById(R.id.deleteItem)
-            imageOfActivity = itemView.findViewById(R.id.imageOfActivity)
-        }
     }
 
     override fun getItemCount(): Int {
@@ -84,9 +74,5 @@ class ActivityInWorkoutAdapter(
             data.removeAt(position)
             notifyDataSetChanged()
         }
-    }
-
-    fun setData(data: MutableList<IActivityType>) {
-        this.data = data
     }
 }

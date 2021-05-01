@@ -9,10 +9,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import aschi2403.tsiy.screens.adapters.ActivitiesTypeEditDeleteAdapter
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentListViewBinding
-import aschi2403.tsiy.model.ActivityType
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.activities.MainActivity
 import aschi2403.tsiy.screens.adapters.WorkoutPlanEditDeleteAdapter

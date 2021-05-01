@@ -87,7 +87,7 @@
                     android:id="@+id/cardioPointsLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/cardiopoints"
+                    android:text="@string/cardioPoints"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
 
@@ -107,7 +107,7 @@
                 android:gravity="center">
 
                 <TextView
-                    android:id="@+id/cardiopoints"
+                    android:id="@+id/cardioPoints"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"/>

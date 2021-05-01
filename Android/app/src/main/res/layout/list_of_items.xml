@@ -10,7 +10,6 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/text_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -19,7 +18,7 @@
                        android:layout_height="50dp"
                        android:id="@+id/imageOfActivity"
                        android:layout_marginStart="20dp"
-                       android:contentDescription="@string/imageofactivity"/>
+                       android:contentDescription="@string/imageOfActivity"/>
 
             <TextView
                 android:id="@+id/nameOfItem"

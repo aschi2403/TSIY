@@ -1,5 +1,6 @@
 package aschi2403.tsiy.screens.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.LayoutInflater
@@ -24,6 +25,7 @@ class ViewFinishedActivityFragment : Fragment() {
 
     private lateinit var binding: FragmentViewfinishedactivityBinding
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -68,7 +70,7 @@ class ViewFinishedActivityFragment : Fragment() {
         binding.pause.text = durationLeadingZero(pauseDuration) +
                 DateUtils.formatElapsedTime(pauseDuration)
 
-        binding.cardiopoints.text = iActivity.cardioPoints.toString()
+        binding.cardioPoints.text = iActivity.cardioPoints.toString()
         binding.caloriesValue.text = iActivity.calories.toString()
 
         binding.activity.text = if (powerActivity) {

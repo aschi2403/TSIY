@@ -104,13 +104,13 @@
                         android:layout_height="wrap_content"
                         android:text="@string/MPAndroidChart"
                         android:textSize="15sp"/>
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_toStartOf="@id/MPAndroidChartLabel"
-                        app:srcCompat="@drawable/ic_baseline_open_in_new_24"
-                        android:contentDescription="@string/github"/>
+                        android:contentDescription="@string/github"
+                        app:srcCompat="@drawable/ic_baseline_open_in_new_24" />
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/icondialoglib"
@@ -128,7 +128,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_toStartOf="@id/icondialoglibLabel"
                         app:srcCompat="@drawable/ic_baseline_open_in_new_24"
                         android:contentDescription="@string/github"/>
                 </RelativeLayout>

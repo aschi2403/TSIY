@@ -23,17 +23,11 @@ class WorkoutPlanEditDeleteAdapter(
     val database = WorkoutRepo(context)
 
     class DataViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val nameOfWorkout: TextView
-        val cv: MaterialCardView
-        val edit: ImageButton
-        val delete: ImageButton
+        val nameOfWorkout: TextView = itemView.findViewById(R.id.nameOfItem)
+        val cv: MaterialCardView = itemView.findViewById(R.id.item_card)
+        val edit: ImageButton = itemView.findViewById(R.id.editItem)
+        val delete: ImageButton = itemView.findViewById(R.id.deleteItem)
 
-        init {
-            cv = itemView.findViewById(R.id.item_card)
-            nameOfWorkout = itemView.findViewById(R.id.nameOfItem)
-            edit = itemView.findViewById(R.id.editItem)
-            delete = itemView.findViewById(R.id.deleteItem)
-        }
     }
 
     override fun getItemCount(): Int {

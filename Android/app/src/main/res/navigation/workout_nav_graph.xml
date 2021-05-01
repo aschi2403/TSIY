@@ -2,8 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/workout_nav_graph"
-            app:startDestination="@id/workout_screen">
+    app:startDestination="@id/workout_screen">
     <fragment
         android:id="@+id/workout_screen"
         android:name="aschi2403.tsiy.screens.fragments.WorkoutScreenFragment"

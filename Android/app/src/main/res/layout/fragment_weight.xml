@@ -17,7 +17,8 @@
             app:backgroundTint="#FFFFFF"
             app:srcCompat="@drawable/ic_baseline_add_24"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/weight" />
 
         <com.github.mikephil.charting.charts.LineChart
             android:layout_marginLeft="5dp"
