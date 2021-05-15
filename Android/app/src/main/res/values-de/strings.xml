@@ -67,5 +67,12 @@
     <string name="de">DE</string>
     <string name="en">EN</string>
     <string name="language">Sprache</string>
+    <string name="filter">Filter</string>
+    <string name="all">Alle</string>
+    <string name="generalActivity">Aktivitität</string>
+    <string name="powerActivity">Kraftübung</string>
+    <string name="filterDoneActivities">Abgeschlossene Aktivitäten filtern</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="chooseWorkout">Workout auswählen</string>
 
 </resources>
