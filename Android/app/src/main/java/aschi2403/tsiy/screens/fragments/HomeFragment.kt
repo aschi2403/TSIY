@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -19,14 +20,12 @@ import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.adapters.HomeListAdapter
 import aschi2403.tsiy.screens.models.HomeViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 
 
-/**
- * A simple [Fragment] subclass.
- * create an instance of this fragment.
- */
 class HomeFragment : Fragment() {
 
+    private var checkedItem: Int = 0
     private lateinit var database: WorkoutRepo
     private lateinit var editDeleteAdapter: HomeListAdapter
     private lateinit var binding: FragmentHomeBinding
@@ -43,6 +42,10 @@ class HomeFragment : Fragment() {
         )
 
         (activity as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+
+        (activity as AppCompatActivity?)!!.filterButtonAppBar.setOnClickListener { showDialog() }
+
+        (activity as AppCompatActivity?)!!.filterButtonAppBar.visibility = View.VISIBLE
 
         binding.homeViewModel = viewModel
         binding.lifecycleOwner = this
@@ -107,9 +110,21 @@ class HomeFragment : Fragment() {
     }
 
     private fun getData(): MutableList<IActivity> {
-        val mergedList =
-            database.allPowerActivities.plus(database.allGeneralActivities)
-        return mergedList.sortedByDescending { it.startDate }.toMutableList()
+        return when (checkedItem) {
+            0 -> {
+                val mergedList =
+                    database.allPowerActivities.plus(database.allGeneralActivities)
+                mergedList.sortedByDescending { it.startDate }.toMutableList()
+            }
+            1 -> {
+                database.allGeneralActivities.sortedByDescending { it.startDate }
+                    .toMutableList()
+            }
+            else -> {
+                database.allPowerActivities.sortedByDescending { it.startDate }
+                    .toMutableList()
+            }
+        }
     }
 
     override fun onResume() {
@@ -118,4 +133,34 @@ class HomeFragment : Fragment() {
         editDeleteAdapter.notifyDataSetChanged()
     }
 
+    override fun onStop() {
+        super.onStop()
+        (activity as AppCompatActivity?)!!.filterButtonAppBar.visibility = View.GONE
+    }
+
+    private fun showDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(R.string.filterDoneActivities.toString())
+
+        val items = arrayOf<CharSequence>(
+            R.string.all.toString(),
+            R.string.generalActivity.toString(),
+            R.string.powerActivity.toString()
+        )
+
+        builder.setSingleChoiceItems(
+            items, checkedItem
+        ) { _, which ->
+            checkedItem = which
+        }
+        builder.setPositiveButton(R.string.filter.toString()) { _, _ ->
+            editDeleteAdapter.setData(getData())
+            editDeleteAdapter.notifyDataSetChanged()
+        }
+
+        builder.setNegativeButton(R.string.cancel.toString(), null)
+
+        val dialog = builder.create()
+        dialog.show()
+    }
 }

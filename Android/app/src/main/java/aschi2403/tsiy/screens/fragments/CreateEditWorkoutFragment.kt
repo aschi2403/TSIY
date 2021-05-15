@@ -134,7 +134,7 @@ class CreateEditWorkoutFragment : Fragment() {
 
     private fun showDialog(activities: List<IActivityType>) {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Choose an workout")
+        builder.setTitle(R.string.chooseWorkout.toString())
 
         var checkedItem = 0 // first
         builder.setSingleChoiceItems(activities.map { iActivityType -> iActivityType.name }
@@ -148,7 +148,7 @@ class CreateEditWorkoutFragment : Fragment() {
             selectedActivities.add(allActivities[checkedItem])
             adapter.notifyDataSetChanged()
         }
-        builder.setNegativeButton("Cancel", null)
+        builder.setNegativeButton(R.string.cancel.toString(), null)
 
 
         val dialog = builder.create()
