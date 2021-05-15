@@ -1,60 +1,68 @@
 package aschi2403.tsiy.screens.fragments
 
+import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import aschi2403.tsiy.R
+import aschi2403.tsiy.databinding.FragmentStatisticsBinding
+import aschi2403.tsiy.helper.ChartMarkerView
+import aschi2403.tsiy.helper.LineChartDateFormatter
+import aschi2403.tsiy.repository.WorkoutRepo
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [StatisticsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class StatisticsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var database: WorkoutRepo
+    private lateinit var binding: FragmentStatisticsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_statistics, container, false)
-    }
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_statistics, container, false
+        )
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment StatisticsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            StatisticsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        database = WorkoutRepo(this.requireContext())
+
+        binding.workoutsChart.xAxis.valueFormatter = LineChartDateFormatter()
+        binding.workoutsChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        binding.workoutsChart.isDoubleTapToZoomEnabled = false
+        binding.workoutsChart.marker = ChartMarkerView(context, R.layout.marker_view)
+        binding.workoutsChart.description.isEnabled = false
+
+        val workoutList: ArrayList<Entry> = ArrayList()
+        val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.GERMAN)
+
+        //TODO: let user change groupBy to show count of activities per day,month, week or year
+        database.allPowerActivities.plus(database.allGeneralActivities)
+            .groupBy { formatter.parse(formatter.format(Date(it.startDate))) }.entries.forEach { list ->
+                workoutList.add(
+                    Entry(list.key!!.time.toFloat(), list.value.size.toFloat(), list.value)
+                )
             }
+
+        //TODO: extract string resource
+        val weightLine = LineDataSet(workoutList, "Activities/Day")
+        weightLine.axisDependency = YAxis.AxisDependency.LEFT
+        weightLine.color = Color.RED
+        weightLine.valueTextColor = Color.BLACK
+
+        binding.workoutsChart.data = LineData(weightLine)
+        binding.workoutsChart.invalidate()
+
+        return binding.root
     }
 }
