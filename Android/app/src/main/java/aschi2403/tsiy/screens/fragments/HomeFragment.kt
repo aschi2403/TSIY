@@ -140,12 +140,12 @@ class HomeFragment : Fragment() {
 
     private fun showDialog() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(R.string.filterDoneActivities.toString())
+        builder.setTitle(R.string.filterDoneActivities)
 
         val items = arrayOf<CharSequence>(
-            R.string.all.toString(),
-            R.string.generalActivity.toString(),
-            R.string.powerActivity.toString()
+            context!!.getString(R.string.all),
+            context!!.getString(R.string.generalActivity),
+            context!!.getString(R.string.powerActivity)
         )
 
         builder.setSingleChoiceItems(
@@ -153,12 +153,12 @@ class HomeFragment : Fragment() {
         ) { _, which ->
             checkedItem = which
         }
-        builder.setPositiveButton(R.string.filter.toString()) { _, _ ->
+        builder.setPositiveButton(R.string.filter) { _, _ ->
             editDeleteAdapter.setData(getData())
             editDeleteAdapter.notifyDataSetChanged()
         }
 
-        builder.setNegativeButton(R.string.cancel.toString(), null)
+        builder.setNegativeButton(R.string.cancel, null)
 
         val dialog = builder.create()
         dialog.show()
