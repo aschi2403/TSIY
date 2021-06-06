@@ -24,7 +24,8 @@ class GeneralActivity(
     override var cardioPoints: Double = 0.0,
     override var calories: Double = 0.0,
     override var startDate: Long = 0,
-    override var endDate: Long = 0
+    override var endDate: Long = 0,
+    var distance: Float = 0F
 ) : IActivity {
     @Ignore
     lateinit var activityType: ActivityType
@@ -41,6 +42,7 @@ class GeneralActivity(
         if (calories != other.calories) return false
         if (startDate != other.startDate) return false
         if (endDate != other.endDate) return false
+        if (distance != other.distance) return false
         if (activityType != other.activityType) return false
 
         return true
@@ -54,11 +56,13 @@ class GeneralActivity(
         result = 31 * result + calories.hashCode()
         result = 31 * result + startDate.hashCode()
         result = 31 * result + endDate.hashCode()
+        result = 31 * result + distance.hashCode()
         result = 31 * result + activityType.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "GeneralActivity(id=$id, activityTypeId=$activityTypeId, time=$duration, cardioPoints=$cardioPoints, calories=$calories, date=$startDate, pause=$endDate, activityType=$activityType)"
+        return "GeneralActivity(id=$id, activityTypeId=$activityTypeId, duration=$duration, cardioPoints=$cardioPoints, calories=$calories, startDate=$startDate, endDate=$endDate, distance=$distance, activityType=$activityType)"
     }
+
 }

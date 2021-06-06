@@ -19,6 +19,8 @@ import aschi2403.tsiy.screens.activities.MainActivity
 import kotlinx.android.synthetic.main.table_row.view.*
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.math.roundToLong
 
 
 class ViewFinishedActivityFragment : Fragment() {
@@ -89,6 +91,17 @@ class ViewFinishedActivityFragment : Fragment() {
                 row.repetitionsValue.text = it.repetitions.toString()
                 row.weightValue.text = it.weight.toString()
                 binding.sets.addView(row)
+            }
+        } else {
+            binding.generalActivityBody.visibility = View.VISIBLE
+            binding.generalActivityHeader.visibility = View.VISIBLE
+            binding.distanceValue.text =
+                (((iActivity as GeneralActivity).distance * 100).roundToLong() / 100.0).toString() + " km"
+            if (iActivity.distance > 0) {
+                binding.speedValue.text =
+                    (((TimeUnit.MILLISECONDS.toSeconds(iActivity.duration) / iActivity.distance) * 100).roundToLong() / 100.0).toString()
+            } else {
+                binding.speedValue.text = "0"
             }
         }
 

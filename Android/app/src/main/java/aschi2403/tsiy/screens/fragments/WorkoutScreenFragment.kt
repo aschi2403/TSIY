@@ -11,6 +11,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentWorkoutScreenBinding
+import aschi2403.tsiy.gps.LocationProvider
 import aschi2403.tsiy.model.GeneralActivity
 import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.repository.WorkoutRepo
@@ -18,10 +19,12 @@ import aschi2403.tsiy.viewmodel.WorkoutScreenViewModel
 
 
 class WorkoutScreenFragment : Fragment() {
+    private var isPowerActivity: Boolean = true
     private lateinit var database: WorkoutRepo
     private var idOfActivity: Long = -1
     private var set = 0
     private lateinit var binding: FragmentWorkoutScreenBinding
+    private lateinit var locationProvider: LocationProvider
 
     private var viewModel = WorkoutScreenViewModel()
 
@@ -32,6 +35,14 @@ class WorkoutScreenFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_workout_screen, container, false
         )
+        isPowerActivity = arguments?.getBoolean("type")!!
+
+        if (!isPowerActivity) {
+            binding.generalActivityHeader.visibility = View.VISIBLE
+            binding.generalActivityBody.visibility = View.VISIBLE
+            locationProvider = LocationProvider(binding.kmValue, binding.speedValue)
+            locationProvider.getLastKnownLocation(requireContext())
+        }
 
         database = WorkoutRepo(requireActivity().applicationContext)
 
@@ -54,7 +65,7 @@ class WorkoutScreenFragment : Fragment() {
                 activities[set].iActivityTypeId
             )
 
-            if(set+1==activities.size){
+            if (set + 1 == activities.size) {
                 binding.next.visibility = View.INVISIBLE
             }
 
@@ -87,12 +98,12 @@ class WorkoutScreenFragment : Fragment() {
             binding.activity.text = arguments?.getString("name")
 
             createActivityInDb(
-                arguments?.getBoolean("type")!!,
+                isPowerActivity,
                 activityTypeId,
                 isWorkout = false
             )
 
-            closeButton(activityTypeId, arguments?.getBoolean("type")!!)
+            closeButton(activityTypeId, isPowerActivity)
         }
 
         startTimer()
@@ -195,7 +206,8 @@ class WorkoutScreenFragment : Fragment() {
                     duration = SystemClock.elapsedRealtime() - binding.timer.base,
                     calories = 0.0,
                     cardioPoints = 0.0,
-                    endDate = System.currentTimeMillis()
+                    endDate = System.currentTimeMillis(),
+                    distance = locationProvider.getDistance()
                 )
             ) //TODO: calculate cardioPoints and calories
             if (isFinished) {
@@ -227,6 +239,13 @@ class WorkoutScreenFragment : Fragment() {
         super.onDestroyView()
         if (viewModel.values.getLong("stopTime") != -1L)
             viewModel.values.putLong("stopTime", SystemClock.elapsedRealtime() - binding.timer.base)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (!isPowerActivity) {
+            locationProvider.stopLocation()
+        }
     }
 }
 

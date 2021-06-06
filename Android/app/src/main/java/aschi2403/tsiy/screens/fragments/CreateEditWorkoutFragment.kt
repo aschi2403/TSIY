@@ -148,7 +148,7 @@ class CreateEditWorkoutFragment : Fragment() {
             selectedActivities.add(allActivities[checkedItem])
             adapter.notifyDataSetChanged()
         }
-        builder.setNegativeButton(R.string.cancel.toString(), null)
+        builder.setNegativeButton(R.string.cancel, null)
 
 
         val dialog = builder.create()

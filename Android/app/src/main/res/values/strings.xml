@@ -75,4 +75,7 @@
     <string name="filterDoneActivities">Filter done activities</string>
     <string name="cancel">Cancel</string>
     <string name="chooseWorkout">Choose an workout</string>
+    <string name="locationPermission">Location permission</string>
+    <string name="distance">Distance</string>
+    <string name="speed">Speed</string>
 </resources>

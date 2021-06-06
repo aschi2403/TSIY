@@ -74,5 +74,8 @@
     <string name="filterDoneActivities">Abgeschlossene Aktivitäten filtern</string>
     <string name="cancel">Abbrechen</string>
     <string name="chooseWorkout">Workout auswählen</string>
+    <string name="locationPermission">Standortberechtigung</string>
+    <string name="distance">Distanz</string>
+    <string name="speed">Geschwindigkeit</string>
 
 </resources>
