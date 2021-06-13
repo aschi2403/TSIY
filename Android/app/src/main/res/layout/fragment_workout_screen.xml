@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".screens.fragments.WorkoutScreenFragment">
+        xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".screens.fragments.WorkoutScreenFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
                 android:id="@+id/activity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="24sp" />
+                android:textSize="24sp"/>
 
             <Chronometer
                 android:id="@+id/timer"
@@ -26,7 +26,7 @@
                 android:layout_marginTop="12dp"
                 android:textSize="48sp"
                 tools:ignore="MissingConstraints"
-                tools:targetApi="24" />
+                tools:targetApi="24"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -39,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="50dp"
-                    android:text="@string/cardioPoints" />
+                    android:text="@string/cardioPoints"/>
 
                 <TextView
                     android:id="@+id/caloriesLabel"
@@ -47,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="50dp"
-                    android:text="@string/calories" />
+                    android:text="@string/calories"/>
 
             </RelativeLayout>
 
@@ -61,14 +61,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_marginStart="75dp" />
+                    android:layout_marginStart="75dp"/>
 
                 <TextView
                     android:id="@+id/caloriesValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="75dp" />
+                    android:layout_marginEnd="75dp"/>
 
             </RelativeLayout>
 
@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="50dp"
-                    android:text="@string/distance" />
+                    android:text="@string/distance"/>
 
                 <TextView
                     android:id="@+id/speedLabel"
@@ -93,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="50dp"
-                    android:text="@string/speed" />
+                    android:text="@string/speed"/>
 
             </RelativeLayout>
 
@@ -109,22 +109,35 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_marginStart="75dp" />
+                    android:layout_marginStart="75dp"/>
 
                 <TextView
                     android:id="@+id/speedValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="75dp" />
+                    android:layout_marginEnd="75dp"/>
 
             </RelativeLayout>
 
-
-            <org.osmdroid.views.MapView
-                android:id="@+id/map"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <org.osmdroid.views.MapView
+                    android:id="@+id/map"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="5dp"
+                    tools:ignore="MissingConstraints"/>
+                <TextView
+                    android:id="@+id/copyright"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/openstreetmapscopyright"
+                    app:layout_constraintBottom_toBottomOf="@+id/map"
+                    app:layout_constraintRight_toRightOf="@+id/map"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageButton
                 android:id="@+id/next"
@@ -132,7 +145,7 @@
                 android:layout_height="50dp"
                 android:backgroundTint="#00FFFFFF"
                 android:contentDescription="@string/next"
-                android:src="@drawable/ic_baseline_skip_next_24" />
+                android:src="@drawable/ic_baseline_skip_next_24"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -145,7 +158,7 @@
                     android:layout_marginStart="75dp"
                     android:backgroundTint="#00FFFFFF"
                     android:contentDescription="@string/pause"
-                    android:src="@drawable/ic_baseline_pause_24" />
+                    android:src="@drawable/ic_baseline_pause_24"/>
 
                 <ImageButton
                     android:id="@+id/close"
@@ -155,7 +168,7 @@
                     android:layout_marginEnd="75dp"
                     android:background="#00FFFFFF"
                     android:contentDescription="@string/close"
-                    android:src="@drawable/ic_baseline_close_24" />
+                    android:src="@drawable/ic_baseline_close_24"/>
             </RelativeLayout>
         </LinearLayout>
 

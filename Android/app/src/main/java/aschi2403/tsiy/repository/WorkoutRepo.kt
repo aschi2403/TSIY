@@ -14,6 +14,7 @@ class WorkoutRepo(context: Context) {
     private var setEntryDao: SetEntryDao = db.setEntryDao()
     private var workoutEntryDao: WorkoutEntryDao = db.workoutEntryDao()
     private var workoutPlanDao: WorkoutPlanDao = db.workoutPlanDao()
+    private var gpsPointsDao: GPSPointsDao = db.gpsPointDao()
 
 
     // PowerActivity

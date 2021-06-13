@@ -97,6 +97,7 @@ class ViewFinishedActivityFragment : Fragment() {
         } else {
             binding.generalActivityBody.visibility = View.VISIBLE
             binding.generalActivityHeader.visibility = View.VISIBLE
+            binding.map.visibility = View.VISIBLE
             binding.distanceValue.text =
                 (((iActivity as GeneralActivity).distance * 100).roundToLong() / 100.0).toString() + " km"
             if (iActivity.distance > 0) {

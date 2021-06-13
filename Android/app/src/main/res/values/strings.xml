@@ -78,4 +78,6 @@
     <string name="locationPermission">Location permission</string>
     <string name="distance">Distance</string>
     <string name="speed">Speed</string>
+    <string name="osmdroid">osmdroid</string>
+    <string name="openstreetmapscopyright">© OpenStreetMap contributors</string>
 </resources>
