@@ -1,10 +1,15 @@
 package aschi2403.tsiy.screens.fragments
 
+import android.Manifest
+import android.app.Activity
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
@@ -16,6 +21,8 @@ import aschi2403.tsiy.model.GeneralActivity
 import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.viewmodel.WorkoutScreenViewModel
+import org.osmdroid.api.IMapController
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 
 
 class WorkoutScreenFragment : Fragment() {
@@ -35,12 +42,26 @@ class WorkoutScreenFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_workout_screen, container, false
         )
+
+        requestPermissions(
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            )
+        )
+
+        binding.map.setTileSource(TileSourceFactory.MAPNIK)
+        val mapController: IMapController = binding.map.controller
+        mapController.setZoom(15.0)
         isPowerActivity = arguments?.getBoolean("type")!!
 
         if (!isPowerActivity) {
             binding.generalActivityHeader.visibility = View.VISIBLE
             binding.generalActivityBody.visibility = View.VISIBLE
-            locationProvider = LocationProvider(binding.kmValue, binding.speedValue)
+            locationProvider = LocationProvider(binding.kmValue, binding.speedValue, binding.map)
             locationProvider.getLastKnownLocation(requireContext())
         }
 
@@ -246,6 +267,30 @@ class WorkoutScreenFragment : Fragment() {
         if (!isPowerActivity) {
             locationProvider.stopLocation()
         }
+    }
+
+    private fun requestPermissions(permissions: Array<String>) {
+        permissions.forEach {
+            if (ContextCompat.checkSelfPermission(this.requireContext(), it)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this.context as Activity,
+                    arrayOf(it),
+                    1
+                )
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.map.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.map.onPause()
     }
 }
 

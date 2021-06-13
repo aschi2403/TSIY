@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".screens.fragments.WorkoutScreenFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".screens.fragments.WorkoutScreenFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -11,16 +10,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="50dp"
             android:gravity="center|center_vertical"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/activity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"/>
+                android:textSize="24sp" />
 
             <Chronometer
                 android:id="@+id/timer"
@@ -29,7 +26,7 @@
                 android:layout_marginTop="12dp"
                 android:textSize="48sp"
                 tools:ignore="MissingConstraints"
-                tools:targetApi="24"/>
+                tools:targetApi="24" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -42,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="50dp"
-                    android:text="@string/cardioPoints"/>
+                    android:text="@string/cardioPoints" />
 
                 <TextView
                     android:id="@+id/caloriesLabel"
@@ -50,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="50dp"
-                    android:text="@string/calories"/>
+                    android:text="@string/calories" />
 
             </RelativeLayout>
 
@@ -64,23 +61,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_marginStart="75dp"/>
+                    android:layout_marginStart="75dp" />
 
                 <TextView
                     android:id="@+id/caloriesValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="75dp"/>
+                    android:layout_marginEnd="75dp" />
 
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/generalActivityHeader"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/kmValueLabel"
@@ -88,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="50dp"
-                    android:text="@string/distance"/>
+                    android:text="@string/distance" />
 
                 <TextView
                     android:id="@+id/speedLabel"
@@ -96,41 +93,46 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="50dp"
-                    android:text="@string/speed"/>
+                    android:text="@string/speed" />
 
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/generalActivityBody"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/kmValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_marginStart="75dp"/>
+                    android:layout_marginStart="75dp" />
 
                 <TextView
                     android:id="@+id/speedValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="75dp"/>
+                    android:layout_marginEnd="75dp" />
 
             </RelativeLayout>
+
+
+            <org.osmdroid.views.MapView
+                android:id="@+id/map"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" />
 
             <ImageButton
                 android:id="@+id/next"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="256dp"
                 android:backgroundTint="#00FFFFFF"
                 android:contentDescription="@string/next"
-                android:src="@drawable/ic_baseline_skip_next_24"/>
+                android:src="@drawable/ic_baseline_skip_next_24" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -143,7 +145,7 @@
                     android:layout_marginStart="75dp"
                     android:backgroundTint="#00FFFFFF"
                     android:contentDescription="@string/pause"
-                    android:src="@drawable/ic_baseline_pause_24"/>
+                    android:src="@drawable/ic_baseline_pause_24" />
 
                 <ImageButton
                     android:id="@+id/close"
@@ -153,7 +155,7 @@
                     android:layout_marginEnd="75dp"
                     android:background="#00FFFFFF"
                     android:contentDescription="@string/close"
-                    android:src="@drawable/ic_baseline_close_24"/>
+                    android:src="@drawable/ic_baseline_close_24" />
             </RelativeLayout>
         </LinearLayout>
 

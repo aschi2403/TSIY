@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".screens.fragments.ViewFinishedActivityFragment">
 
@@ -15,19 +14,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:textSize="32sp"/>
+            android:textSize="32sp" />
 
         <TextView
             android:id="@+id/startDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"/>
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/endDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"/>
+            android:gravity="center" />
 
         <TableLayout
             android:layout_width="match_parent"
@@ -46,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/time"
                     android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/pauseDurationLabel"
@@ -55,7 +54,7 @@
                     android:layout_marginStart="50dp"
                     android:text="@string/pause_time"
                     android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
             </TableRow>
 
             <TableRow
@@ -67,14 +66,14 @@
                     android:id="@+id/duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/pause"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
             </TableRow>
 
             <TableRow
@@ -89,7 +88,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/cardioPoints"
                     android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/caloriesLabel"
@@ -98,7 +97,7 @@
                     android:layout_marginStart="50dp"
                     android:text="@string/calories"
                     android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
             </TableRow>
 
             <TableRow
@@ -110,22 +109,23 @@
                     android:id="@+id/cardioPoints"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/caloriesValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
             </TableRow>
+
             <TableRow
                 android:id="@+id/generalActivityHeader"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="16dp"
-                android:gravity="center">
+                android:gravity="center"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/distanceLabel"
@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/distance"
                     android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/speedLabel"
@@ -142,40 +142,40 @@
                     android:layout_marginStart="50dp"
                     android:text="@string/speed"
                     android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
             </TableRow>
 
             <TableRow
                 android:id="@+id/generalActivityBody"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center">
+                android:gravity="center"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/distanceValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/speedValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
             </TableRow>
         </TableLayout>
 
         <TableLayout
             android:id="@+id/header"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="40dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TableRow
                 android:layout_width="match_parent"
@@ -189,7 +189,7 @@
                     android:layout_weight="1"
                     android:text="@string/weight"
                     android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/repetitionsLabel"
@@ -199,7 +199,7 @@
                     android:layout_weight="1"
                     android:text="@string/repetitions"
                     android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
             </TableRow>
 
             <ScrollView
@@ -210,12 +210,16 @@
                     android:id="@+id/sets"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"/>
+                    android:orientation="vertical" />
 
             </ScrollView>
 
         </TableLayout>
 
+        <org.osmdroid.views.MapView
+            android:id="@+id/map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 </layout>

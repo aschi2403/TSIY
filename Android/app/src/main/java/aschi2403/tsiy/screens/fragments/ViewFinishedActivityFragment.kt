@@ -17,6 +17,8 @@ import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.activities.MainActivity
 import kotlinx.android.synthetic.main.table_row.view.*
+import org.osmdroid.api.IMapController
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -104,6 +106,10 @@ class ViewFinishedActivityFragment : Fragment() {
                 binding.speedValue.text = "0"
             }
         }
+
+        binding.map.setTileSource(TileSourceFactory.MAPNIK)
+        val mapController: IMapController = binding.map.controller
+        mapController.setZoom(15.0)
 
         return binding.root
     }
