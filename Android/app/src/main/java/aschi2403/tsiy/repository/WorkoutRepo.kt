@@ -180,4 +180,14 @@ class WorkoutRepo(context: Context) {
     fun deleteWorkoutEntry(workoutEntry: WorkoutEntry) {
         workoutEntryDao.deleteWorkoutEntry(workoutEntry)
     }
+
+    fun insertGPSPoints(gpsPoints: List<GPSPoint>) {
+        gpsPoints.forEach {
+            gpsPointsDao.insertGPSPoint(it)
+        }
+    }
+
+    fun getGPSPointsFromActivity(workoutEntryId: Long): List<GPSPoint> {
+        return gpsPointsDao.loadGPSPoints(workoutEntryId)
+    }
 }

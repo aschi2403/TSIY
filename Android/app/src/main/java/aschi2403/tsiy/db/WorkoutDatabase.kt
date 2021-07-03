@@ -15,7 +15,7 @@ import aschi2403.tsiy.model.*
         SetEntry::class,
         WorkoutEntry::class,
         WorkoutPlan::class,
-        GPSPoints::class],
+        GPSPoint::class],
     version = 8
 )
 abstract class WorkoutDatabase : RoomDatabase() {

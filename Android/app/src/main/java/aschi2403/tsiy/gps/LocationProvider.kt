@@ -24,7 +24,7 @@ class LocationProvider(kmValue: TextView, speedValue: TextView, val map: MapView
     private lateinit var oldLocation: Location
     private var distance: Float = 0F
     val geoPoints: MutableList<GeoPoint> = ArrayList()
-
+    val polyline = Polyline()
 
     private val locationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
@@ -37,6 +37,7 @@ class LocationProvider(kmValue: TextView, speedValue: TextView, val map: MapView
             geoPoints.add(point)
             positionMarker.position = point
             map.controller.setCenter(point)
+            polyline.addPoint(point)
 
             distance += oldLocation.distanceTo(location) / 1000
             kmValue.text = String.format("%.2f km", distance)
@@ -92,6 +93,7 @@ class LocationProvider(kmValue: TextView, speedValue: TextView, val map: MapView
                         oldLocation.latitude.toString() + " " + oldLocation.longitude,
                         Toast.LENGTH_LONG
                     ).show()
+                    map.overlays.add(polyline)
                 } else {
                     Toast.makeText(context, "Unable to detect your location.", Toast.LENGTH_LONG)
                         .show()

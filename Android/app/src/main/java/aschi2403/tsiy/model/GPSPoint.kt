@@ -7,27 +7,20 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "GPSPoints",
-    foreignKeys = [
-        ForeignKey(
-            entity = WorkoutEntry::class,
-            parentColumns = ["id"],
-            childColumns = ["workoutEntryId"],
-            onDelete = ForeignKey.CASCADE
-        )],
     indices = [Index("workoutEntryId")]
 )
-class GPSPoints(
+class GPSPoint(
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null,
-    var latitude: Long,
-    var longitude: Long,
+    var latitude: Double,
+    var longitude: Double,
     var workoutEntryId: Long
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as GPSPoints
+        other as GPSPoint
 
         if (id != other.id) return false
         if (latitude != other.latitude) return false

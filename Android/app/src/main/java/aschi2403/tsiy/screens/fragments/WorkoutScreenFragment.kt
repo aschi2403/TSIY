@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentWorkoutScreenBinding
 import aschi2403.tsiy.gps.LocationProvider
+import aschi2403.tsiy.model.GPSPoint
 import aschi2403.tsiy.model.GeneralActivity
 import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.repository.WorkoutRepo
@@ -231,6 +232,15 @@ class WorkoutScreenFragment : Fragment() {
                     distance = locationProvider.getDistance()
                 )
             ) //TODO: calculate cardioPoints and calories
+            database.insertGPSPoints(locationProvider.geoPoints.map {
+                GPSPoint(
+                    null,
+                    it.latitude,
+                    it.longitude,
+                    idOfActivity
+                )
+            })
+
             if (isFinished) {
                 activity?.finish()
             }
