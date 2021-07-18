@@ -72,8 +72,8 @@ class LocationProvider(kmValue: TextView, speedValue: TextView, val map: MapView
 
                 locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    0L,
-                    0.0001f,
+                    1000,
+                    1f,
                     locationListener
                 )
 
