@@ -19,6 +19,7 @@ import aschi2403.tsiy.screens.activities.MainActivity
 import kotlinx.android.synthetic.main.table_row.view.*
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polyline
 import java.text.SimpleDateFormat
@@ -103,9 +104,9 @@ class ViewFinishedActivityFragment : Fragment() {
                 (((iActivity as GeneralActivity).distance * 100).roundToLong() / 100.0).toString() + " km"
             if (iActivity.distance > 0) {
                 binding.speedValue.text =
-                    (((iActivity.distance / (iActivity.duration / 3600000.0)) * 100).roundToLong() / 100.0).toString()
+                    (((iActivity.distance / (iActivity.duration / 3600000.0)) * 100).roundToLong() / 100.0).toString() + " km/h"
             } else {
-                binding.speedValue.text = "0"
+                binding.speedValue.text = "0 km/h"
             }
         }
 
@@ -114,9 +115,12 @@ class ViewFinishedActivityFragment : Fragment() {
         mapController.setZoom(15.0)
         val gpsPoints = database.getGPSPointsFromActivity(idOfActivity)
         if (gpsPoints.isNotEmpty()) {
-            val middlePoint =
-                GeoPoint(gpsPoints.first().latitude, gpsPoints.first().longitude) //TODO: change to middle point
-            mapController.setCenter(middlePoint)
+            val boundingBox =
+                BoundingBox.fromGeoPoints(gpsPoints.map { gpsPoint -> GeoPoint(gpsPoint.latitude, gpsPoint.longitude) }
+                    .toList())
+            mapController.setCenter(boundingBox.centerWithDateLine)
+            mapController.zoomToSpan(boundingBox.latitudeSpan, boundingBox.longitudeSpanWithDateLine)
+            binding.map.invalidate()
         } else {
             binding.map.visibility = View.GONE
         }
