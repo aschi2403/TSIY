@@ -120,7 +120,6 @@ class ViewFinishedActivityFragment : Fragment() {
                     .toList())
             mapController.setCenter(boundingBox.centerWithDateLine)
             mapController.zoomToSpan(boundingBox.latitudeSpan, boundingBox.longitudeSpanWithDateLine)
-            binding.map.invalidate()
         } else {
             binding.map.visibility = View.GONE
         }
