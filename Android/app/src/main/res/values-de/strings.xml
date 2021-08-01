@@ -79,5 +79,11 @@
     <string name="speed">Geschwindigkeit</string>
     <string name="ok">OK</string>
     <string name="goBackMessage">Eingaben löschen?</string>
+    <string name="activities">Aktivitäten</string>
+    <string name="Day">Tag</string>
+    <string name="Week">Woche</string>
+    <string name="Month">Monat</string>
+    <string name="Year">Jahr</string>
+    <string name="group_by">Gruppieren nach</string>
 
 </resources>
