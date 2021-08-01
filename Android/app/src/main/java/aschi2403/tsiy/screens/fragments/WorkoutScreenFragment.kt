@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
@@ -18,6 +19,7 @@ import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentWorkoutScreenBinding
 import aschi2403.tsiy.gps.LocationProvider
 import aschi2403.tsiy.model.GPSPoint
+import aschi2403.tsiy.helper.DialogView
 import aschi2403.tsiy.model.GeneralActivity
 import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.repository.WorkoutRepo
@@ -33,8 +35,25 @@ class WorkoutScreenFragment : Fragment() {
     private var set = 0
     private lateinit var binding: FragmentWorkoutScreenBinding
     private lateinit var locationProvider: LocationProvider
+    private lateinit var dialogView: DialogView
 
     private var viewModel = WorkoutScreenViewModel()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                dialogView.showYesNoDialog(
+                    getString(R.string.attention),
+                    getString(R.string.goBackMessage),
+                    { _, _ ->
+                        activity?.finish()
+                    },
+                    { _, _ -> }
+                )
+            }
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +76,7 @@ class WorkoutScreenFragment : Fragment() {
         binding.map.setTileSource(TileSourceFactory.MAPNIK)
         val mapController: IMapController = binding.map.controller
         mapController.setZoom(15.0)
+        dialogView = DialogView(requireContext())
         isPowerActivity = arguments?.getBoolean("type")!!
 
         if (!isPowerActivity) {

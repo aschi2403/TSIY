@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentAddeditactivitytypeBinding
+import aschi2403.tsiy.helper.DialogView
 import aschi2403.tsiy.helper.IconPackProvider
 import aschi2403.tsiy.model.ActivityType
 import aschi2403.tsiy.repository.WorkoutRepo
@@ -28,6 +30,30 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
     private lateinit var binding: FragmentAddeditactivitytypeBinding
 
     private lateinit var iconPack: IconPack
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (!binding.cardioPointsValue.text.isNullOrEmpty() ||
+                    !binding.caloriesValue.text.isNullOrEmpty() ||
+                    !binding.descriptionValue.text.isNullOrEmpty() ||
+                    !binding.activityType.text.isNullOrEmpty()
+                ) {
+                    DialogView(requireContext()).showYesNoDialog(
+                        getString(R.string.attention),
+                        getString(R.string.goBackMessage),
+                        { _, _ ->
+                            findNavController().popBackStack()
+                        },
+                        { _, _ -> }
+                    )
+                } else {
+                    findNavController().popBackStack()
+                }
+            }
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -103,7 +129,8 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
         return binding.root
     }
 
-    override val iconDialogIconPack: IconPack
+    override
+    val iconDialogIconPack: IconPack
         get() = iconPack
 
     override fun onIconDialogIconsSelected(dialog: IconDialog, icons: List<Icon>) {

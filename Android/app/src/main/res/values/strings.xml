@@ -80,4 +80,12 @@
     <string name="speed">Speed</string>
     <string name="osmdroid">osmdroid</string>
     <string name="openstreetmapscopyright">© OpenStreetMap contributors</string>
+    <string name="goBackMessage">Do you really want to discard your input?</string>
+    <string name="ok">OK</string>
+    <string name="activities">Activities</string>
+    <string name="Day">Day</string>
+    <string name="Week">Week</string>
+    <string name="Month">Month</string>
+    <string name="Year">Year</string>
+    <string name="group_by">Group by</string>
 </resources>

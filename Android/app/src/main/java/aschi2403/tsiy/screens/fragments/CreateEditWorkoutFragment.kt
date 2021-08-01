@@ -5,13 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import androidx.activity.OnBackPressedCallback
+import androidx.core.view.isNotEmpty
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentCreateEditWorkoutBinding
+import aschi2403.tsiy.helper.DialogView
 import aschi2403.tsiy.helper.IconPackProvider
 import aschi2403.tsiy.model.WorkoutEntry
 import aschi2403.tsiy.model.WorkoutPlan
@@ -31,13 +33,33 @@ class CreateEditWorkoutFragment : Fragment() {
 
     private lateinit var allActivities: List<IActivityType>
 
+    private lateinit var dialogView: DialogView
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (!binding.nameValue.text.isNullOrEmpty() || binding.listOfActivities.isNotEmpty()) {
+                    dialogView.showYesNoDialog(
+                        getString(R.string.attention),
+                        getString(R.string.goBackMessage),
+                        { _, _ -> findNavController().popBackStack() },
+                        { _, _ -> }
+                    )
+                } else {
+                    findNavController().popBackStack()
+                }
+            }
+        })
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
+        dialogView = DialogView(requireContext())
         val id = requireArguments().getLong("id", -1)
 
         binding = DataBindingUtil.inflate(
@@ -49,7 +71,12 @@ class CreateEditWorkoutFragment : Fragment() {
         allActivities = database.allActivityTypes.plus(database.allPowerActivityTypes)
 
         binding.add.setOnClickListener {
-            showDialog(allActivities)
+            dialogView.showItemCheckDialog(R.string.chooseWorkout.toString(),
+                allActivities.map { iActivityType -> iActivityType.name },
+                { _, _ ->
+                    selectedActivities.add(allActivities[dialogView.checkedItem])
+                    adapter.notifyDataSetChanged()
+                }, { _, _ -> })
         }
 
         binding.close.setOnClickListener { findNavController().popBackStack() }
@@ -130,29 +157,6 @@ class CreateEditWorkoutFragment : Fragment() {
         listView.adapter = adapter
 
         return binding.root
-    }
-
-    private fun showDialog(activities: List<IActivityType>) {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(R.string.chooseWorkout.toString())
-
-        var checkedItem = 0 // first
-        builder.setSingleChoiceItems(activities.map { iActivityType -> iActivityType.name }
-            .toTypedArray(), checkedItem) { _, which ->
-            checkedItem = which
-            // user checked an item
-        }
-
-
-        builder.setPositiveButton("OK") { _, _ ->
-            selectedActivities.add(allActivities[checkedItem])
-            adapter.notifyDataSetChanged()
-        }
-        builder.setNegativeButton(R.string.cancel, null)
-
-
-        val dialog = builder.create()
-        dialog.show()
     }
 
     private fun isEqual(first: MutableList<IActivityType>, second: List<WorkoutEntry>): Boolean {

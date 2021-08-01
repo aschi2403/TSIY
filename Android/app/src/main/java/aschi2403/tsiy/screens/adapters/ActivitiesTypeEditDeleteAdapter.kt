@@ -9,11 +9,11 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
+import aschi2403.tsiy.helper.DialogView
 import aschi2403.tsiy.model.ActivityType
 import aschi2403.tsiy.model.GeneralActivity
 import aschi2403.tsiy.model.PowerActivity
@@ -68,7 +68,18 @@ class ActivitiesTypeEditDeleteAdapter(
                     .count()
             }
             if (items > 0) {
-                showAlertDialog(items, position)
+                DialogView(context).showYesNoDialog(
+                    context.getString(R.string.attention),
+                    "Do you really want to delete $items saved activities?",
+                    { _, _ ->
+                        deleteData(position)
+                        Toast.makeText(
+                            context,
+                            "Activity type and saved activities deleted.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    },
+                    { _, _ -> })
             } else {
                 deleteData(position)
             }
@@ -96,26 +107,6 @@ class ActivitiesTypeEditDeleteAdapter(
         this.data = data
     }
 
-    private fun showAlertDialog(items: Long, position: Int) {
-        val alertDialog: AlertDialog.Builder = AlertDialog.Builder(context)
-        alertDialog.setTitle(context.getString(R.string.attention))
-        alertDialog.setMessage("Do you really want to delete $items saved activities?")
-        alertDialog.setPositiveButton(
-            "YES"
-        ) { _, _ ->
-            deleteData(position)
-            Toast.makeText(
-                context,
-                "Activity type and saved activities deleted.",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-        alertDialog.setNegativeButton(
-            "NO"
-        ) { _, _ -> }
-        val alert: AlertDialog = alertDialog.create()
-        alert.show()
-    }
 
     private fun deleteData(position: Int) {
         database.deleteActivityType(data[position])
