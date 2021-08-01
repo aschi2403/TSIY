@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isNotEmpty
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -33,19 +33,23 @@ class CreateEditWorkoutFragment : Fragment() {
 
     private lateinit var allActivities: List<IActivityType>
 
-    private var dialogView = DialogView(requireContext())
+    private lateinit var dialogView: DialogView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                dialogView.showYesNoDialog(
-                    getString(R.string.attention),
-                    getString(R.string.goBackMessage),
-                    { _, _ -> this.handleOnBackPressed() },
-                    { _, _ -> }
-                )
+                if (!binding.nameValue.text.isNullOrEmpty() || binding.listOfActivities.isNotEmpty()) {
+                    dialogView.showYesNoDialog(
+                        getString(R.string.attention),
+                        getString(R.string.goBackMessage),
+                        { _, _ -> findNavController().popBackStack() },
+                        { _, _ -> }
+                    )
+                } else {
+                    findNavController().popBackStack()
+                }
             }
         })
     }
@@ -54,9 +58,8 @@ class CreateEditWorkoutFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
+        dialogView = DialogView(requireContext())
         val id = requireArguments().getLong("id", -1)
 
         binding = DataBindingUtil.inflate(

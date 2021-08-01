@@ -5,6 +5,7 @@ import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentWorkoutScreenBinding
 import aschi2403.tsiy.gps.LocationProvider
+import aschi2403.tsiy.helper.DialogView
 import aschi2403.tsiy.model.GeneralActivity
 import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.repository.WorkoutRepo
@@ -25,8 +27,25 @@ class WorkoutScreenFragment : Fragment() {
     private var set = 0
     private lateinit var binding: FragmentWorkoutScreenBinding
     private lateinit var locationProvider: LocationProvider
+    private lateinit var dialogView: DialogView
 
     private var viewModel = WorkoutScreenViewModel()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                dialogView.showYesNoDialog(
+                    getString(R.string.attention),
+                    getString(R.string.goBackMessage),
+                    { _, _ ->
+                        activity?.finish()
+                    },
+                    { _, _ -> }
+                )
+            }
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +54,7 @@ class WorkoutScreenFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_workout_screen, container, false
         )
+        dialogView = DialogView(requireContext())
         isPowerActivity = arguments?.getBoolean("type")!!
 
         if (!isPowerActivity) {

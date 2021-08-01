@@ -35,12 +35,22 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
         super.onCreate(savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                DialogView(requireContext()).showYesNoDialog(
-                    getString(R.string.attention),
-                    getString(R.string.goBackMessage),
-                    { _, _ -> this.handleOnBackPressed() },
-                    { _, _ -> }
-                )
+                if (!binding.cardioPointsValue.text.isNullOrEmpty() ||
+                    !binding.caloriesValue.text.isNullOrEmpty() ||
+                    !binding.descriptionValue.text.isNullOrEmpty() ||
+                    !binding.activityType.text.isNullOrEmpty()
+                ) {
+                    DialogView(requireContext()).showYesNoDialog(
+                        getString(R.string.attention),
+                        getString(R.string.goBackMessage),
+                        { _, _ ->
+                            findNavController().popBackStack()
+                        },
+                        { _, _ -> }
+                    )
+                } else {
+                    findNavController().popBackStack()
+                }
             }
         })
     }
@@ -119,7 +129,8 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
         return binding.root
     }
 
-    override val iconDialogIconPack: IconPack
+    override
+    val iconDialogIconPack: IconPack
         get() = iconPack
 
     override fun onIconDialogIconsSelected(dialog: IconDialog, icons: List<Icon>) {
