@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentAddeditactivitytypeBinding
+import aschi2403.tsiy.helper.DialogView
 import aschi2403.tsiy.helper.IconPackProvider
 import aschi2403.tsiy.model.ActivityType
 import aschi2403.tsiy.repository.WorkoutRepo
@@ -28,6 +30,20 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
     private lateinit var binding: FragmentAddeditactivitytypeBinding
 
     private lateinit var iconPack: IconPack
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                DialogView(requireContext()).showYesNoDialog(
+                    getString(R.string.attention),
+                    getString(R.string.goBackMessage),
+                    { _, _ -> this.handleOnBackPressed() },
+                    { _, _ -> }
+                )
+            }
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
