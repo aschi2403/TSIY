@@ -73,11 +73,13 @@ class CreateEditWorkoutFragment : Fragment() {
         binding.add.setOnClickListener {
             with(dialogView) {
                 showItemCheckDialog(R.string.chooseWorkout,
-                        allActivities.map { iActivityType -> iActivityType.name },
-                        { _, _ ->
+                    allActivities.map { iActivityType -> iActivityType.name },
+                    { _, _ ->
+                        if (allActivities.isNotEmpty()) {
                             selectedActivities.add(allActivities[checkedItem])
                             adapter.notifyDataSetChanged()
-                        }) { _, _ -> }
+                        }
+                    }) { _, _ -> }
             }
         }
 
