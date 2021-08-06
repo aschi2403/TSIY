@@ -71,12 +71,14 @@ class CreateEditWorkoutFragment : Fragment() {
         allActivities = database.allActivityTypes.plus(database.allPowerActivityTypes)
 
         binding.add.setOnClickListener {
-            dialogView.showItemCheckDialog(R.string.chooseWorkout.toString(),
-                allActivities.map { iActivityType -> iActivityType.name },
-                { _, _ ->
-                    selectedActivities.add(allActivities[dialogView.checkedItem])
-                    adapter.notifyDataSetChanged()
-                }, { _, _ -> })
+            with(dialogView) {
+                showItemCheckDialog(R.string.chooseWorkout,
+                        allActivities.map { iActivityType -> iActivityType.name },
+                        { _, _ ->
+                            selectedActivities.add(allActivities[checkedItem])
+                            adapter.notifyDataSetChanged()
+                        }) { _, _ -> }
+            }
         }
 
         binding.close.setOnClickListener { findNavController().popBackStack() }
