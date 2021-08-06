@@ -98,7 +98,7 @@ class AddWeightFragment : Fragment() {
         // otherwise if the user hasn't put in a number yet and the user presses the increase button the app crashes (java.lang.NumberFormatException: empty String)
         if (!binding.weightValue.text.isNullOrEmpty()) {
             binding.weightValue.setText(
-                (binding.weightValue.text.toString().toDouble() + 0.1).round().toString()
+                (binding.weightValue.text.toString().replace(',', '.').toDouble() + 0.1).round().toString()
             )
         } else {
             binding.weightValue.setText(
@@ -107,7 +107,7 @@ class AddWeightFragment : Fragment() {
         }
     }
 
-    private fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
+    private fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).replace(',', '.').toDouble()
 
     private fun updateDateField() {
         binding.dateValue.text = formatDate(public_date!!.millis)
