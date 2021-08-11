@@ -53,11 +53,6 @@ class LocationProvider(kmValue: TextView, speedValue: TextView) {
                 if (location != null) {
                     oldLocation.latitude = location.latitude
                     oldLocation.longitude = location.longitude
-                    Toast.makeText(
-                        context,
-                        oldLocation.latitude.toString() + " " + oldLocation.longitude,
-                        Toast.LENGTH_LONG
-                    ).show()
                 }
             } else {
                 Toast.makeText(context, "Please turn on location and start the activity again", Toast.LENGTH_LONG)
