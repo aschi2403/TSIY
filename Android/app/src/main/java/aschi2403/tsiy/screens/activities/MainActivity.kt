@@ -3,10 +3,10 @@ package aschi2403.tsiy.screens.activities
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import aschi2403.tsiy.R
+import aschi2403.tsiy.helper.DialogView
 import aschi2403.tsiy.helper.LanguageHelper
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -38,6 +39,17 @@ class MainActivity : AppCompatActivity() {
         val appBarLayout = findViewById<Toolbar>(R.id.appBarLayout)
         setSupportActionBar(appBarLayout)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+        if (!sharedPreferences.contains("darkMode")) {
+            when (applicationContext.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+                Configuration.UI_MODE_NIGHT_NO -> {
+                    sharedPreferences.edit().putInt("darkMode", AppCompatDelegate.MODE_NIGHT_NO).apply()
+                }
+                Configuration.UI_MODE_NIGHT_YES -> {
+                    sharedPreferences.edit().putInt("darkMode", AppCompatDelegate.MODE_NIGHT_YES).apply()
+                }
+            }
+        }
 
         AppCompatDelegate.setDefaultNightMode(sharedPreferences.getInt("darkMode", 0))
 
@@ -81,7 +93,13 @@ class MainActivity : AppCompatActivity() {
                     Manifest.permission.ACCESS_FINE_LOCATION
                 )
             ) {
-                showDialog()
+                DialogView(this).showYesNoDialog(
+                    getString(R.string.locationPermission),
+                    getString(R.string.locationMessage),
+                    { _, _ ->
+                        requestLocationPermission()
+                    }, { _, _ -> }
+                )
             } else {
                 requestLocationPermission()
             }
@@ -94,20 +112,5 @@ class MainActivity : AppCompatActivity() {
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
             500
         )
-    }
-
-    private fun showDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(R.string.locationPermission)
-
-        builder.setMessage("Location is needed to record the distance of an activity.")
-
-        builder.setPositiveButton("ASK AGAIN") { _, _ ->
-            requestLocationPermission()
-        }
-        builder.setNegativeButton(R.string.cancel, null)
-
-        val dialog = builder.create()
-        dialog.show()
     }
 }

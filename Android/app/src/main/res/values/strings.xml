@@ -86,4 +86,6 @@
     <string name="Month">Month</string>
     <string name="Year">Year</string>
     <string name="group_by">Group by</string>
+    <string name="workout">Workout</string>
+    <string name="locationMessage">Location is needed to record the distance of an activity. Ask again?</string>
 </resources>
