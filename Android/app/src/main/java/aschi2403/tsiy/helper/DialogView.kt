@@ -25,7 +25,7 @@ class DialogView(val context: Context) {
         alertDialog.create().show()
     }
     fun showItemCheckDialog(
-        title: String,
+        title: Int,
         items: List<String>,
         ok: DialogInterface.OnClickListener,
         cancel: DialogInterface.OnClickListener

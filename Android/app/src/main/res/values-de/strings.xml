@@ -87,4 +87,6 @@
     <string name="Month">Monat</string>
     <string name="Year">Jahr</string>
     <string name="group_by">Gruppieren nach</string>
+    <string name="workout">Workout</string>
+    <string name="locationMessage">"Der Standort wird benötigt, um die Entfernung einer Aktivität zu erfassen. Nochmals fragen?</string>
 </resources>

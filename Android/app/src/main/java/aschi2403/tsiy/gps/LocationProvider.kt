@@ -88,11 +88,7 @@ class LocationProvider(kmValue: TextView, speedValue: TextView, val map: MapView
                     oldLocation = Location("oldLoc")
                     oldLocation.latitude = location.latitude
                     oldLocation.longitude = location.longitude
-                    Toast.makeText(
-                        context,
-                        oldLocation.latitude.toString() + " " + oldLocation.longitude,
-                        Toast.LENGTH_LONG
-                    ).show()
+
                     map.overlays.add(polyline)
                 } else {
                     Toast.makeText(context, "Unable to detect your location.", Toast.LENGTH_LONG)
