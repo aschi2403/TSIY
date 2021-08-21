@@ -36,7 +36,9 @@ abstract class WorkoutDatabase : RoomDatabase() {
                     context.applicationContext,
                     WorkoutDatabase::class.java,
                     "Workout.db"
-                ).allowMainThreadQueries()/*.createFromAsset("database/Workout_temp.db")*/.build()
+                )
+                    .createFromAsset("database/Workout_template.db")
+                    .allowMainThreadQueries()/*.createFromAsset("database/Workout_temp.db")*/.build()
             }
             return instance as WorkoutDatabase
         }
