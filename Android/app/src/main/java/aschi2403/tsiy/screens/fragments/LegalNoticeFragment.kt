@@ -28,13 +28,8 @@ class LegalNoticeFragment : Fragment() {
         binding.MPAndroidChart.setOnClickListener {
             openBrowser("https://github.com/PhilJay/MPAndroidChart")
         }
-
         binding.icondialoglib.setOnClickListener {
             openBrowser("https://github.com/maltaisn/icondialoglib")
-        }
-
-        binding.osmdroid.setOnClickListener {
-            openBrowser("https://github.com/osmdroid/osmdroid")
         }
 
         (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)

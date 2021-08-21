@@ -77,8 +77,6 @@
     <string name="locationPermission">Standortberechtigung</string>
     <string name="distance">Distanz</string>
     <string name="speed">Geschwindigkeit</string>
-    <string name="osmdroid">osmdroid</string>
-    <string name="openstreetmapscopyright">© OpenStreetMap contributors</string>
     <string name="ok">OK</string>
     <string name="goBackMessage">Eingaben löschen?</string>
     <string name="activities">Aktivitäten</string>

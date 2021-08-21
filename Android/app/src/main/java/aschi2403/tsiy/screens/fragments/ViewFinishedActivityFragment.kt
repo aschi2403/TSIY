@@ -17,13 +17,9 @@ import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.activities.MainActivity
 import kotlinx.android.synthetic.main.table_row.view.*
-import org.osmdroid.api.IMapController
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.util.BoundingBox
-import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.overlay.Polyline
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.math.roundToLong
 
 
@@ -99,37 +95,16 @@ class ViewFinishedActivityFragment : Fragment() {
         } else {
             binding.generalActivityBody.visibility = View.VISIBLE
             binding.generalActivityHeader.visibility = View.VISIBLE
-            binding.map.visibility = View.VISIBLE
             binding.distanceValue.text =
                 (((iActivity as GeneralActivity).distance * 100).roundToLong() / 100.0).toString() + " km"
             if (iActivity.distance > 0) {
                 binding.speedValue.text =
-                    (((iActivity.distance / (iActivity.duration / 3600000.0)) * 100).roundToLong() / 100.0).toString() + " km/h"
+                    (((TimeUnit.MILLISECONDS.toSeconds(iActivity.duration) / iActivity.distance) * 100).roundToLong() / 100.0).toString()
             } else {
-                binding.speedValue.text = "0 km/h"
+                binding.speedValue.text = "0"
             }
         }
 
-        binding.map.setTileSource(TileSourceFactory.MAPNIK)
-        val mapController: IMapController = binding.map.controller
-        mapController.setZoom(15.0)
-        val gpsPoints = database.getGPSPointsFromActivity(idOfActivity)
-        if (gpsPoints.isNotEmpty()) {
-            val boundingBox =
-                BoundingBox.fromGeoPoints(gpsPoints.map { gpsPoint -> GeoPoint(gpsPoint.latitude, gpsPoint.longitude) }
-                    .toList())
-            mapController.setCenter(boundingBox.centerWithDateLine)
-            mapController.zoomToSpan(boundingBox.latitudeSpan, boundingBox.longitudeSpanWithDateLine)
-        } else {
-            binding.map.visibility = View.GONE
-        }
-        val polyline = Polyline()
-
-        gpsPoints.forEach {
-            polyline.addPoint(GeoPoint(it.latitude, it.longitude))
-        }
-        binding.map.overlays.add(polyline)
-        binding.map.invalidate()
         return binding.root
     }
 
