@@ -78,8 +78,6 @@
     <string name="locationPermission">Location permission</string>
     <string name="distance">Distance</string>
     <string name="speed">Speed</string>
-    <string name="osmdroid">osmdroid</string>
-    <string name="openstreetmapscopyright">© OpenStreetMap contributors</string>
     <string name="goBackMessage">Do you really want to discard your input?</string>
     <string name="ok">OK</string>
     <string name="activities">Activities</string>

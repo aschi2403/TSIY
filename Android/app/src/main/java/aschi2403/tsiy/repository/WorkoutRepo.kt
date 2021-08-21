@@ -14,7 +14,6 @@ class WorkoutRepo(context: Context) {
     private var setEntryDao: SetEntryDao = db.setEntryDao()
     private var workoutEntryDao: WorkoutEntryDao = db.workoutEntryDao()
     private var workoutPlanDao: WorkoutPlanDao = db.workoutPlanDao()
-    private var gpsPointsDao: GPSPointsDao = db.gpsPointDao()
 
 
     // PowerActivity
@@ -179,15 +178,5 @@ class WorkoutRepo(context: Context) {
 
     fun deleteWorkoutEntry(workoutEntry: WorkoutEntry) {
         workoutEntryDao.deleteWorkoutEntry(workoutEntry)
-    }
-
-    fun insertGPSPoints(gpsPoints: List<GPSPoint>) {
-        gpsPoints.forEach {
-            gpsPointsDao.insertGPSPoint(it)
-        }
-    }
-
-    fun getGPSPointsFromActivity(workoutEntryId: Long): List<GPSPoint> {
-        return gpsPointsDao.loadGPSPoints(workoutEntryId)
     }
 }
