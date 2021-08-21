@@ -38,7 +38,7 @@ abstract class WorkoutDatabase : RoomDatabase() {
                     "Workout.db"
                 )
                     .createFromAsset("database/Workout_template.db")
-                    .allowMainThreadQueries()/*.createFromAsset("database/Workout_temp.db")*/.build()
+                    .allowMainThreadQueries().build()
             }
             return instance as WorkoutDatabase
         }
