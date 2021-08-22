@@ -7,10 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
+import aschi2403.tsiy.helper.DataMerger
 import aschi2403.tsiy.model.GeneralActivity
 import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.model.relations.IActivity
@@ -25,10 +28,12 @@ import java.util.*
 class HomeListAdapter(
     private var data: MutableList<IActivity>,
     val context: Context,
-    private val iconPack: IconPack
+    private val iconPack: IconPack,
+    private val toolbar: Toolbar
 ) :
     RecyclerView.Adapter<HomeListAdapter.DataViewHolder>() {
     val database = WorkoutRepo(context)
+    private val dataMerger = DataMerger(database)
 
     class DataViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val icon: ImageView = itemView.findViewById(R.id.icon)
@@ -37,7 +42,6 @@ class HomeListAdapter(
         val cv: MaterialCardView = itemView.findViewById(R.id.card)
         val timeValue: TextView = itemView.findViewById(R.id.timeValue)
         val cardioPointsValue: TextView = itemView.findViewById(R.id.cardioPointsValue)
-
     }
 
     override fun getItemCount(): Int {
@@ -75,6 +79,21 @@ class HomeListAdapter(
             val activity = data[position] as GeneralActivity
             holder.firstLine.text = activity.activityType.name
             holder.icon.setImageDrawable(iconPack.getIcon(activity.activityType.icon)!!.drawable)
+            val workoutName = context.getString(R.string.workout)
+            if (activity.activityType.name.contains(workoutName)) {
+                holder.cv.setOnClickListener {
+                    (context as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+                    toolbar.setNavigationOnClickListener {
+                        (context as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+                        setData(
+                            dataMerger.getData(0, workoutName)
+                        )
+                    }
+                    setData(
+                        dataMerger.getDataFromWorkoutId(0, data[position].workoutPlanId)
+                    )
+                }
+            }
         }
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
             holder.icon.setColorFilter(Color.WHITE)
@@ -87,6 +106,6 @@ class HomeListAdapter(
 
     fun setData(data: MutableList<IActivity>) {
         this.data = data
+        this.notifyDataSetChanged()
     }
-
 }

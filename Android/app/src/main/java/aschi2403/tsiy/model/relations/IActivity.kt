@@ -8,6 +8,8 @@ interface IActivity {
     var duration: Long
     var cardioPoints: Double
     var calories: Double
+    var workoutId: Int
+    var workoutPlanId: Long
 
     override fun toString(): String
 }

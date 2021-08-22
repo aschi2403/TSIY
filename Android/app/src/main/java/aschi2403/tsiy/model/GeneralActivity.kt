@@ -25,7 +25,9 @@ class GeneralActivity(
     override var calories: Double = 0.0,
     override var startDate: Long = 0,
     override var endDate: Long = 0,
-    var distance: Float = 0F
+    var distance: Float = 0F,
+    override var workoutId: Int = -1,
+    override var workoutPlanId: Long = -1
 ) : IActivity {
     @Ignore
     lateinit var activityType: ActivityType

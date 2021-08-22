@@ -15,8 +15,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentHomeBinding
+import aschi2403.tsiy.helper.DataMerger
 import aschi2403.tsiy.helper.IconPackProvider
-import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.adapters.HomeListAdapter
 import aschi2403.tsiy.screens.models.HomeViewModel
@@ -27,9 +27,10 @@ class HomeFragment : Fragment() {
 
     private var checkedItem: Int = 0
     private lateinit var database: WorkoutRepo
-    private lateinit var editDeleteAdapter: HomeListAdapter
+    private lateinit var homeListAdapter: HomeListAdapter
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
+    private lateinit var dataMerger: DataMerger
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -94,43 +95,29 @@ class HomeFragment : Fragment() {
 
         database = WorkoutRepo(this.requireContext())
 
+        dataMerger = DataMerger(database)
+
 
         val rv = binding.listOfActivities
         rv.setHasFixedSize(true)
         val llm = LinearLayoutManager(this.context)
 
         rv.layoutManager = llm
-        editDeleteAdapter = HomeListAdapter(
-            getData(),
+        homeListAdapter = HomeListAdapter(
+            dataMerger.getData(checkedItem, getString(R.string.workout)),
             this.requireContext(),
-            IconPackProvider(this.requireContext()).loadIconPack()
+            IconPackProvider(this.requireContext()).loadIconPack(),
+            activity!!.findViewById(R.id.appBarLayout)
         )
-        rv.adapter = editDeleteAdapter
+        rv.adapter = homeListAdapter
         return binding.root
     }
 
-    private fun getData(): MutableList<IActivity> {
-        return when (checkedItem) {
-            0 -> {
-                val mergedList =
-                    database.allPowerActivities.plus(database.allGeneralActivities)
-                mergedList.sortedByDescending { it.startDate }.toMutableList()
-            }
-            1 -> {
-                database.allGeneralActivities.sortedByDescending { it.startDate }
-                    .toMutableList()
-            }
-            else -> {
-                database.allPowerActivities.sortedByDescending { it.startDate }
-                    .toMutableList()
-            }
-        }
-    }
 
     override fun onResume() {
         super.onResume()
-        editDeleteAdapter.setData(getData())
-        editDeleteAdapter.notifyDataSetChanged()
+        homeListAdapter.setData(dataMerger.getData(checkedItem, getString(R.string.workout)))
+        homeListAdapter.notifyDataSetChanged()
     }
 
     override fun onStop() {
@@ -154,8 +141,8 @@ class HomeFragment : Fragment() {
             checkedItem = which
         }
         builder.setPositiveButton(R.string.filter) { _, _ ->
-            editDeleteAdapter.setData(getData())
-            editDeleteAdapter.notifyDataSetChanged()
+            homeListAdapter.setData(dataMerger.getData(checkedItem, getString(R.string.workout)))
+            homeListAdapter.notifyDataSetChanged()
         }
 
         builder.setNegativeButton(R.string.cancel, null)

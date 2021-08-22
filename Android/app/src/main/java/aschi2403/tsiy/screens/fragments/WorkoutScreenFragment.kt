@@ -21,6 +21,8 @@ import aschi2403.tsiy.viewmodel.WorkoutScreenViewModel
 
 
 class WorkoutScreenFragment : Fragment() {
+    private var workoutPlanId: Long = -1
+    private var newWorkoutIdForDatabase: Int = -1
     private var isPowerActivity: Boolean = true
     private lateinit var database: WorkoutRepo
     private var idOfActivity: Long = -1
@@ -66,18 +68,23 @@ class WorkoutScreenFragment : Fragment() {
 
         database = WorkoutRepo(requireActivity().applicationContext)
 
-        val workoutId = arguments?.getInt("workoutId", -1)!!
+        workoutPlanId = arguments?.getLong("workoutPlanId", -1)!!
 
-        if (workoutId >= 0) {
+        if (workoutPlanId >= 0) {
+            val data = database.allGeneralActivities.plus(database.allPowerActivities)
+            if (data.isNotEmpty() && newWorkoutIdForDatabase == -1) {
+                newWorkoutIdForDatabase = data
+                    .maxOf { activity -> activity.workoutId }.plus(1)
+            }
             val activities =
-                database.workoutEntriesByWorkoutPlanId(workoutId.toLong()).toMutableList()
+                database.workoutEntriesByWorkoutPlanId(workoutPlanId).toMutableList()
 
             closeButton(activities[set].iActivityTypeId, activities[set].isPowerActivity)
 
             createActivityInDb(
                 activities[set].isPowerActivity,
                 activities[set].iActivityTypeId,
-                isWorkout = true
+                isWorkout = true,
             )
 
             changeActivityNameLabel(
@@ -98,7 +105,9 @@ class WorkoutScreenFragment : Fragment() {
                         activities[set].iActivityTypeId,
                         activities[set].isPowerActivity,
                         isFinished = false,
-                        navigate = false
+                        navigate = false,
+                        newWorkoutIdForDatabase = newWorkoutIdForDatabase,
+                        workoutPlanId = workoutPlanId
                     )
                     // remove id of activity
                     idOfActivity = -1
@@ -139,7 +148,14 @@ class WorkoutScreenFragment : Fragment() {
 
     private fun closeButton(activityTypeId: Long, isPowerActivity: Boolean) {
         binding.close.setOnClickListener {
-            saveInDatabase(activityTypeId, isPowerActivity, isFinished = true, navigate = true)
+            saveInDatabase(
+                activityTypeId,
+                isPowerActivity,
+                isFinished = true,
+                navigate = true,
+                newWorkoutIdForDatabase = newWorkoutIdForDatabase,
+                workoutPlanId = workoutPlanId
+            )
             viewModel.values.clear()
         }
     }
@@ -172,7 +188,8 @@ class WorkoutScreenFragment : Fragment() {
                     database.addGeneralActivity(
                         GeneralActivity(
                             startDate = System.currentTimeMillis(),
-                            activityTypeId = activityTypeId
+                            activityTypeId = activityTypeId,
+                            workoutId = -1
                         )
                     )
             }
@@ -181,7 +198,8 @@ class WorkoutScreenFragment : Fragment() {
                 idOfActivity = database.addPowerActivity(
                     PowerActivity(
                         startDate = System.currentTimeMillis(),
-                        activityTypeId = activityTypeId
+                        activityTypeId = activityTypeId,
+                        workoutId = -1
                     )
                 )
             }
@@ -198,7 +216,9 @@ class WorkoutScreenFragment : Fragment() {
                         activityTypeId,
                         isPowerActivity,
                         isFinished = false,
-                        navigate = false
+                        navigate = false,
+                        newWorkoutIdForDatabase = newWorkoutIdForDatabase,
+                        workoutPlanId = workoutPlanId
                     )
                     // remove id of activity
                     idOfActivity = -1
@@ -215,7 +235,9 @@ class WorkoutScreenFragment : Fragment() {
         activityTypeId: Long,
         isPowerActivity: Boolean,
         isFinished: Boolean,
-        navigate: Boolean
+        navigate: Boolean,
+        newWorkoutIdForDatabase: Int,
+        workoutPlanId: Long
     ) {
         if (!isPowerActivity) { // normal activity
             database.updateActivity(
@@ -227,9 +249,11 @@ class WorkoutScreenFragment : Fragment() {
                     calories = 0.0,
                     cardioPoints = 0.0,
                     endDate = System.currentTimeMillis(),
-                    distance = locationProvider.getDistance()
+                    distance = locationProvider.getDistance(),
+                    workoutId = newWorkoutIdForDatabase,
+                    workoutPlanId = workoutPlanId
                 )
-            ) //TODO: calculate cardioPoints and calories
+            ) //sTODO: calculate cardioPoints and calories
             if (isFinished) {
                 activity?.finish()
             }
@@ -243,7 +267,9 @@ class WorkoutScreenFragment : Fragment() {
                     calories = 0.0,
                     cardioPoints = 0.0,
                     sets = set,
-                    endDate = System.currentTimeMillis()
+                    endDate = System.currentTimeMillis(),
+                    workoutId = newWorkoutIdForDatabase,
+                    workoutPlanId = workoutPlanId
                 )
             )
             if (navigate)

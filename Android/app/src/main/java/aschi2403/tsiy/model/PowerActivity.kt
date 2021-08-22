@@ -23,10 +23,13 @@ class PowerActivity(
     override var cardioPoints: Double = 0.0,
     override var calories: Double = 0.0,
     override var startDate: Long = 0,
-    override var endDate: Long = 0
+    override var endDate: Long = 0,
+    override var workoutId: Int = -1,
+    override var workoutPlanId: Long = -1
 ) : IActivity {
     @Ignore
     lateinit var powerActivityType: ActivityType
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

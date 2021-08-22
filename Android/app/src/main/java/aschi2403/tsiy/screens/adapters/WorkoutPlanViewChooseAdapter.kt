@@ -46,7 +46,7 @@ class WorkoutPlanViewChooseAdapter(
         holder.name.text = data[position].name
         holder.cv.setOnClickListener { view: View ->
             val intent = Intent(view.context, MainWorkoutActivity::class.java)
-            intent.putExtra("workoutId", data[position].id!!.toInt())
+            intent.putExtra("workoutPlanId", data[position].id!!)
             context.startActivity(intent)
         }
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)

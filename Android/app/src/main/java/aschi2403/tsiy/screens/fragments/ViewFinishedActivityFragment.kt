@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -47,6 +48,10 @@ class ViewFinishedActivityFragment : Fragment() {
             database.powerActivityById(idOfActivity!!)
         } else {
             database.generalActivityById(idOfActivity!!)
+        }
+
+        activity!!.findViewById<Toolbar>(R.id.appBarLayout).setNavigationOnClickListener {
+            findNavController().popBackStack()
         }
 
         val deleteButton = requireActivity().findViewById<Button>(R.id.deleteButtonAppBar)
