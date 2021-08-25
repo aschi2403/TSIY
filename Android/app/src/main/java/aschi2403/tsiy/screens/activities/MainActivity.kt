@@ -14,10 +14,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import aschi2403.tsiy.BuildConfig
 import aschi2403.tsiy.R
 import aschi2403.tsiy.helper.DialogView
 import aschi2403.tsiy.helper.LanguageHelper
 import kotlinx.android.synthetic.main.activity_main.*
+import org.osmdroid.config.Configuration
+import org.osmdroid.config.IConfigurationProvider
+import org.osmdroid.tileprovider.util.StorageUtils.getStorage
 
 
 class MainActivity : AppCompatActivity() {
@@ -53,6 +57,10 @@ class MainActivity : AppCompatActivity() {
 
         AppCompatDelegate.setDefaultNightMode(sharedPreferences.getInt("darkMode", 0))
 
+        val provider: IConfigurationProvider = Configuration.getInstance()
+        provider.userAgentValue = BuildConfig.APPLICATION_ID
+        provider.osmdroidBasePath = getStorage()
+        provider.osmdroidTileCache = getStorage()
         setupView()
     }
 

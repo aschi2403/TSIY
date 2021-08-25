@@ -84,7 +84,7 @@ class WorkoutScreenFragment : Fragment() {
             createActivityInDb(
                 activities[set].isPowerActivity,
                 activities[set].iActivityTypeId,
-                isWorkout = true,
+                isWorkout = true
             )
 
             changeActivityNameLabel(
@@ -253,7 +253,8 @@ class WorkoutScreenFragment : Fragment() {
                     workoutId = newWorkoutIdForDatabase,
                     workoutPlanId = workoutPlanId
                 )
-            ) //sTODO: calculate cardioPoints and calories
+            ) //TODO: calculate cardioPoints and calories
+
             if (isFinished) {
                 activity?.finish()
             }

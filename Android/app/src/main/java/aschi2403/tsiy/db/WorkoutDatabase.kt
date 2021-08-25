@@ -14,7 +14,8 @@ import aschi2403.tsiy.model.*
         WeightEntry::class,
         SetEntry::class,
         WorkoutEntry::class,
-        WorkoutPlan::class],
+        WorkoutPlan::class,
+        GPSPoint::class],
     version = 8
 )
 abstract class WorkoutDatabase : RoomDatabase() {
@@ -26,6 +27,7 @@ abstract class WorkoutDatabase : RoomDatabase() {
     abstract fun setEntryDao(): SetEntryDao
     abstract fun workoutPlanDao(): WorkoutPlanDao
     abstract fun workoutEntryDao(): WorkoutEntryDao
+    abstract fun gpsPointDao(): GPSPointsDao
 
     companion object {
         private var instance: WorkoutDatabase? = null
@@ -36,7 +38,9 @@ abstract class WorkoutDatabase : RoomDatabase() {
                     context.applicationContext,
                     WorkoutDatabase::class.java,
                     "Workout.db"
-                ).allowMainThreadQueries()/*.createFromAsset("database/Workout_temp.db")*/.build()
+                )
+                    .createFromAsset("database/Workout_template.db")
+                    .allowMainThreadQueries().build()
             }
             return instance as WorkoutDatabase
         }
