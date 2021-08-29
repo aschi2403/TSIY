@@ -90,4 +90,7 @@
     <string name="group_by">Group by</string>
     <string name="workout">Workout</string>
     <string name="locationMessage">Location is needed to record the distance of an activity. Ask again?</string>
+    <string name="unableToGetLocation">Unable to detect your location.</string>
+    <string name="turnOnLocation">Please turn on location and start the activity again</string>
+    <string name="locationIsNeedToRecordDistance">Location permission is needed to record the distance.</string>
 </resources>
