@@ -5,7 +5,7 @@ import androidx.room.*
 import androidx.room.OnConflictStrategy.IGNORE
 import androidx.room.OnConflictStrategy.REPLACE
 import aschi2403.tsiy.model.ActivityType
-
+// testcomment
 @Dao
 interface ActivityTypeDao {
     @Query("SELECT * FROM ActivityType WHERE isPowerActivity = 0")
