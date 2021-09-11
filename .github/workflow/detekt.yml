@@ -1,8 +1,7 @@
 name: detekt
 
 on: push
-
- jobs:
+jobs:
    detekt:
      runs-on: ubuntu-latest
 
