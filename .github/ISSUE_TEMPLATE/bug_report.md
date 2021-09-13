@@ -7,10 +7,10 @@ assignees: ''
 
 ---
 
-**What is wrong**
+**Current behaviour**
 
 
-**How should it be**
+**Expected behaviour**
 
 
 **How to reproduce**
@@ -22,3 +22,5 @@ assignees: ''
 **Smartphone**
  - Device:
  - OS:
+
+**Android logcat**
