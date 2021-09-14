@@ -99,7 +99,7 @@ class WorkoutScreenFragment : Fragment() {
         database = WorkoutRepo(requireActivity().applicationContext)
 
         receiver = GPSReceiver(binding.map, binding.kmValue, binding.speedValue)
-        requireActivity().registerReceiver(receiver, IntentFilter("GPS_Data")) //<----Register
+        requireActivity().registerReceiver(receiver, IntentFilter("GPS_Data"))
 
 
         locationService = Intent(
