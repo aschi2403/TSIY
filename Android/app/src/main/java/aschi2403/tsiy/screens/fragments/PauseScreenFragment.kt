@@ -1,9 +1,9 @@
 package aschi2403.tsiy.screens.fragments
 
 import android.content.Context
+import android.content.Context.VIBRATOR_SERVICE
 import android.content.SharedPreferences
-import android.os.Bundle
-import android.os.SystemClock
+import android.os.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,10 +67,14 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
         return binding.root
     }
 
+    // called when countdown time has changed
     override fun onChronometerTick(chronometer: Chronometer?) {
         if (chronometer != null) {
             when (chronometer.text) {
                 "00:00" -> {
+                    // vibration feedback
+                    vibrate()
+                    // navigate back to choose power activity
                     findNavController().popBackStack()
                 }
             }
@@ -88,6 +92,19 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
         if (timerIsCounting && lastCountdownPaused != 0L) {
             countdown.base = countdown.base + SystemClock.elapsedRealtime() - lastCountdownPaused
             countdown.start()
+        }
+    }
+
+    private fun vibrate() {
+        if (Build.VERSION.SDK_INT >= 26) { // > Android 8.0 Oreo
+            (context?.getSystemService(VIBRATOR_SERVICE) as Vibrator).vibrate(
+                VibrationEffect.createOneShot(
+                    800,
+                    VibrationEffect.DEFAULT_AMPLITUDE
+                )
+            )
+        } else {
+            (context?.getSystemService(VIBRATOR_SERVICE) as Vibrator).vibrate(800)
         }
     }
 
