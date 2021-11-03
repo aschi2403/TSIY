@@ -3,30 +3,40 @@ package aschi2403.tsiy.gps
 import android.Manifest
 import android.content.Context
 import android.content.Context.LOCATION_SERVICE
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import aschi2403.tsiy.R
 
-class LocationProvider(kmValue: TextView, speedValue: TextView) {
+class LocationProvider(val context: Context) {
 
     private lateinit var locationManager: LocationManager
-    private var oldLocation: Location = Location("oldLong")
-    private var distance: Float = 0F
-
+    private lateinit var oldLocation: Location
 
     private val locationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
-            distance += oldLocation.distanceTo(location) / 1000
-            kmValue.text = String.format("%.2f km", distance)
-            speedValue.text = String.format("%.2f km/h", location.speed * 3.6)
+            if (!::oldLocation.isInitialized) {
+                oldLocation = Location("oldLoc")
+                oldLocation.latitude = location.latitude
+                oldLocation.longitude = location.longitude
+            }
 
             oldLocation.latitude = location.latitude
             oldLocation.longitude = location.longitude
+
+
+            val gpsData = Intent()
+            gpsData.action = "GPS_Data"
+            gpsData.putExtra( "latitude",location.latitude)
+            gpsData.putExtra( "longitude",location.longitude)
+            gpsData.putExtra( "distance",oldLocation.distanceTo(location) / 1000)
+            gpsData.putExtra("speed", location.speed)
+            context.sendBroadcast(gpsData)
         }
 
         override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
@@ -35,8 +45,9 @@ class LocationProvider(kmValue: TextView, speedValue: TextView) {
     }
 
 
-    fun getLastKnownLocation(context: Context) {
+    fun startLocationTracking(context: Context) {
         locationManager = context.getSystemService(LOCATION_SERVICE) as LocationManager
+
         if (ContextCompat.checkSelfPermission(
                 context,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -48,26 +59,35 @@ class LocationProvider(kmValue: TextView, speedValue: TextView) {
             ) {
                 val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
 
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0L, 0f, locationListener)
+                locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    1000,
+                    1f,
+                    locationListener
+                )
 
                 if (location != null) {
+                    oldLocation = Location("oldLoc")
                     oldLocation.latitude = location.latitude
                     oldLocation.longitude = location.longitude
+                } else {
+                    Toast.makeText(context, context.getString(R.string.unableToGetLocation), Toast.LENGTH_LONG)
+                        .show()
                 }
             } else {
-                Toast.makeText(context, "Please turn on location and start the activity again", Toast.LENGTH_LONG)
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.turnOnLocation),
+                    Toast.LENGTH_LONG
+                )
                     .show()
             }
         } else {
-            Toast.makeText(context, "Location permission is needed to record the distance.", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                context,
+                context.getString(R.string.locationIsNeedToRecordDistance),
+                Toast.LENGTH_LONG
+            ).show()
         }
-    }
-
-    fun stopLocation() {
-        locationManager.removeUpdates(locationListener)
-    }
-
-    fun getDistance(): Float {
-        return distance
     }
 }

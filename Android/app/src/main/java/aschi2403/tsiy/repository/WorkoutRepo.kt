@@ -14,6 +14,7 @@ class WorkoutRepo(context: Context) {
     private var setEntryDao: SetEntryDao = db.setEntryDao()
     private var workoutEntryDao: WorkoutEntryDao = db.workoutEntryDao()
     private var workoutPlanDao: WorkoutPlanDao = db.workoutPlanDao()
+    private var gpsPointsDao: GPSPointsDao = db.gpsPointDao()
 
 
     // PowerActivity
@@ -161,14 +162,11 @@ class WorkoutRepo(context: Context) {
 
     fun workoutEntryById(id: Long) = workoutPlanDao.loadWorkoutPlan(id)
 
-    fun workoutEntriesByWorkoutPlanId(workoutPlanId: Long): List<WorkoutEntry> {
-        return allWorkoutEntry
-            .filter { workoutEntry -> workoutEntry.workoutPlanId == workoutPlanId }
-    }
+    fun workoutEntriesByWorkoutPlanId(workoutPlanId: Long): List<WorkoutEntry> = allWorkoutEntry
+        .filter { workoutEntry -> workoutEntry.workoutPlanId == workoutPlanId }
 
-    fun updateWorkoutEntry(workoutEntry: WorkoutEntry) {
+    fun updateWorkoutEntry(workoutEntry: WorkoutEntry) =
         workoutEntryDao.updateWorkoutEntry(workoutEntry)
-    }
 
     fun insertWorkoutEntry(workoutEntry: WorkoutEntry): Long {
         val newId = workoutEntryDao.insertWorkoutEntry(workoutEntry)
@@ -176,7 +174,13 @@ class WorkoutRepo(context: Context) {
         return newId
     }
 
-    fun deleteWorkoutEntry(workoutEntry: WorkoutEntry) {
+    fun deleteWorkoutEntry(workoutEntry: WorkoutEntry) =
         workoutEntryDao.deleteWorkoutEntry(workoutEntry)
-    }
+
+    fun insertGPSPoints(gpsPoints: List<GPSPoint>) =
+        gpsPoints.forEach {
+            gpsPointsDao.insertGPSPoint(it)
+        }
+
+    fun getGPSPointsFromActivity(workoutEntryId: Long): List<GPSPoint> = gpsPointsDao.loadGPSPoints(workoutEntryId)
 }

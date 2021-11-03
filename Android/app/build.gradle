@@ -16,6 +16,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/roomSchemas".toString())
+            }
+        }
     }
 
     buildFeatures {
@@ -75,4 +80,9 @@ dependencies {
     // icon dialog
     implementation 'com.maltaisn:icondialog:3.3.0'
     implementation "com.maltaisn:iconpack-default:1.0.0"
+
+    //map
+    implementation 'org.osmdroid:osmdroid-android:6.1.10'
+    implementation 'org.osmdroid:osmdroid-wms:6.1.10'
+    implementation 'org.osmdroid:osmdroid-mapsforge:6.1.10'
 }
