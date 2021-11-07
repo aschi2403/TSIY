@@ -1,26 +1,40 @@
 package aschi2403.tsiy.screens.fragments
 
+import android.Manifest
+import android.app.Activity
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentWorkoutScreenBinding
-import aschi2403.tsiy.gps.LocationProvider
+import aschi2403.tsiy.gps.LocationForceGroundService
 import aschi2403.tsiy.helper.DialogView
+import aschi2403.tsiy.model.GPSPoint
 import aschi2403.tsiy.model.GeneralActivity
 import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.viewmodel.WorkoutScreenViewModel
+import org.osmdroid.api.IMapController
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.Polyline
 
 
 class WorkoutScreenFragment : Fragment() {
+    private lateinit var locationService: Intent
     private var workoutPlanId: Long = -1
     private var newWorkoutIdForDatabase: Int = -1
     private var isPowerActivity: Boolean = true
@@ -28,8 +42,9 @@ class WorkoutScreenFragment : Fragment() {
     private var idOfActivity: Long = -1
     private var set = 0
     private lateinit var binding: FragmentWorkoutScreenBinding
-    private lateinit var locationProvider: LocationProvider
     private lateinit var dialogView: DialogView
+
+    private lateinit var receiver: GPSReceiver
 
     private var viewModel = WorkoutScreenViewModel()
 
@@ -56,19 +71,48 @@ class WorkoutScreenFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_workout_screen, container, false
         )
+
+        requestPermissions(
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            )
+        )
+
+        binding.map.setTileSource(TileSourceFactory.MAPNIK)
+        val mapController: IMapController = binding.map.controller
+        mapController.setZoom(15.0)
         dialogView = DialogView(requireContext())
         isPowerActivity = arguments?.getBoolean("type")!!
 
         if (!isPowerActivity) {
             binding.generalActivityHeader.visibility = View.VISIBLE
             binding.generalActivityBody.visibility = View.VISIBLE
-            locationProvider = LocationProvider(binding.kmValue, binding.speedValue)
-            locationProvider.getLastKnownLocation(requireContext())
         }
 
         database = WorkoutRepo(requireActivity().applicationContext)
 
-        workoutPlanId = arguments?.getLong("workoutPlanId", -1)!!
+        receiver = GPSReceiver(binding.map, binding.kmValue, binding.speedValue)
+        requireActivity().registerReceiver(receiver, IntentFilter("GPS_Data"))
+
+
+        locationService = Intent(
+            requireActivity(),
+            LocationForceGroundService::class.java
+        )
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            requireActivity().startForegroundService(locationService)
+        } else {
+            requireActivity().startService(locationService)
+        }
+
+
+        val workoutId = arguments?.getInt("workoutId", -1)!!
 
         if (workoutPlanId >= 0) {
             val data = database.allGeneralActivities.plus(database.allPowerActivities)
@@ -249,11 +293,20 @@ class WorkoutScreenFragment : Fragment() {
                     calories = 0.0,
                     cardioPoints = 0.0,
                     endDate = System.currentTimeMillis(),
+                    distance = receiver.distance
                     distance = locationProvider.getDistance(),
                     workoutId = newWorkoutIdForDatabase,
                     workoutPlanId = workoutPlanId
                 )
             ) //TODO: calculate cardioPoints and calories
+            database.insertGPSPoints(receiver.geoPoints.map {
+                GPSPoint(
+                    null,
+                    it.latitude,
+                    it.longitude,
+                    idOfActivity
+                )
+            })
 
             if (isFinished) {
                 activity?.finish()
@@ -280,6 +333,8 @@ class WorkoutScreenFragment : Fragment() {
                     )
                 )
         }
+        requireActivity().unregisterReceiver(receiver)
+        requireActivity().stopService(locationService)
     }
 
     override fun onDestroyView() {
@@ -291,7 +346,66 @@ class WorkoutScreenFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         if (!isPowerActivity) {
-            locationProvider.stopLocation()
+            requireActivity().stopService(locationService)
+        }
+    }
+
+    private fun requestPermissions(permissions: Array<String>) {
+        permissions.forEach {
+            if (ContextCompat.checkSelfPermission(this.requireContext(), it)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this.context as Activity,
+                    arrayOf(it),
+                    1
+                )
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.map.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.map.onPause()
+    }
+
+    internal class GPSReceiver(private val map: MapView, private val kmValue: TextView, private val speedValue: TextView) :
+        BroadcastReceiver() {
+
+
+        val geoPoints: MutableList<GeoPoint> = ArrayList()
+        var distance: Float = 0F
+        private val polyline = Polyline()
+        private var positionMarker: Marker
+
+
+        init {
+            map.overlays.add(polyline)
+            positionMarker = Marker(map)
+            map.overlayManager.add(positionMarker)
+        }
+
+        override fun onReceive(context: Context?, intent: Intent) {
+            if (intent.action == "GPS_Data") {
+                val latitude = intent.getDoubleExtra("latitude", 0.0)
+                val longitude = intent.getDoubleExtra("longitude", 0.0)
+                distance+= intent.getFloatExtra("distance", 0F)
+                val speed = intent.getFloatExtra("speed", 0F)
+
+                val point = GeoPoint(latitude, longitude)
+                positionMarker.position = point
+                map.controller.setCenter(point)
+                polyline.addPoint(point)
+
+                geoPoints.add(point)
+                kmValue.text = String.format("%.2f km", distance)
+                speedValue.text = String.format("%.2f km/h", speed * 3.6)
+            }
         }
     }
 }

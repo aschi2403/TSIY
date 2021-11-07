@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import aschi2403.tsiy.db.migrations.MIGRATION_8_9
 import aschi2403.tsiy.model.*
 
 @Database(
@@ -16,7 +17,8 @@ import aschi2403.tsiy.model.*
         WorkoutEntry::class,
         WorkoutPlan::class,
         GPSPoint::class],
-    version = 8
+    version = 9,
+    exportSchema = true
 )
 abstract class WorkoutDatabase : RoomDatabase() {
     abstract fun powerActivityDao(): PowerActivityDao
@@ -38,7 +40,7 @@ abstract class WorkoutDatabase : RoomDatabase() {
                     context.applicationContext,
                     WorkoutDatabase::class.java,
                     "Workout.db"
-                )
+                ).addMigrations(MIGRATION_8_9)
                     .createFromAsset("database/Workout_template.db")
                     .allowMainThreadQueries().build()
             }
