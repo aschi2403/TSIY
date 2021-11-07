@@ -9,31 +9,32 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.widget.Toolbar
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
-import aschi2403.tsiy.helper.DataMerger
-import aschi2403.tsiy.model.GeneralActivity
+import aschi2403.tsiy.model.DoneWorkout
 import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.fragments.HomeFragmentDirections
+import aschi2403.tsiy.screens.fragments.HomeFragmentDirections.Companion.actionHomeFragmentToFragmentViewFinishedActivity
+import aschi2403.tsiy.screens.fragments.ViewFinishedWorkoutFragmentDirections
 import com.google.android.material.card.MaterialCardView
 import com.maltaisn.icondialog.pack.IconPack
 import java.text.SimpleDateFormat
-import java.util.*
-
+import java.util.Locale
+import java.util.Date
+import java.util.concurrent.TimeUnit
 
 class HomeListAdapter(
     private var data: MutableList<IActivity>,
     val context: Context,
     private val iconPack: IconPack,
-    private val toolbar: Toolbar
+    private val checkedItem: Int,
+    private val calledFromHomeFragment: Boolean
 ) :
     RecyclerView.Adapter<HomeListAdapter.DataViewHolder>() {
     val database = WorkoutRepo(context)
-    private val dataMerger = DataMerger(database)
 
     class DataViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val icon: ImageView = itemView.findViewById(R.id.icon)
@@ -55,53 +56,62 @@ class HomeListAdapter(
     }
 
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
-        holder.cv.setOnClickListener {
-            Navigation.findNavController(it).navigate(
-                HomeFragmentDirections.actionHomeFragmentToFragmentViewFinishedActivity(
-                    type = data[position] is PowerActivity,
-                    id = data[position].id!!
-                )
-            )
-        }
-
-        val minutes = data[position].duration / 1000 / 60
-        val seconds = data[position].duration / 1000 % 60
-
-        val timeValueText = "$minutes minutes and $seconds seconds"
-        holder.timeValue.text = timeValueText
-
-        holder.cardioPointsValue.text = data[position].cardioPoints.toString()
-        if (data[position] is PowerActivity) {
-            val activity = data[position] as PowerActivity
-            holder.firstLine.text = activity.powerActivityType.name
-            holder.icon.setImageDrawable(iconPack.getIcon(activity.powerActivityType.icon)!!.drawable)
-        } else {
-            val activity = data[position] as GeneralActivity
-            holder.firstLine.text = activity.activityType.name
-            holder.icon.setImageDrawable(iconPack.getIcon(activity.activityType.icon)!!.drawable)
-            val workoutName = context.getString(R.string.workout)
-            if (activity.activityType.name.contains(workoutName)) {
-                holder.cv.setOnClickListener {
-                    (context as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-                    toolbar.setNavigationOnClickListener {
-                        (context as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-                        setData(
-                            dataMerger.getData(0, workoutName)
-                        )
-                    }
-                    setData(
-                        dataMerger.getDataFromWorkoutId(0, data[position].workoutPlanId)
+        if (calledFromHomeFragment) {
+            holder.cv.setOnClickListener {
+                Navigation.findNavController(it).navigate(
+                    actionHomeFragmentToFragmentViewFinishedActivity(
+                        type = data[position] is PowerActivity,
+                        id = data[position].id!!
                     )
-                }
+                )
+            }
+        } else {
+            holder.cv.setOnClickListener {
+                Navigation.findNavController(it).navigate(
+                    ViewFinishedWorkoutFragmentDirections.actionViewFinishedWorkoutFragmentToFragmentViewFinishedActivity(
+                        type = data[position] is PowerActivity,
+                        id = data[position].id!!
+                    )
+                )
             }
         }
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
+
+        holder.timeValue.text = generateTimeValueText(data[position].duration)
+
+        holder.cardioPointsValue.text = data[position].cardioPoints.toString()
+        holder.firstLine.text = data[position].activityType.name
+        holder.icon.setImageDrawable(iconPack.getIcon(data[position].activityType.icon)!!.drawable)
+
+        if (data[position] is DoneWorkout) {
+            holder.cv.setOnClickListener {
+                (context as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+                Navigation.findNavController(it).navigate(
+                    HomeFragmentDirections.actionHomeFragmentToViewFinishedWorkoutFragment(
+                        checkedItem,
+                        data[position].workoutId
+                    )
+                )
+            }
+        }
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
             holder.icon.setColorFilter(Color.WHITE)
+        }
 
+        holder.secondLine.text = formatDate(data[position].startDate)
+    }
+
+    private fun formatDate(startDate: Long): String {
         val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN)
-        val date = simpleDateFormat.format(Date(data[position].startDate))
-        holder.secondLine.text = date
+        return simpleDateFormat.format(Date(startDate))
+    }
 
+    private fun generateTimeValueText(
+        duration: Long
+    ): String {
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(duration)
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(duration)
+
+        return "$minutes minutes and $seconds seconds"
     }
 
     fun setData(data: MutableList<IActivity>) {

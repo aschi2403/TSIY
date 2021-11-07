@@ -17,10 +17,7 @@ class ChooseWorkoutPlanFragment : Fragment() {
 
     private lateinit var binding: FragmentChooseActivityTypeBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_choose_activity_type, container, false

@@ -41,9 +41,6 @@ class DialogView(val context: Context) {
 
         itemCheckDialog.setPositiveButton(R.string.ok, ok)
         itemCheckDialog.setNegativeButton(R.string.cancel, cancel)
-
-
         itemCheckDialog.create().show()
     }
-
 }

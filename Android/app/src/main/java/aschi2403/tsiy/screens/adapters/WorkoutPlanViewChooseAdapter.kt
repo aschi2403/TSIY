@@ -15,7 +15,6 @@ import aschi2403.tsiy.model.WorkoutPlan
 import aschi2403.tsiy.screens.activities.MainWorkoutActivity
 import com.google.android.material.card.MaterialCardView
 
-
 class WorkoutPlanViewChooseAdapter(
     private var data: MutableList<WorkoutPlan>,
     private val context: Context
@@ -26,7 +25,6 @@ class WorkoutPlanViewChooseAdapter(
         val icon: ImageView = itemView.findViewById(R.id.imageOfActivity)
         val name: TextView = itemView.findViewById(R.id.nameOfItem)
         val cv: MaterialCardView = itemView.findViewById(R.id.item_card)
-
     }
 
     override fun getItemCount(): Int {
@@ -49,8 +47,8 @@ class WorkoutPlanViewChooseAdapter(
             intent.putExtra("workoutPlanId", data[position].id!!)
             context.startActivity(intent)
         }
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
             holder.icon.setColorFilter(Color.WHITE)
-
+        }
     }
 }

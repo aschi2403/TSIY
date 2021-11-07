@@ -23,21 +23,22 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polyline
+import java.sql.Time
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.concurrent.TimeUnit
+import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
 
+private const val MAP_ZOOM = 15.0
 class ViewFinishedActivityFragment : Fragment() {
 
     private lateinit var binding: FragmentViewfinishedactivityBinding
 
-    @SuppressLint("SetTextI18n")
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
 
+    @SuppressLint("SetTextI18n")
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_viewfinishedactivity, container, false
         )
@@ -52,10 +53,6 @@ class ViewFinishedActivityFragment : Fragment() {
             database.powerActivityById(idOfActivity!!)
         } else {
             database.generalActivityById(idOfActivity!!)
-        }
-
-        activity!!.findViewById<Toolbar>(R.id.appBarLayout).setNavigationOnClickListener {
-            findNavController().popBackStack()
         }
 
         val deleteButton = requireActivity().findViewById<Button>(R.id.deleteButtonAppBar)
@@ -74,10 +71,15 @@ class ViewFinishedActivityFragment : Fragment() {
         binding.endDate.text = sdf.format(iActivity.endDate)
 
         binding.duration.text =
-            durationLeadingZero(iActivity.duration) + DateUtils.formatElapsedTime(iActivity.duration / 1000)
+            durationLeadingZero(iActivity.duration) + DateUtils.formatElapsedTime(
+                TimeUnit.MILLISECONDS.toSeconds(
+                    iActivity.duration
+                )
+            )
 
-        val pauseDuration =
-            iActivity.endDate / 1000 - iActivity.startDate / 1000 - iActivity.duration / 1000
+        val pauseDuration = TimeUnit.MILLISECONDS.toSeconds(iActivity.endDate)
+        -TimeUnit.MILLISECONDS.toSeconds(iActivity.startDate) - TimeUnit.MILLISECONDS.toSeconds(iActivity.duration)
+
         binding.pause.text = durationLeadingZero(pauseDuration) +
                 DateUtils.formatElapsedTime(pauseDuration)
 
@@ -109,7 +111,7 @@ class ViewFinishedActivityFragment : Fragment() {
                 (((iActivity as GeneralActivity).distance * 100).roundToLong() / 100.0).toString() + " km"
             if (iActivity.distance > 0) {
                 binding.speedValue.text =
-                    (((iActivity.distance / (iActivity.duration / 3600000.0)) * 100).roundToLong() / 100.0).toString() + " km/h"
+                    (((iActivity.distance / (TimeUnit.MILLISECONDS.toHours(iActivity.duration))) * 100.0).roundToLong() / 100.0).toString() + " km/h"
             } else {
                 binding.speedValue.text = "0 km/h"
             }
@@ -117,7 +119,7 @@ class ViewFinishedActivityFragment : Fragment() {
 
         binding.map.setTileSource(TileSourceFactory.MAPNIK)
         val mapController: IMapController = binding.map.controller
-        mapController.setZoom(15.0)
+        mapController.setZoom(MAP_ZOOM)
         val gpsPoints = database.getGPSPointsFromActivity(idOfActivity)
         if (gpsPoints.isNotEmpty()) {
             val boundingBox =
@@ -139,10 +141,10 @@ class ViewFinishedActivityFragment : Fragment() {
     }
 
     private fun durationLeadingZero(duration: Long): String {
-        if (duration / 1000 < 3600) {
+        if (TimeUnit.MILLISECONDS.toHours(duration) < 1) {
             return "00:"
         }
-        if (duration / 1000 < 36000) {
+        if (TimeUnit.MILLISECONDS.toHours(duration) < 10) {
             return "0"
         }
         return ""

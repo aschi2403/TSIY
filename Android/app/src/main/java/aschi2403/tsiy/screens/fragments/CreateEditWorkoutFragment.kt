@@ -22,7 +22,6 @@ import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.activities.MainActivity
 import aschi2403.tsiy.screens.adapters.ActivityInWorkoutAdapter
 
-
 class CreateEditWorkoutFragment : Fragment() {
     private lateinit var binding: FragmentCreateEditWorkoutBinding
 
@@ -34,7 +33,6 @@ class CreateEditWorkoutFragment : Fragment() {
     private lateinit var allActivities: List<IActivityType>
 
     private lateinit var dialogView: DialogView
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,10 +52,7 @@ class CreateEditWorkoutFragment : Fragment() {
         })
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         dialogView = DialogView(requireContext())
         val id = requireArguments().getLong("id", -1)

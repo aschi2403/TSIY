@@ -54,6 +54,7 @@ class WorkoutEntry(
     }
 
     override fun toString(): String {
-        return "WorkoutEntry(id=$id, workoutPlanId=$workoutPlanId, iActivityTypeId=$iActivityTypeId, position=$position, isPowerActivity=$isPowerActivity)"
+        return "WorkoutEntry(id=$id, workoutPlanId=$workoutPlanId, iActivityTypeId=$iActivityTypeId, " +
+                "position=$position, isPowerActivity=$isPowerActivity)"
     }
 }

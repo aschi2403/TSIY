@@ -31,7 +31,7 @@ class WorkoutRepo(context: Context) {
             val list = powerActivityDao.loadAll()
 
             list.forEach {
-                it.powerActivityType = powerActivityTypeById(it.activityTypeId)
+                it.activityType = powerActivityTypeById(it.activityTypeId)
             }
 
             return list
