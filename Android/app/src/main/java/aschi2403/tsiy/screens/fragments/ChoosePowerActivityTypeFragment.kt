@@ -32,6 +32,9 @@ class ChoosePowerActivityTypeFragment : Fragment() {
 
         val idOfPowerActivity = arguments?.getLong("idOfPowerActivity")!!
 
+        val upNext = arguments?.getString("upNext")
+
+
         val finished = arguments?.getBoolean("finished")!!
 
         if (finished) {
@@ -50,7 +53,7 @@ class ChoosePowerActivityTypeFragment : Fragment() {
                 if (finished) {
                     activity?.finish()
                 } else {
-                    findNavController().navigate(ChoosePowerActivityTypeFragmentDirections.actionChoosePowerActivityTypeToPauseScreen())
+                    findNavController().navigate(ChoosePowerActivityTypeFragmentDirections.actionChoosePowerActivityTypeToPauseScreen(upNext = upNext))
                 }
             }
         }

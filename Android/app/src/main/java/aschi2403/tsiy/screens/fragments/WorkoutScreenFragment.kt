@@ -117,10 +117,19 @@ class WorkoutScreenFragment : Fragment() {
 
             closeButton(activities[set].iActivityTypeId, activities[set].isPowerActivity)
 
+            val upNext = if (set + 1 < activities.size) {
+                database.activityTypeById(
+                    activities[set + 1].iActivityTypeId
+                ).name
+            } else {
+                null
+            }
+
             createActivityInDb(
                 activities[set].isPowerActivity,
                 activities[set].iActivityTypeId,
-                isWorkout = true
+                isWorkout = true,
+                upNext
             )
 
             changeActivityNameLabel(
@@ -143,7 +152,8 @@ class WorkoutScreenFragment : Fragment() {
                         isFinished = false,
                         navigate = false,
                         newWorkoutIdForDatabase = newWorkoutIdForDatabase,
-                        workoutPlanId = workoutPlanId
+                        workoutPlanId = workoutPlanId,
+                        upNext
                     )
                     // remove id of activity
                     idOfActivity = -1
@@ -152,7 +162,9 @@ class WorkoutScreenFragment : Fragment() {
                     set++
 
                     findNavController().navigate(
-                        WorkoutScreenFragmentDirections.actionWorkoutScreenToPauseScreen()
+                        WorkoutScreenFragmentDirections.actionWorkoutScreenToPauseScreen(
+                            upNext
+                        )
                     )
                 }
             }
@@ -164,7 +176,8 @@ class WorkoutScreenFragment : Fragment() {
             createActivityInDb(
                 isPowerActivity,
                 activityTypeId,
-                isWorkout = false
+                isWorkout = false,
+                upNext = null
             )
 
             closeButton(activityTypeId, isPowerActivity)
@@ -188,7 +201,8 @@ class WorkoutScreenFragment : Fragment() {
                 isFinished = true,
                 navigate = true,
                 newWorkoutIdForDatabase = newWorkoutIdForDatabase,
-                workoutPlanId = workoutPlanId
+                workoutPlanId = workoutPlanId,
+                upNext = null
             )
             viewModel.values.clear()
         }
@@ -213,7 +227,8 @@ class WorkoutScreenFragment : Fragment() {
     private fun createActivityInDb(
         isPowerActivity: Boolean,
         activityTypeId: Long,
-        isWorkout: Boolean
+        isWorkout: Boolean,
+        upNext: String?
     ) {
         if (!isPowerActivity) { // normal activity
             binding.next.visibility = View.INVISIBLE
@@ -241,7 +256,7 @@ class WorkoutScreenFragment : Fragment() {
                 Navigation.findNavController(requireActivity(), R.id.fragNavWorkoutHost)
                     .navigate(
                         WorkoutScreenFragmentDirections.actionWorkoutScreenToChoosePowerActivityType(
-                            idOfPowerActivity = idOfActivity, finished = false
+                            idOfPowerActivity = idOfActivity, finished = false, upNext = upNext
                         )
                     )
                 if (isWorkout) {
@@ -252,7 +267,8 @@ class WorkoutScreenFragment : Fragment() {
                         isFinished = false,
                         navigate = false,
                         newWorkoutIdForDatabase = newWorkoutIdForDatabase,
-                        workoutPlanId = workoutPlanId
+                        workoutPlanId = workoutPlanId,
+                        upNext = upNext
                     )
                     // remove id of activity
                     idOfActivity = -1
@@ -270,7 +286,8 @@ class WorkoutScreenFragment : Fragment() {
         isFinished: Boolean,
         navigate: Boolean,
         newWorkoutIdForDatabase: Int,
-        workoutPlanId: Long
+        workoutPlanId: Long,
+        upNext: String?
     ) {
         if (!isPowerActivity) { // normal activity
             database.updateActivity(
@@ -317,7 +334,7 @@ class WorkoutScreenFragment : Fragment() {
             if (navigate) {
                 findNavController().navigate(
                     WorkoutScreenFragmentDirections.actionWorkoutScreenToChoosePowerActivityType(
-                        idOfPowerActivity = idOfActivity, finished = isFinished
+                        idOfPowerActivity = idOfActivity, finished = isFinished, upNext = upNext
                     )
                 )
             }

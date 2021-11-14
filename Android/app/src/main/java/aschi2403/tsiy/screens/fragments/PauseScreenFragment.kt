@@ -30,6 +30,14 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
             inflater, R.layout.fragment_pause_screen, container, false
         )
 
+        val upNext = arguments?.getString("upNext")
+        if(upNext.isNullOrEmpty()){
+            binding.upNextLayout.visibility=View.INVISIBLE
+        }else{
+            binding.upNextLayout.visibility=View.VISIBLE
+            binding.upNext.text=upNext
+        }
+
         val sharedPreferences: SharedPreferences =
             this.requireContext().getSharedPreferences("settings", Context.MODE_PRIVATE)
 

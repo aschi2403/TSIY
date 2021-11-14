@@ -9,7 +9,13 @@
         android:label="fragment_workout_screen"
         tools:layout="@layout/fragment_workout_screen">
         <action android:id="@+id/action_workout_screen_to_pause_screen"
-                app:destination="@id/pause_screen" app:popUpTo="@id/workout_screen" app:popUpToInclusive="false"/>
+                app:destination="@id/pause_screen" app:popUpTo="@id/workout_screen" app:popUpToInclusive="false">
+            <argument
+                android:name="upNext"
+                app:argType="string"
+                app:nullable="true"
+                android:defaultValue=" " />
+        </action>
         <action android:id="@+id/action_workout_screen_to_choose_power_activity_type"
                 app:destination="@id/choose_power_activity_type"/>
         <argument android:name="activityTypeId" app:argType="long"/>
@@ -28,12 +34,22 @@
         <argument android:name="finished" app:argType="boolean" android:defaultValue="true"/>
         <action android:id="@+id/action_choose_power_activity_type_to_pause_screen" app:destination="@id/pause_screen"
                 app:popUpTo="@id/workout_screen" app:popUpToInclusive="false"/>
+        <argument
+            android:name="upNext"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 
     <fragment
         android:id="@+id/pause_screen"
         android:name="aschi2403.tsiy.screens.fragments.PauseScreenFragment"
         android:label="fragment_pause_screen"
-        tools:layout="@layout/fragment_pause_screen"/>
+        tools:layout="@layout/fragment_pause_screen">
+        <argument
+            android:name="upNext"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue=" " />
+    </fragment>
 
 </navigation>
