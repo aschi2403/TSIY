@@ -98,7 +98,7 @@ class ActivitiesTypeEditDeleteAdapter(
         Navigation.findNavController(view).navigate(
             ListActivitiesFragmentDirections.actionListActivitiesFragmentToFragmentAddEditFragment(
                 id = data[position].id!!,
-                type = data[position].isPowerActivity
+                isPowerActivity = data[position].isPowerActivity
             )
         )
     }

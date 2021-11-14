@@ -54,7 +54,7 @@ class HomeListAdapter(
         holder.cv.setOnClickListener {
             Navigation.findNavController(it).navigate(
                 HomeFragmentDirections.actionHomeFragmentToFragmentViewFinishedActivity(
-                    type = data[position] is PowerActivity,
+                    displayPowerActivities = data[position] is PowerActivity,
                     id = data[position].id!!
                 )
             )

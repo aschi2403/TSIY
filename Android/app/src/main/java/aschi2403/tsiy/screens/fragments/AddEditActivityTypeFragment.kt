@@ -70,7 +70,7 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
 
         val newActivity = arguments?.getBoolean("new")
         val idOfActivity = arguments?.getLong("id")
-        val powerActivity = arguments?.getBoolean("type")
+        val isPowerActivity = arguments?.getBoolean("isPowerActivity")
 
         val database = WorkoutRepo(requireContext())
         var activity: ActivityType
@@ -80,7 +80,7 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
             ?: IconDialog.newInstance(IconDialogSettings())
 
         if (!newActivity!! && idOfActivity != null) {
-            activity = if (powerActivity!!) {
+            activity = if (isPowerActivity!!) {
                 database.powerActivityTypeById(idOfActivity)
             } else {
                 database.activityTypeById(idOfActivity)
@@ -113,7 +113,7 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
                     binding.activityType.text.toString(),
                     iconId,
                     binding.descriptionValue.text.toString(),
-                    powerActivity!!,
+                    isPowerActivity!!,
                     binding.caloriesValue.text.toString().toDouble(),
                     binding.cardioPointsValue.text.toString().toDouble()
                 )

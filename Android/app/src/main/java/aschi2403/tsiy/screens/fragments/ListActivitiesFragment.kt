@@ -24,7 +24,7 @@ class ListActivitiesFragment : Fragment() {
 
     private lateinit var editDeleteAdapter: ActivitiesTypeEditDeleteAdapter
     private lateinit var database: WorkoutRepo
-    private var type: Boolean? = false
+    private var managePowerActivities: Boolean? = false
 
     private lateinit var binding: FragmentListViewBinding
 
@@ -40,14 +40,14 @@ class ListActivitiesFragment : Fragment() {
         (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         database = WorkoutRepo(requireContext())
-        type = arguments?.getBoolean("type")
+        managePowerActivities = arguments?.getBoolean("managePowerActivities")
 
-        val data = getData(type!!)
+        val data = getData(managePowerActivities!!)
         binding.addNewActivity.setOnClickListener {
             findNavController().navigate(
                 ListActivitiesFragmentDirections.actionListActivitiesFragmentToFragmentAddEditFragment(
                     new = true,
-                    type = type!!
+                    isPowerActivity = managePowerActivities!!
                 )
             )
         }
@@ -78,7 +78,7 @@ class ListActivitiesFragment : Fragment() {
             fun callSearch(query: String?) {
                 if (query != null) {
                     editDeleteAdapter.setData(
-                        getData(type!!).stream()
+                        getData(managePowerActivities!!).stream()
                             .filter {
                                 it.name.toUpperCase(Locale.getDefault()).contains(
                                     query.toUpperCase(
@@ -106,7 +106,7 @@ class ListActivitiesFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        editDeleteAdapter.setData(getData(type!!).toMutableList())
+        editDeleteAdapter.setData(getData(managePowerActivities!!).toMutableList())
         editDeleteAdapter.notifyDataSetChanged()
     }
 }

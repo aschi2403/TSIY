@@ -56,7 +56,10 @@ class ChooseActivityTypeFragment : Fragment() {
                     resources.getString(R.string.no_power_activity_type)
                 binding.createOne.setOnClickListener {
                     findNavController().navigate(
-                        R.id.action_fragment_choose_activity_type_to_fragment_add_edit_fragment
+                        ChooseActivityTypeFragmentDirections.actionFragmentChooseActivityTypeToFragmentAddEditFragment(
+                            new = true,
+                            isPowerActivity = true
+                        )
                     )
                 }
             }

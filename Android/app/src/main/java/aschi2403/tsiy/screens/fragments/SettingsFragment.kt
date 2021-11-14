@@ -98,7 +98,7 @@ class SettingsFragment : Fragment() {
     private fun managePowerActivities() {
         findNavController().navigate(
             SettingsFragmentDirections.actionSettingsFragmentToListActivitiesFragment(
-                type = true
+                managePowerActivities = true
             )
         )
 
@@ -107,7 +107,7 @@ class SettingsFragment : Fragment() {
     private fun manageActivities() {
         findNavController().navigate(
             SettingsFragmentDirections.actionSettingsFragmentToListActivitiesFragment(
-                type = false
+                managePowerActivities = false
             )
         )
     }

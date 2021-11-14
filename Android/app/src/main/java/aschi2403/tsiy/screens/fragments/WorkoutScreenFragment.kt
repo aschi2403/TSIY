@@ -89,7 +89,7 @@ class WorkoutScreenFragment : Fragment() {
         val mapController: IMapController = binding.map.controller
         mapController.setZoom(15.0)
         dialogView = DialogView(requireContext())
-        isPowerActivity = arguments?.getBoolean("type")!!
+        isPowerActivity = arguments?.getBoolean("isPowerActivity")!!
 
         if (!isPowerActivity) {
             binding.generalActivityHeader.visibility = View.VISIBLE
