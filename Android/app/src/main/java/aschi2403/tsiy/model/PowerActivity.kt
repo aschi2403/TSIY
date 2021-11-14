@@ -1,6 +1,10 @@
 package aschi2403.tsiy.model
 
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Ignore
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import aschi2403.tsiy.model.relations.IActivity
 
 @Entity(
@@ -23,10 +27,13 @@ class PowerActivity(
     override var cardioPoints: Double = 0.0,
     override var calories: Double = 0.0,
     override var startDate: Long = 0,
-    override var endDate: Long = 0
+    override var endDate: Long = 0,
+    override var workoutId: Int = -1,
+    override var workoutPlanId: Long = -1
 ) : IActivity {
     @Ignore
-    lateinit var powerActivityType: ActivityType
+    override lateinit var activityType: ActivityType
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -41,7 +48,7 @@ class PowerActivity(
         if (calories != other.calories) return false
         if (startDate != other.startDate) return false
         if (endDate != other.endDate) return false
-        if (powerActivityType != other.powerActivityType) return false
+        if (activityType != other.activityType) return false
 
         return true
     }
@@ -55,12 +62,13 @@ class PowerActivity(
         result = 31 * result + calories.hashCode()
         result = 31 * result + startDate.hashCode()
         result = 31 * result + endDate.hashCode()
-        result = 31 * result + powerActivityType.hashCode()
+        result = 31 * result + activityType.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "PowerActivity(id=$id, activityTypeId=$activityTypeId, sets=$sets, time=$duration, cardioPoints=$cardioPoints, calories=$calories, date=$startDate, pause=$endDate, powerActivityType=$powerActivityType)"
+        return "PowerActivity(id=$id, activityTypeId=$activityTypeId, sets=$sets, time=$duration, " +
+                "cardioPoints=$cardioPoints, calories=$calories, date=$startDate, pause=$endDate, " +
+                "powerActivityType=$activityType)"
     }
-
 }

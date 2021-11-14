@@ -2,8 +2,6 @@ package aschi2403.tsiy.screens.fragments
 
 import android.Manifest
 import android.app.Activity
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -13,7 +11,6 @@ import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -25,6 +22,7 @@ import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentWorkoutScreenBinding
 import aschi2403.tsiy.gps.LocationForceGroundService
 import aschi2403.tsiy.helper.DialogView
+import aschi2403.tsiy.helper.GPSReceiver
 import aschi2403.tsiy.model.GPSPoint
 import aschi2403.tsiy.model.GeneralActivity
 import aschi2403.tsiy.model.PowerActivity
@@ -32,14 +30,12 @@ import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.viewmodel.WorkoutScreenViewModel
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.Marker
-import org.osmdroid.views.overlay.Polyline
 
-
+private const val MAP_ZOOM = 15.0
 class WorkoutScreenFragment : Fragment() {
     private lateinit var locationService: Intent
+    private var workoutPlanId: Long = -1
+    private var newWorkoutIdForDatabase: Int = -1
     private var isPowerActivity: Boolean = true
     private lateinit var database: WorkoutRepo
     private var idOfActivity: Long = -1
@@ -67,14 +63,10 @@ class WorkoutScreenFragment : Fragment() {
         })
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_workout_screen, container, false
         )
-
         requestPermissions(
             arrayOf(
                 Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -87,7 +79,7 @@ class WorkoutScreenFragment : Fragment() {
 
         binding.map.setTileSource(TileSourceFactory.MAPNIK)
         val mapController: IMapController = binding.map.controller
-        mapController.setZoom(15.0)
+        mapController.setZoom(MAP_ZOOM)
         dialogView = DialogView(requireContext())
         isPowerActivity = arguments?.getBoolean("type")!!
 
@@ -101,12 +93,10 @@ class WorkoutScreenFragment : Fragment() {
         receiver = GPSReceiver(binding.map, binding.kmValue, binding.speedValue)
         requireActivity().registerReceiver(receiver, IntentFilter("GPS_Data"))
 
-
         locationService = Intent(
             requireActivity(),
             LocationForceGroundService::class.java
         )
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             requireActivity().startForegroundService(locationService)
@@ -114,19 +104,32 @@ class WorkoutScreenFragment : Fragment() {
             requireActivity().startService(locationService)
         }
 
+        workoutPlanId = arguments?.getLong("workoutPlanId", -1)!!
 
-        val workoutId = arguments?.getInt("workoutId", -1)!!
-
-        if (workoutId >= 0) {
+        if (workoutPlanId >= 0) {
+            val data = database.allGeneralActivities.plus(database.allPowerActivities)
+            if (data.isNotEmpty() && newWorkoutIdForDatabase == -1) {
+                newWorkoutIdForDatabase = data
+                    .maxOf { activity -> activity.workoutId }.plus(1)
+            }
             val activities =
-                database.workoutEntriesByWorkoutPlanId(workoutId.toLong()).toMutableList()
+                database.workoutEntriesByWorkoutPlanId(workoutPlanId).toMutableList()
 
             closeButton(activities[set].iActivityTypeId, activities[set].isPowerActivity)
+
+            val upNext = if (set + 1 < activities.size) {
+                database.activityTypeById(
+                    activities[set + 1].iActivityTypeId
+                ).name
+            } else {
+                null
+            }
 
             createActivityInDb(
                 activities[set].isPowerActivity,
                 activities[set].iActivityTypeId,
-                isWorkout = true
+                isWorkout = true,
+                upNext
             )
 
             changeActivityNameLabel(
@@ -147,7 +150,10 @@ class WorkoutScreenFragment : Fragment() {
                         activities[set].iActivityTypeId,
                         activities[set].isPowerActivity,
                         isFinished = false,
-                        navigate = false
+                        navigate = false,
+                        newWorkoutIdForDatabase = newWorkoutIdForDatabase,
+                        workoutPlanId = workoutPlanId,
+                        upNext
                     )
                     // remove id of activity
                     idOfActivity = -1
@@ -157,6 +163,7 @@ class WorkoutScreenFragment : Fragment() {
 
                     findNavController().navigate(
                         WorkoutScreenFragmentDirections.actionWorkoutScreenToPauseScreen(
+                            upNext
                         )
                     )
                 }
@@ -169,7 +176,8 @@ class WorkoutScreenFragment : Fragment() {
             createActivityInDb(
                 isPowerActivity,
                 activityTypeId,
-                isWorkout = false
+                isWorkout = false,
+                upNext = null
             )
 
             closeButton(activityTypeId, isPowerActivity)
@@ -179,8 +187,7 @@ class WorkoutScreenFragment : Fragment() {
 
         binding.pause.setOnClickListener {
             findNavController().navigate(
-                WorkoutScreenFragmentDirections.actionWorkoutScreenToPauseScreen(
-                )
+                WorkoutScreenFragmentDirections.actionWorkoutScreenToPauseScreen()
             )
         }
         return binding.root
@@ -188,7 +195,15 @@ class WorkoutScreenFragment : Fragment() {
 
     private fun closeButton(activityTypeId: Long, isPowerActivity: Boolean) {
         binding.close.setOnClickListener {
-            saveInDatabase(activityTypeId, isPowerActivity, isFinished = true, navigate = true)
+            saveInDatabase(
+                activityTypeId,
+                isPowerActivity,
+                isFinished = true,
+                navigate = true,
+                newWorkoutIdForDatabase = newWorkoutIdForDatabase,
+                workoutPlanId = workoutPlanId,
+                upNext = null
+            )
             viewModel.values.clear()
         }
     }
@@ -212,16 +227,18 @@ class WorkoutScreenFragment : Fragment() {
     private fun createActivityInDb(
         isPowerActivity: Boolean,
         activityTypeId: Long,
-        isWorkout: Boolean
+        isWorkout: Boolean,
+        upNext: String?
     ) {
-        if (!isPowerActivity) { //normal activity
+        if (!isPowerActivity) { // normal activity
             binding.next.visibility = View.INVISIBLE
             if (idOfActivity == -1L) {
                 idOfActivity =
                     database.addGeneralActivity(
                         GeneralActivity(
                             startDate = System.currentTimeMillis(),
-                            activityTypeId = activityTypeId
+                            activityTypeId = activityTypeId,
+                            workoutId = -1
                         )
                     )
             }
@@ -230,7 +247,8 @@ class WorkoutScreenFragment : Fragment() {
                 idOfActivity = database.addPowerActivity(
                     PowerActivity(
                         startDate = System.currentTimeMillis(),
-                        activityTypeId = activityTypeId
+                        activityTypeId = activityTypeId,
+                        workoutId = -1
                     )
                 )
             }
@@ -238,7 +256,7 @@ class WorkoutScreenFragment : Fragment() {
                 Navigation.findNavController(requireActivity(), R.id.fragNavWorkoutHost)
                     .navigate(
                         WorkoutScreenFragmentDirections.actionWorkoutScreenToChoosePowerActivityType(
-                            idOfPowerActivity = idOfActivity, finished = false
+                            idOfPowerActivity = idOfActivity, finished = false, upNext = upNext
                         )
                     )
                 if (isWorkout) {
@@ -247,7 +265,10 @@ class WorkoutScreenFragment : Fragment() {
                         activityTypeId,
                         isPowerActivity,
                         isFinished = false,
-                        navigate = false
+                        navigate = false,
+                        newWorkoutIdForDatabase = newWorkoutIdForDatabase,
+                        workoutPlanId = workoutPlanId,
+                        upNext = upNext
                     )
                     // remove id of activity
                     idOfActivity = -1
@@ -255,7 +276,6 @@ class WorkoutScreenFragment : Fragment() {
                 }
 
                 set++
-
             }
         }
     }
@@ -264,7 +284,10 @@ class WorkoutScreenFragment : Fragment() {
         activityTypeId: Long,
         isPowerActivity: Boolean,
         isFinished: Boolean,
-        navigate: Boolean
+        navigate: Boolean,
+        newWorkoutIdForDatabase: Int,
+        workoutPlanId: Long,
+        upNext: String?
     ) {
         if (!isPowerActivity) { // normal activity
             database.updateActivity(
@@ -276,9 +299,11 @@ class WorkoutScreenFragment : Fragment() {
                     calories = 0.0,
                     cardioPoints = 0.0,
                     endDate = System.currentTimeMillis(),
-                    distance = receiver.distance
+                    distance = receiver.distance,
+                    workoutId = newWorkoutIdForDatabase,
+                    workoutPlanId = workoutPlanId
                 )
-            ) //TODO: calculate cardioPoints and calories
+            ) // TODO: calculate cardioPoints and calories
             database.insertGPSPoints(receiver.geoPoints.map {
                 GPSPoint(
                     null,
@@ -301,15 +326,18 @@ class WorkoutScreenFragment : Fragment() {
                     calories = 0.0,
                     cardioPoints = 0.0,
                     sets = set,
-                    endDate = System.currentTimeMillis()
+                    endDate = System.currentTimeMillis(),
+                    workoutId = newWorkoutIdForDatabase,
+                    workoutPlanId = workoutPlanId
                 )
             )
-            if (navigate)
+            if (navigate) {
                 findNavController().navigate(
                     WorkoutScreenFragmentDirections.actionWorkoutScreenToChoosePowerActivityType(
-                        idOfPowerActivity = idOfActivity, finished = isFinished
+                        idOfPowerActivity = idOfActivity, finished = isFinished, upNext = upNext
                     )
                 )
+            }
         }
         requireActivity().unregisterReceiver(receiver)
         requireActivity().stopService(locationService)
@@ -317,8 +345,9 @@ class WorkoutScreenFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        if (viewModel.values.getLong("stopTime") != -1L)
+        if (viewModel.values.getLong("stopTime") != -1L) {
             viewModel.values.putLong("stopTime", SystemClock.elapsedRealtime() - binding.timer.base)
+        }
     }
 
     override fun onDestroy() {
@@ -351,40 +380,4 @@ class WorkoutScreenFragment : Fragment() {
         super.onPause()
         binding.map.onPause()
     }
-
-    internal class GPSReceiver(private val map: MapView, private val kmValue: TextView, private val speedValue: TextView) :
-        BroadcastReceiver() {
-
-
-        val geoPoints: MutableList<GeoPoint> = ArrayList()
-        var distance: Float = 0F
-        private val polyline = Polyline()
-        private var positionMarker: Marker
-
-
-        init {
-            map.overlays.add(polyline)
-            positionMarker = Marker(map)
-            map.overlayManager.add(positionMarker)
-        }
-
-        override fun onReceive(context: Context?, intent: Intent) {
-            if (intent.action == "GPS_Data") {
-                val latitude = intent.getDoubleExtra("latitude", 0.0)
-                val longitude = intent.getDoubleExtra("longitude", 0.0)
-                distance+= intent.getFloatExtra("distance", 0F)
-                val speed = intent.getFloatExtra("speed", 0F)
-
-                val point = GeoPoint(latitude, longitude)
-                positionMarker.position = point
-                map.controller.setCenter(point)
-                polyline.addPoint(point)
-
-                geoPoints.add(point)
-                kmValue.text = String.format("%.2f km", distance)
-                speedValue.text = String.format("%.2f km/h", speed * 3.6)
-            }
-        }
-    }
 }
-

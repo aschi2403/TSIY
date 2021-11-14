@@ -7,25 +7,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
-import aschi2403.tsiy.model.GeneralActivity
+import aschi2403.tsiy.model.DoneWorkout
 import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.fragments.HomeFragmentDirections
+import aschi2403.tsiy.screens.fragments.HomeFragmentDirections.Companion.actionHomeFragmentToFragmentViewFinishedActivity
+import aschi2403.tsiy.screens.fragments.ViewFinishedWorkoutFragmentDirections
 import com.google.android.material.card.MaterialCardView
 import com.maltaisn.icondialog.pack.IconPack
 import java.text.SimpleDateFormat
-import java.util.*
-
+import java.util.Locale
+import java.util.Date
+import java.util.concurrent.TimeUnit
 
 class HomeListAdapter(
     private var data: MutableList<IActivity>,
     val context: Context,
-    private val iconPack: IconPack
+    private val iconPack: IconPack,
+    private val checkedItem: Int,
+    private val calledFromHomeFragment: Boolean
 ) :
     RecyclerView.Adapter<HomeListAdapter.DataViewHolder>() {
     val database = WorkoutRepo(context)
@@ -37,7 +43,6 @@ class HomeListAdapter(
         val cv: MaterialCardView = itemView.findViewById(R.id.card)
         val timeValue: TextView = itemView.findViewById(R.id.timeValue)
         val cardioPointsValue: TextView = itemView.findViewById(R.id.cardioPointsValue)
-
     }
 
     override fun getItemCount(): Int {
@@ -51,42 +56,66 @@ class HomeListAdapter(
     }
 
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
-        holder.cv.setOnClickListener {
-            Navigation.findNavController(it).navigate(
-                HomeFragmentDirections.actionHomeFragmentToFragmentViewFinishedActivity(
-                    type = data[position] is PowerActivity,
-                    id = data[position].id!!
+        if (calledFromHomeFragment) {
+            holder.cv.setOnClickListener {
+                Navigation.findNavController(it).navigate(
+                    actionHomeFragmentToFragmentViewFinishedActivity(
+                        type = data[position] is PowerActivity,
+                        id = data[position].id!!
+                    )
                 )
-            )
+            }
+        } else {
+            holder.cv.setOnClickListener {
+                Navigation.findNavController(it).navigate(
+                    ViewFinishedWorkoutFragmentDirections.actionViewFinishedWorkoutFragmentToFragmentViewFinishedActivity(
+                        type = data[position] is PowerActivity,
+                        id = data[position].id!!
+                    )
+                )
+            }
         }
 
-        val minutes = data[position].duration / 1000 / 60
-        val seconds = data[position].duration / 1000 % 60
-
-        val timeValueText = "$minutes minutes and $seconds seconds"
-        holder.timeValue.text = timeValueText
+        holder.timeValue.text = generateTimeValueText(data[position].duration)
 
         holder.cardioPointsValue.text = data[position].cardioPoints.toString()
-        if (data[position] is PowerActivity) {
-            val activity = data[position] as PowerActivity
-            holder.firstLine.text = activity.powerActivityType.name
-            holder.icon.setImageDrawable(iconPack.getIcon(activity.powerActivityType.icon)!!.drawable)
-        } else {
-            val activity = data[position] as GeneralActivity
-            holder.firstLine.text = activity.activityType.name
-            holder.icon.setImageDrawable(iconPack.getIcon(activity.activityType.icon)!!.drawable)
+        holder.firstLine.text = data[position].activityType.name
+        holder.icon.setImageDrawable(iconPack.getIcon(data[position].activityType.icon)!!.drawable)
+
+        if (data[position] is DoneWorkout) {
+            holder.cv.setOnClickListener {
+                (context as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+                Navigation.findNavController(it).navigate(
+                    HomeFragmentDirections.actionHomeFragmentToViewFinishedWorkoutFragment(
+                        checkedItem,
+                        data[position].workoutId
+                    )
+                )
+            }
         }
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
             holder.icon.setColorFilter(Color.WHITE)
+        }
 
+        holder.secondLine.text = formatDate(data[position].startDate)
+    }
+
+    private fun formatDate(startDate: Long): String {
         val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN)
-        val date = simpleDateFormat.format(Date(data[position].startDate))
-        holder.secondLine.text = date
+        return simpleDateFormat.format(Date(startDate))
+    }
 
+    private fun generateTimeValueText(
+        duration: Long
+    ): String {
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(duration)
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(duration)
+
+        return "$minutes minutes and $seconds seconds"
     }
 
     fun setData(data: MutableList<IActivity>) {
         this.data = data
+        this.notifyDataSetChanged()
     }
-
 }

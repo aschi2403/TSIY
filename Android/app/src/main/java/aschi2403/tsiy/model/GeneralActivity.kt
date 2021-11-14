@@ -1,7 +1,11 @@
 package aschi2403.tsiy.model
 
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
+import androidx.room.Ignore
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import aschi2403.tsiy.model.relations.IActivity
 
 @Entity(
@@ -25,10 +29,12 @@ class GeneralActivity(
     override var calories: Double = 0.0,
     override var startDate: Long = 0,
     override var endDate: Long = 0,
-    var distance: Float = 0F
+    var distance: Float = 0F,
+    override var workoutId: Int = -1,
+    override var workoutPlanId: Long = -1
 ) : IActivity {
     @Ignore
-    lateinit var activityType: ActivityType
+    override lateinit var activityType: ActivityType
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -62,7 +68,8 @@ class GeneralActivity(
     }
 
     override fun toString(): String {
-        return "GeneralActivity(id=$id, activityTypeId=$activityTypeId, duration=$duration, cardioPoints=$cardioPoints, calories=$calories, startDate=$startDate, endDate=$endDate, distance=$distance, activityType=$activityType)"
+        return "GeneralActivity(id=$id, activityTypeId=$activityTypeId, duration=$duration, " +
+                "cardioPoints=$cardioPoints, calories=$calories, startDate=$startDate, endDate=$endDate," +
+                "distance=$distance, activityType=$activityType)"
     }
-
 }

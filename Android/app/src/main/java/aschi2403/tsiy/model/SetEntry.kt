@@ -46,5 +46,4 @@ class SetEntry(
         result = 31 * result + powerActivityId.hashCode()
         return result
     }
-
 }

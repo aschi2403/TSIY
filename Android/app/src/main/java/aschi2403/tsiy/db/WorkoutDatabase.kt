@@ -5,7 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import aschi2403.tsiy.db.migrations.MIGRATION_8_9
-import aschi2403.tsiy.model.*
+import aschi2403.tsiy.db.migrations.MIGRATION_9_10
+import aschi2403.tsiy.model.ActivityType
+import aschi2403.tsiy.model.GeneralActivity
+import aschi2403.tsiy.model.PowerActivity
+import aschi2403.tsiy.model.WeightEntry
+import aschi2403.tsiy.model.SetEntry
+import aschi2403.tsiy.model.WorkoutEntry
+import aschi2403.tsiy.model.WorkoutPlan
+import aschi2403.tsiy.model.GPSPoint
 
 @Database(
     entities = [
@@ -17,7 +25,7 @@ import aschi2403.tsiy.model.*
         WorkoutEntry::class,
         WorkoutPlan::class,
         GPSPoint::class],
-    version = 9,
+    version = 10,
     exportSchema = true
 )
 abstract class WorkoutDatabase : RoomDatabase() {
@@ -40,7 +48,7 @@ abstract class WorkoutDatabase : RoomDatabase() {
                     context.applicationContext,
                     WorkoutDatabase::class.java,
                     "Workout.db"
-                ).addMigrations(MIGRATION_8_9)
+                ).addMigrations(MIGRATION_8_9).addMigrations(MIGRATION_9_10)
                     .createFromAsset("database/Workout_template.db")
                     .allowMainThreadQueries().build()
             }

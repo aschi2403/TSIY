@@ -48,6 +48,16 @@
             app:destination="@id/weightFragment"/>
     </fragment>
     <fragment
+        android:id="@+id/viewFinishedWorkoutFragment"
+        android:name="aschi2403.tsiy.screens.fragments.ViewFinishedWorkoutFragment"
+        android:label="fragment_view_finished_workout_fragment"
+        tools:layout="@layout/fragment_home">
+        <argument android:name="checkedItem" app:argType="integer"/>
+        <argument android:name="workoutId" app:argType="integer"/>
+        <action android:id="@+id/action_viewFinishedWorkoutFragment_to_fragment_view_finished_activity"
+                app:destination="@id/fragment_view_finished_activity"/>
+    </fragment>
+    <fragment
         android:id="@+id/homeFragment"
         android:name="aschi2403.tsiy.screens.fragments.HomeFragment"
         android:label="fragment_home"
@@ -63,6 +73,8 @@
         <action
             android:id="@+id/action_homeFragment_to_chooseWorkoutPlanFragment"
             app:destination="@id/chooseWorkoutPlanFragment" />
+        <action android:id="@+id/action_homeFragment_to_viewFinishedWorkoutFragment"
+                app:destination="@id/viewFinishedWorkoutFragment"/>
     </fragment>
     <fragment
         android:id="@+id/fragment_choose_activity_type"
