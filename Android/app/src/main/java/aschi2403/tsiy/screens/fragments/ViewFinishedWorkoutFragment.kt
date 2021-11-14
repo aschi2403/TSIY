@@ -45,8 +45,17 @@ class ViewFinishedWorkoutFragment : Fragment() {
             false
         )
 
+        hideStartActivityButton()
+
         rv.adapter = homeListAdapter
 
         return binding.root
+    }
+
+    private fun hideStartActivityButton() {
+        binding.startGeneralActivity.visibility = View.INVISIBLE
+        binding.startPowerActivity.visibility = View.INVISIBLE
+        binding.startWorkout.visibility = View.INVISIBLE
+        binding.startNewActivity.visibility = View.INVISIBLE
     }
 }
