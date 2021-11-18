@@ -25,12 +25,12 @@ class WeightFragment : Fragment() {
     private lateinit var binding: FragmentWeightBinding
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
 
         binding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_weight, container, false
+            inflater, R.layout.fragment_weight, container, false
         )
 
         binding.addWeight.setOnClickListener {
@@ -46,13 +46,23 @@ class WeightFragment : Fragment() {
         database = WorkoutRepo(this.requireContext())
 
         val weightList: ArrayList<Entry> = ArrayList()
-        database.allWeightEntries.forEach { weight -> run { weightList.add(Entry(weight.date.toFloat(), weight.weight.toFloat(), weight)) } }
+        database.allWeightEntries.forEach { weight ->
+            run {
+                weightList.add(
+                    Entry(
+                        weight.date.toFloat(),
+                        weight.weight.toFloat(),
+                        weight
+                    )
+                )
+            }
+        }
 
 
         val weightLine = LineDataSet(weightList, "Weight")
         weightLine.axisDependency = AxisDependency.LEFT
         weightLine.color = Color.RED
-        weightLine.valueTextColor= Color.BLACK
+        weightLine.valueTextColor = Color.BLACK
 
         binding.chart.data = LineData(weightLine)
         binding.chart.invalidate() // refresh

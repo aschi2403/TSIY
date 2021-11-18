@@ -28,6 +28,8 @@ import java.util.*
  */
 var public_date: MyDate? = null
 
+const val ZERO_DOT_ONE = 0.1
+
 class AddWeightFragment : Fragment() {
     private lateinit var binding: FragmentAddWeightBinding
     private var repo: WorkoutRepo? = null
@@ -81,9 +83,10 @@ class AddWeightFragment : Fragment() {
     }
 
     private fun decreaseButtonHandler() {
-        // otherwise if the user hasn't put in a number yet and the user presses the decrease button the app crashes (java.lang.NumberFormatException: empty String)
+        // otherwise if the user hasn't put in a number yet and the user presses the decrease button
+        // the app crashes (java.lang.NumberFormatException: empty String)
         if (!binding.weightValue.text.isNullOrEmpty()) {
-            val newValue: Double = binding.weightValue.text.toString().toDouble() - 0.1
+            val newValue: Double = binding.weightValue.text.toString().toDouble() - ZERO_DOT_ONE
 
             // prevent weight value from getting negative
             if (newValue >= 0) {
@@ -95,10 +98,13 @@ class AddWeightFragment : Fragment() {
     }
 
     private fun increaseButtonHandler() {
-        // otherwise if the user hasn't put in a number yet and the user presses the increase button the app crashes (java.lang.NumberFormatException: empty String)
+        // otherwise if the user hasn't put in a number yet and the user presses the increase button
+        // the app crashes (java.lang.NumberFormatException: empty String)
         if (!binding.weightValue.text.isNullOrEmpty()) {
             binding.weightValue.setText(
-                (binding.weightValue.text.toString().replace(',', '.').toDouble() + 0.1).round().toString()
+                (binding.weightValue.text.toString().replace(',', '.')
+                    .toDouble() + ZERO_DOT_ONE).round()
+                    .toString()
             )
         } else {
             binding.weightValue.setText(
@@ -107,14 +113,15 @@ class AddWeightFragment : Fragment() {
         }
     }
 
-    private fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).replace(',', '.').toDouble()
+    private fun Double.round(decimals: Int = 2): Double =
+        "%.${decimals}f".format(this).replace(',', '.').toDouble()
 
     private fun updateDateField() {
         binding.dateValue.text = formatDate(public_date!!.millis)
     }
 
-    private fun formatDate(time_millis: Long) =
-        SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMAN).format(Date(time_millis)).toString()
+    private fun formatDate(timeInMillis: Long) =
+        SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMAN).format(Date(timeInMillis)).toString()
 
     //handler for onClick of confirm button
     @RequiresApi(Build.VERSION_CODES.O)

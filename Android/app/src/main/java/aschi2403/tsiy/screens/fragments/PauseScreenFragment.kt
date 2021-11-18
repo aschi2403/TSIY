@@ -57,7 +57,7 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
         binding.skip.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.plusMin.setOnClickListener { binding.countdown.base += 60000 }
+        binding.plusMin.setOnClickListener { binding.countdown.base += TimeUnit.MINUTES.toMillis(1) }
         binding.pause.setOnClickListener {
             if (timerIsCounting) {
                 binding.pause.text = getString(R.string.resume)
@@ -104,7 +104,7 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
     }
 
     private fun vibrate() {
-        if (Build.VERSION.SDK_INT >= 26) { // > Android 8.0 Oreo
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // > Android 8.0 Oreo
             (context?.getSystemService(VIBRATOR_SERVICE) as Vibrator).vibrate(
                 VibrationEffect.createOneShot(
                     800,

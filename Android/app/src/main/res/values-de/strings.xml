@@ -95,4 +95,5 @@
     <string name="locationIsNeedToRecordDistance">Für die Aufzeichnung der Entfernung ist eine Standortgenehmigung
         erforderlich.
     </string>
+    <string name="pleaseInsertAllDataForTheActivity">Geben Sie bitte alle Daten für die Aktivität ein.</string>
 </resources>

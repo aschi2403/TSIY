@@ -45,7 +45,9 @@ class ActivityType(
     }
 
     override fun toString(): String {
-        return "ActivityType(id=$id, name='$name', icon='$icon', description='$description', powerActivity=$isPowerActivity, caloriesPerMinute=$caloriesPerMinute, cardioPointsPerMinute=$cardioPointsPerMinute)"
+        return "ActivityType(id=$id, name='$name', icon='$icon', description='$description+', " +
+                "powerActivity=$isPowerActivity, caloriesPerMinute=$caloriesPerMinute, " +
+                "cardioPointsPerMinute=$cardioPointsPerMinute)"
     }
 
 }

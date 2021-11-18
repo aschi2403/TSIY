@@ -1,7 +1,12 @@
 package aschi2403.tsiy.db
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Update
+import androidx.room.Delete
+import androidx.room.Query
+import androidx.room.OnConflictStrategy
 import aschi2403.tsiy.model.GPSPoint
 
 @Dao

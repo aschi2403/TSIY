@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -15,6 +14,7 @@ import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentViewfinishedactivityBinding
 import aschi2403.tsiy.model.GeneralActivity
 import aschi2403.tsiy.model.PowerActivity
+import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.activities.MainActivity
 import kotlinx.android.synthetic.main.table_row.view.*
@@ -23,22 +23,26 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polyline
-import java.sql.Time
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
 
 private const val MAP_ZOOM = 15.0
+private const val HUNDRED_DOT_ZERO = 100.0
+private const val HUNDRED = 100
+
 class ViewFinishedActivityFragment : Fragment() {
 
     private lateinit var binding: FragmentViewfinishedactivityBinding
 
-
     @SuppressLint("SetTextI18n")
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_viewfinishedactivity, container, false
         )
@@ -55,16 +59,7 @@ class ViewFinishedActivityFragment : Fragment() {
             database.generalActivityById(idOfActivity!!)
         }
 
-        val deleteButton = requireActivity().findViewById<Button>(R.id.deleteButtonAppBar)
-        deleteButton.visibility = View.VISIBLE
-        deleteButton.setOnClickListener {
-            if (powerActivity) {
-                database.deletePowerActivity(iActivity as PowerActivity)
-            } else {
-                database.deleteGeneralActivity(iActivity as GeneralActivity)
-            }
-            findNavController().popBackStack()
-        }
+        configureDeleteButton(powerActivity, database, iActivity)
 
         val sdf = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.GERMAN)
         binding.startDate.text = sdf.format(iActivity.startDate)
@@ -77,9 +72,8 @@ class ViewFinishedActivityFragment : Fragment() {
                 )
             )
 
-        val pauseDuration = TimeUnit.MILLISECONDS.toSeconds(iActivity.endDate)
-        -TimeUnit.MILLISECONDS.toSeconds(iActivity.startDate) - TimeUnit.MILLISECONDS.toSeconds(iActivity.duration)
-
+        val pauseDuration =
+            TimeUnit.MILLISECONDS.toSeconds(iActivity.endDate - iActivity.startDate - iActivity.duration)
         binding.pause.text = durationLeadingZero(pauseDuration) +
                 DateUtils.formatElapsedTime(pauseDuration)
 
@@ -108,10 +102,13 @@ class ViewFinishedActivityFragment : Fragment() {
             binding.generalActivityHeader.visibility = View.VISIBLE
             binding.map.visibility = View.VISIBLE
             binding.distanceValue.text =
-                (((iActivity as GeneralActivity).distance * 100).roundToLong() / 100.0).toString() + " km"
+                (((iActivity as GeneralActivity).distance * HUNDRED).roundToLong() /
+                        HUNDRED_DOT_ZERO).toString() + " km"
             if (iActivity.distance > 0) {
                 binding.speedValue.text =
-                    (((iActivity.distance / (TimeUnit.MILLISECONDS.toHours(iActivity.duration))) * 100.0).roundToLong() / 100.0).toString() + " km/h"
+                    (((iActivity.distance /
+                            (TimeUnit.MILLISECONDS.toHours(iActivity.duration))) * HUNDRED_DOT_ZERO)
+                        .roundToLong() / HUNDRED_DOT_ZERO).toString() + " km/h"
             } else {
                 binding.speedValue.text = "0 km/h"
             }
@@ -123,10 +120,18 @@ class ViewFinishedActivityFragment : Fragment() {
         val gpsPoints = database.getGPSPointsFromActivity(idOfActivity)
         if (gpsPoints.isNotEmpty()) {
             val boundingBox =
-                BoundingBox.fromGeoPoints(gpsPoints.map { gpsPoint -> GeoPoint(gpsPoint.latitude, gpsPoint.longitude) }
+                BoundingBox.fromGeoPoints(gpsPoints.map { gpsPoint ->
+                    GeoPoint(
+                        gpsPoint.latitude,
+                        gpsPoint.longitude
+                    )
+                }
                     .toList())
             mapController.setCenter(boundingBox.centerWithDateLine)
-            mapController.zoomToSpan(boundingBox.latitudeSpan, boundingBox.longitudeSpanWithDateLine)
+            mapController.zoomToSpan(
+                boundingBox.latitudeSpan,
+                boundingBox.longitudeSpanWithDateLine
+            )
         } else {
             binding.map.visibility = View.GONE
         }
@@ -138,6 +143,23 @@ class ViewFinishedActivityFragment : Fragment() {
         binding.map.overlays.add(polyline)
         binding.map.invalidate()
         return binding.root
+    }
+
+    private fun configureDeleteButton(
+        powerActivity: Boolean,
+        database: WorkoutRepo,
+        iActivity: IActivity
+    ) {
+        val deleteButton = requireActivity().findViewById<Button>(R.id.deleteButtonAppBar)
+        deleteButton.visibility = View.VISIBLE
+        deleteButton.setOnClickListener {
+            if (powerActivity) {
+                database.deletePowerActivity(iActivity as PowerActivity)
+            } else {
+                database.deleteGeneralActivity(iActivity as GeneralActivity)
+            }
+            findNavController().popBackStack()
+        }
     }
 
     private fun durationLeadingZero(duration: Long): String {

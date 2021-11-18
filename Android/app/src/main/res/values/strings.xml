@@ -94,4 +94,5 @@
     <string name="unableToGetLocation">Unable to detect your location.</string>
     <string name="turnOnLocation">Please turn on location and start the activity again</string>
     <string name="locationIsNeedToRecordDistance">Location permission is needed to record the distance.</string>
+    <string name="pleaseInsertAllDataForTheActivity">Please insert all data for the activity</string>
 </resources>

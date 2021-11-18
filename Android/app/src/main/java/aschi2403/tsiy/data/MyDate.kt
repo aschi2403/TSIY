@@ -4,7 +4,7 @@ class MyDate(
     day: Int = 0,
     month: Int = 0,
     year: Int = 0,
-    time_millis: Long = 0L,
+    timeInMillis: Long = 0L,
     val callBack: () -> Unit
 ) {
     var day: Int = day
@@ -22,7 +22,7 @@ class MyDate(
             field = value
             callBack()
         }
-    var millis: Long = time_millis
+    var millis: Long = timeInMillis
         set(value) {
             field = value
             callBack()

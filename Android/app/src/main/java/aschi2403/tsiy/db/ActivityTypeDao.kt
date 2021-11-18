@@ -1,9 +1,13 @@
 package aschi2403.tsiy.db
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Update
+import androidx.room.Delete
 import androidx.room.OnConflictStrategy.IGNORE
 import androidx.room.OnConflictStrategy.REPLACE
+import androidx.room.Query
 import aschi2403.tsiy.model.ActivityType
 
 @Dao

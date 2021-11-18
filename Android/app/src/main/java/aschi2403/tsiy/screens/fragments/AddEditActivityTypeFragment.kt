@@ -23,10 +23,11 @@ import com.maltaisn.icondialog.IconDialogSettings
 import com.maltaisn.icondialog.data.Icon
 import com.maltaisn.icondialog.pack.IconPack
 
+const val DEFAULT_ICON_ID = 522 // Cycling icon as standard
 
 class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
 
-    private var iconId: Int = 522 // Cycling icon as standard
+    private var iconId: Int = DEFAULT_ICON_ID
     private lateinit var binding: FragmentAddeditactivitytypeBinding
 
     private lateinit var iconPack: IconPack
@@ -101,7 +102,10 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
 
         binding.close.setOnClickListener { findNavController().popBackStack() }
         binding.save.setOnClickListener {
-            if (binding.activityType.text.isNullOrEmpty() || binding.caloriesValue.text.isNullOrEmpty() || binding.cardioPointsValue.text.isNullOrEmpty()) {
+            if (binding.activityType.text.isNullOrEmpty()
+                || binding.caloriesValue.text.isNullOrEmpty()
+                || binding.cardioPointsValue.text.isNullOrEmpty()
+            ) {
                 Toast.makeText(
                     requireContext(),
                     "Please insert all data for the activity",
