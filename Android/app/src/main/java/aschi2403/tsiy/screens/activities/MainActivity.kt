@@ -24,6 +24,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.osmdroid.config.IConfigurationProvider
 import org.osmdroid.tileprovider.util.StorageUtils.getStorage
 
+const val REQUEST_CODE = 500
+
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -123,7 +125,7 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_BACKGROUND_LOCATION
             ),
-            500
+            REQUEST_CODE
         )
     }
 }

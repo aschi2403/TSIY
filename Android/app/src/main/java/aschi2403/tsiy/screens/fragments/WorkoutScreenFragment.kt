@@ -107,80 +107,9 @@ class WorkoutScreenFragment : Fragment() {
         workoutPlanId = arguments?.getLong("workoutPlanId", -1)!!
 
         if (workoutPlanId >= 0) {
-            val data = database.allGeneralActivities.plus(database.allPowerActivities)
-            if (data.isNotEmpty() && newWorkoutIdForDatabase == -1) {
-                newWorkoutIdForDatabase = data
-                    .maxOf { activity -> activity.workoutId }.plus(1)
-            }
-            val activities =
-                database.workoutEntriesByWorkoutPlanId(workoutPlanId).toMutableList()
-
-            closeButton(activities[set].iActivityTypeId, activities[set].isPowerActivity)
-
-            val upNext = if (set + 1 < activities.size) {
-                database.activityTypeById(
-                    activities[set + 1].iActivityTypeId
-                ).name
-            } else {
-                null
-            }
-
-            createActivityInDb(
-                activities[set].isPowerActivity,
-                activities[set].iActivityTypeId,
-                isWorkout = true,
-                upNext
-            )
-
-            changeActivityNameLabel(
-                activities[set].isPowerActivity,
-                activities[set].iActivityTypeId
-            )
-
-            if (set + 1 == activities.size) {
-                binding.next.visibility = View.INVISIBLE
-            }
-
-            if (!activities[set].isPowerActivity && set + 1 < activities.size) {
-                binding.next.visibility = View.VISIBLE
-                binding.next.setOnClickListener {
-
-                    // finish activity
-                    saveInDatabase(
-                        activities[set].iActivityTypeId,
-                        activities[set].isPowerActivity,
-                        isFinished = false,
-                        navigate = false,
-                        newWorkoutIdForDatabase = newWorkoutIdForDatabase,
-                        workoutPlanId = workoutPlanId,
-                        upNext
-                    )
-                    // remove id of activity
-                    idOfActivity = -1
-                    viewModel.values.putLong("stopTime", -1)
-
-                    set++
-
-                    findNavController().navigate(
-                        WorkoutScreenFragmentDirections.actionWorkoutScreenToPauseScreen(
-                            upNext
-                        )
-                    )
-                }
-            }
+            handleWorkout()
         } else {
-            val activityTypeId = arguments?.getLong("activityTypeId")!!
-
-            binding.activity.text = arguments?.getString("name")
-
-            createActivityInDb(
-                isPowerActivity,
-                activityTypeId,
-                isWorkout = false,
-                upNext = null
-            )
-
-            closeButton(activityTypeId, isPowerActivity)
+            handleActivity()
         }
 
         startTimer()
@@ -191,6 +120,84 @@ class WorkoutScreenFragment : Fragment() {
             )
         }
         return binding.root
+    }
+
+    private fun handleActivity() {
+        val activityTypeId = arguments?.getLong("activityTypeId")!!
+        binding.activity.text = arguments?.getString("name")
+
+        createActivityInDb(
+            isPowerActivity,
+            activityTypeId,
+            isWorkout = false,
+            upNext = null
+        )
+
+        closeButton(activityTypeId, isPowerActivity)
+    }
+
+    private fun handleWorkout() {
+        val data = database.allGeneralActivities.plus(database.allPowerActivities)
+        if (data.isNotEmpty() && newWorkoutIdForDatabase == -1) {
+            newWorkoutIdForDatabase = data
+                .maxOf { activity -> activity.workoutId }.plus(1)
+        }
+        val activities =
+            database.workoutEntriesByWorkoutPlanId(workoutPlanId).toMutableList()
+
+        closeButton(activities[set].iActivityTypeId, activities[set].isPowerActivity)
+
+        val upNext = if (set + 1 < activities.size) {
+            database.activityTypeById(
+                activities[set + 1].iActivityTypeId
+            ).name
+        } else {
+            null
+        }
+
+        createActivityInDb(
+            activities[set].isPowerActivity,
+            activities[set].iActivityTypeId,
+            isWorkout = true,
+            upNext
+        )
+
+        changeActivityNameLabel(
+            activities[set].isPowerActivity,
+            activities[set].iActivityTypeId
+        )
+
+        if (set + 1 == activities.size) {
+            binding.next.visibility = View.INVISIBLE
+        }
+
+        if (!activities[set].isPowerActivity && set + 1 < activities.size) {
+            binding.next.visibility = View.VISIBLE
+            binding.next.setOnClickListener {
+
+                // finish activity
+                saveInDatabase(
+                    activities[set].iActivityTypeId,
+                    activities[set].isPowerActivity,
+                    isFinished = false,
+                    navigate = false,
+                    newWorkoutIdForDatabase = newWorkoutIdForDatabase,
+                    workoutPlanId = workoutPlanId,
+                    upNext
+                )
+                // remove id of activity
+                idOfActivity = -1
+                viewModel.values.putLong("stopTime", -1)
+
+                set++
+
+                findNavController().navigate(
+                    WorkoutScreenFragmentDirections.actionWorkoutScreenToPauseScreen(
+                        upNext
+                    )
+                )
+            }
+        }
     }
 
     private fun closeButton(activityTypeId: Long, isPowerActivity: Boolean) {

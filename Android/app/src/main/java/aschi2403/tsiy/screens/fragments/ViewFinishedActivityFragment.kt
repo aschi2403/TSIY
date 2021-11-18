@@ -24,7 +24,7 @@ import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polyline
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToLong
 
@@ -32,6 +32,7 @@ import kotlin.math.roundToLong
 private const val MAP_ZOOM = 15.0
 private const val HUNDRED_DOT_ZERO = 100.0
 private const val HUNDRED = 100
+private const val TEN = 10
 
 class ViewFinishedActivityFragment : Fragment() {
 
@@ -166,7 +167,7 @@ class ViewFinishedActivityFragment : Fragment() {
         if (TimeUnit.MILLISECONDS.toHours(duration) < 1) {
             return "00:"
         }
-        if (TimeUnit.MILLISECONDS.toHours(duration) < 10) {
+        if (TimeUnit.MILLISECONDS.toHours(duration) < TEN) {
             return "0"
         }
         return ""

@@ -53,7 +53,11 @@ class ChoosePowerActivityTypeFragment : Fragment() {
                 if (finished) {
                     activity?.finish()
                 } else {
-                    findNavController().navigate(ChoosePowerActivityTypeFragmentDirections.actionChoosePowerActivityTypeToPauseScreen(upNext = upNext))
+                    findNavController().navigate(
+                        ChoosePowerActivityTypeFragmentDirections.actionChoosePowerActivityTypeToPauseScreen(
+                            upNext = upNext
+                        )
+                    )
                 }
             }
         }

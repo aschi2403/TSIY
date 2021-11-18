@@ -46,6 +46,36 @@ class HomeFragment : Fragment() {
 
         (activity as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(false)
 
+        handleFilter()
+
+        (activity as AppCompatActivity?)!!.filterButtonAppBar.visibility = View.VISIBLE
+
+        binding.homeViewModel = viewModel
+        binding.lifecycleOwner = this
+
+        handleFloatingButtons()
+
+        database = WorkoutRepo(this.requireContext())
+
+        dataMerger = DataMerger(database)
+
+        val rv = binding.listOfActivities
+        rv.setHasFixedSize(true)
+        val llm = LinearLayoutManager(this.context)
+
+        rv.layoutManager = llm
+        homeListAdapter = HomeListAdapter(
+            dataMerger.getData(checkedItem, getString(R.string.workout)),
+            this.requireContext(),
+            IconPackProvider(this.requireContext()).loadIconPack(),
+            checkedItem,
+            true
+        )
+        rv.adapter = homeListAdapter
+        return binding.root
+    }
+
+    private fun handleFilter() {
         (activity as AppCompatActivity?)!!.filterButtonAppBar.setOnClickListener {
             with(DialogView(this.requireContext())) {
                 showItemCheckDialog(R.string.filterDoneActivities, listOf(
@@ -64,12 +94,9 @@ class HomeFragment : Fragment() {
                 }, { _, _ -> })
             }
         }
+    }
 
-        (activity as AppCompatActivity?)!!.filterButtonAppBar.visibility = View.VISIBLE
-
-        binding.homeViewModel = viewModel
-        binding.lifecycleOwner = this
-
+    private fun handleFloatingButtons() {
         binding.startNewActivity.setOnClickListener {
             if (binding.startGeneralActivity.isVisible) {
                 closeFloatingButtons()
@@ -95,25 +122,6 @@ class HomeFragment : Fragment() {
         binding.startWorkout.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToChooseWorkoutPlanFragment())
         }
-
-        database = WorkoutRepo(this.requireContext())
-
-        dataMerger = DataMerger(database)
-
-        val rv = binding.listOfActivities
-        rv.setHasFixedSize(true)
-        val llm = LinearLayoutManager(this.context)
-
-        rv.layoutManager = llm
-        homeListAdapter = HomeListAdapter(
-            dataMerger.getData(checkedItem, getString(R.string.workout)),
-            this.requireContext(),
-            IconPackProvider(this.requireContext()).loadIconPack(),
-            checkedItem,
-            true
-        )
-        rv.adapter = homeListAdapter
-        return binding.root
     }
 
     private fun showFloatingButtons() {

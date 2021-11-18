@@ -64,7 +64,10 @@ class StatisticsFragment : Fragment() {
         binding.cardioPointsValue.text = activities.sumByDouble { a -> a.cardioPoints }.toString()
 
         val items = arrayOf(
-            getString(R.string.Day), getString(R.string.Week), getString(R.string.Month), getString(R.string.Year)
+            getString(R.string.Day),
+            getString(R.string.Week),
+            getString(R.string.Month),
+            getString(R.string.Year)
         )
 
         val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
@@ -74,7 +77,9 @@ class StatisticsFragment : Fragment() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.groupBy.adapter = adapter
         binding.groupBy.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                // noting to do
+            }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
                 binding.groupByLabel.text = p0?.selectedItem.toString()
@@ -86,8 +91,9 @@ class StatisticsFragment : Fragment() {
         return binding.root
     }
 
-    //TODO: implement
-    fun changeCardioPoints(position: Int) {}
+    fun changeCardioPoints(position: Int) {
+        //TODO: implement
+    }
 
     fun changeChart(position: Int, groupBy: String) {
         workoutList.clear()
@@ -122,7 +128,8 @@ class StatisticsFragment : Fragment() {
                 )
             )
         }
-        val weightLine = LineDataSet(workoutList, getString(R.string.activities) + "/" + groupBy)
+        val weightLine =
+            LineDataSet(workoutList, getString(R.string.activities) + "/" + groupBy)
         weightLine.color = Color.RED
         weightLine.valueTextColor = Color.BLACK
 

@@ -7,8 +7,6 @@ import aschi2403.tsiy.model.relations.IActivityType
 
 @Entity(tableName = "ActivityType", indices = [Index("id")])
 class ActivityType(
-    @PrimaryKey(autoGenerate = true)
-    override var id: Long? = 0,
     override var name: String = "",
     override var icon: Int = 0,
     override var description: String = "",
@@ -16,6 +14,10 @@ class ActivityType(
     override var caloriesPerMinute: Double,
     override var cardioPointsPerMinute: Double
 ) : IActivityType {
+
+    @PrimaryKey(autoGenerate = true)
+    override var id: Long? = 0
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
