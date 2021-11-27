@@ -24,7 +24,7 @@ import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polyline
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToLong
 
@@ -38,7 +38,6 @@ class ViewFinishedActivityFragment : Fragment() {
 
     private lateinit var binding: FragmentViewfinishedactivityBinding
 
-    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,21 +61,32 @@ class ViewFinishedActivityFragment : Fragment() {
 
         configureDeleteButton(powerActivity, database, iActivity)
 
+        setGuiData(iActivity, powerActivity, database, idOfActivity)
+        return binding.root
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setGuiData(
+        iActivity: IActivity,
+        powerActivity: Boolean,
+        database: WorkoutRepo,
+        idOfActivity: Long
+    ) {
         val sdf = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.GERMAN)
         binding.startDate.text = sdf.format(iActivity.startDate)
         binding.endDate.text = sdf.format(iActivity.endDate)
 
-        binding.duration.text =
-            durationLeadingZero(iActivity.duration) + DateUtils.formatElapsedTime(
+        binding.duration.text = "${durationLeadingZero(iActivity.duration)}${
+            DateUtils.formatElapsedTime(
                 TimeUnit.MILLISECONDS.toSeconds(
                     iActivity.duration
                 )
             )
+        }"
 
         val pauseDuration =
             TimeUnit.MILLISECONDS.toSeconds(iActivity.endDate - iActivity.startDate - iActivity.duration)
-        binding.pause.text = durationLeadingZero(pauseDuration) +
-                DateUtils.formatElapsedTime(pauseDuration)
+        binding.pause.text = "${durationLeadingZero(pauseDuration)}${DateUtils.formatElapsedTime(pauseDuration)}"
 
         binding.cardioPoints.text = iActivity.cardioPoints.toString()
         binding.caloriesValue.text = iActivity.calories.toString()
@@ -87,6 +97,18 @@ class ViewFinishedActivityFragment : Fragment() {
             database.activityTypeById(iActivity.activityTypeId).name
         }
 
+        setActivitySpecificInformation(powerActivity, database, idOfActivity, iActivity)
+
+        createMap(database, idOfActivity)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setActivitySpecificInformation(
+        powerActivity: Boolean,
+        database: WorkoutRepo,
+        idOfActivity: Long,
+        iActivity: IActivity
+    ) {
         if (powerActivity) {
             val sets = database.getSetEntriesByPowerActivityId(idOfActivity).toTypedArray()
             if (sets.isNotEmpty()) {
@@ -102,19 +124,23 @@ class ViewFinishedActivityFragment : Fragment() {
             binding.generalActivityBody.visibility = View.VISIBLE
             binding.generalActivityHeader.visibility = View.VISIBLE
             binding.map.visibility = View.VISIBLE
-            binding.distanceValue.text =
+            binding.distanceValue.text = "${
                 (((iActivity as GeneralActivity).distance * HUNDRED).roundToLong() /
-                        HUNDRED_DOT_ZERO).toString() + " km"
+                        HUNDRED_DOT_ZERO)
+            } km "
             if (iActivity.distance > 0) {
-                binding.speedValue.text =
+                binding.speedValue.text = "${
                     (((iActivity.distance /
                             (TimeUnit.MILLISECONDS.toHours(iActivity.duration))) * HUNDRED_DOT_ZERO)
-                        .roundToLong() / HUNDRED_DOT_ZERO).toString() + " km/h"
+                        .roundToLong() / HUNDRED_DOT_ZERO)
+                } km/h "
             } else {
-                binding.speedValue.text = "0 km/h"
+                binding.speedValue.text = R.string.zeroKmH.toString()
             }
         }
+    }
 
+    private fun createMap(database: WorkoutRepo, idOfActivity: Long) {
         binding.map.setTileSource(TileSourceFactory.MAPNIK)
         val mapController: IMapController = binding.map.controller
         mapController.setZoom(MAP_ZOOM)
@@ -126,8 +152,7 @@ class ViewFinishedActivityFragment : Fragment() {
                         gpsPoint.latitude,
                         gpsPoint.longitude
                     )
-                }
-                    .toList())
+                }.toList())
             mapController.setCenter(boundingBox.centerWithDateLine)
             mapController.zoomToSpan(
                 boundingBox.latitudeSpan,
@@ -143,7 +168,6 @@ class ViewFinishedActivityFragment : Fragment() {
         }
         binding.map.overlays.add(polyline)
         binding.map.invalidate()
-        return binding.root
     }
 
     private fun configureDeleteButton(

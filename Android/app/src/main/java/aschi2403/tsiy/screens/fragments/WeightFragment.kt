@@ -59,7 +59,7 @@ class WeightFragment : Fragment() {
         }
 
 
-        val weightLine = LineDataSet(weightList, "Weight")
+        val weightLine = LineDataSet(weightList, R.string.weight.toString())
         weightLine.axisDependency = AxisDependency.LEFT
         weightLine.color = Color.RED
         weightLine.valueTextColor = Color.BLACK

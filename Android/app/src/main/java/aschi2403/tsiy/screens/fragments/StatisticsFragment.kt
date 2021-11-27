@@ -39,7 +39,7 @@ class StatisticsFragment : Fragment() {
         )
 
         database = WorkoutRepo(this.requireContext())
-        changeChart(0, getString(R.string.Day))
+        changeChart(getString(R.string.Day))
 
         binding.workoutsChart.xAxis.valueFormatter = LineChartDateFormatter()
         binding.workoutsChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
@@ -83,7 +83,7 @@ class StatisticsFragment : Fragment() {
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
                 binding.groupByLabel.text = p0?.selectedItem.toString()
-                changeChart(position, p0?.selectedItem.toString())
+                changeChart(p0?.selectedItem.toString())
                 changeCardioPoints(position)
             }
         }
@@ -95,41 +95,37 @@ class StatisticsFragment : Fragment() {
         //TODO: implement
     }
 
-    fun changeChart(position: Int, groupBy: String) {
+    fun changeChart(groupBy: String) {
         workoutList.clear()
-        when (position) {
-            // Day
-            0 -> groupBy(
+        when (groupBy) {
+            getString(R.string.Day) -> groupBy(
                 SimpleDateFormat(
                     "dd/MM/yyyy",
-                    Locale.GERMAN
+                    Locale.getDefault()
                 )
             )
-            // Week
-            1
+            getString(R.string.Week)
             -> groupBy(
                 SimpleDateFormat(
                     "F/MM/yyyy",
-                    Locale.GERMAN
+                    Locale.getDefault()
                 )
             )
-            // Month
-            2 -> groupBy(
+            getString(R.string.Month) -> groupBy(
                 SimpleDateFormat(
                     "MM/yyyy",
-                    Locale.GERMAN
+                    Locale.getDefault()
                 )
             )
-            // Year
-            3 -> groupBy(
+            getString(R.string.Year) -> groupBy(
                 SimpleDateFormat(
                     "yyyy",
-                    Locale.GERMAN
+                    Locale.getDefault()
                 )
             )
         }
         val weightLine =
-            LineDataSet(workoutList, getString(R.string.activities) + "/" + groupBy)
+            LineDataSet(workoutList, "${getString(R.string.activities)} / $groupBy")
         weightLine.color = Color.RED
         weightLine.valueTextColor = Color.BLACK
 

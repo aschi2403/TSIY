@@ -1,41 +1,30 @@
 package aschi2403.tsiy.screens.fragments
 
-import android.annotation.SuppressLint
-import android.app.DatePickerDialog
-import android.app.Dialog
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.data.MyDate
 import aschi2403.tsiy.databinding.FragmentAddWeightBinding
+import aschi2403.tsiy.helper.DatePickerFragment
 import aschi2403.tsiy.model.WeightEntry
 import aschi2403.tsiy.repository.WorkoutRepo
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- * A simple [Fragment] subclass.
- */
 var public_date: MyDate? = null
 
 const val ZERO_DOT_ONE = 0.1
 
 class AddWeightFragment : Fragment() {
     private lateinit var binding: FragmentAddWeightBinding
-    private var repo: WorkoutRepo? = null
+    private lateinit var repo: WorkoutRepo
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("SimpleDateFormat")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -71,13 +60,12 @@ class AddWeightFragment : Fragment() {
         }
 
         binding.dateValue.text =
-            SimpleDateFormat("dd.MM.yyyy HH:mm").format(Date(public_date!!.millis)).toString()
+            SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMAN).format(Date(public_date!!.millis)).toString()
 
-        repo = activity?.let { WorkoutRepo(it) }
+        repo = WorkoutRepo(requireActivity())
 
-        if (!repo?.allWeightEntries.isNullOrEmpty()) {
-            binding.weightValue.setText(repo?.allWeightEntries?.last()?.weight.toString())
-        }
+        binding.weightValue.setText(repo.allWeightEntries.last().weight.toString())
+
 
         return binding.root
     }
@@ -124,7 +112,6 @@ class AddWeightFragment : Fragment() {
         SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMAN).format(Date(timeInMillis)).toString()
 
     //handler for onClick of confirm button
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun confirmButton() {
         // get text of input field
         val text: String = binding.weightValue.text.toString()
@@ -135,36 +122,13 @@ class AddWeightFragment : Fragment() {
         // if value is valid add new database entry
         if (value != null) {
             val weightEntry = WeightEntry(date = public_date!!.millis, weight = value)
-            repo?.addWeightEntry(weightEntry)
+            repo.addWeightEntry(weightEntry)
 
             // navigate back to weight-fragment
             findNavController().navigate(R.id.action_addWeightFragment_to_weightFragment)
         } else {
-            Toast.makeText(context, "Please insert a correct weight", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, R.string.pleaseInsertACorrectWeight, Toast.LENGTH_LONG).show()
         }
-
     }
 }
 
-class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val year = public_date!!.year
-        val month = public_date!!.month
-        val day = public_date!!.day
-
-        // Create a new instance of DatePickerDialog and return it
-        return DatePickerDialog(requireContext(), this, year, month, day)
-    }
-
-    override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
-        // Do something with the date chosen by the user
-        public_date!!.day = day
-        public_date!!.month = month
-        public_date!!.year = year
-
-        val calendar = Calendar.getInstance()
-        calendar.set(year, month, day)
-        public_date!!.millis = calendar.timeInMillis
-    }
-}

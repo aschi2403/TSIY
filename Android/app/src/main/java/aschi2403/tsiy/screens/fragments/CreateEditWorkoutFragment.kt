@@ -186,6 +186,7 @@ class CreateEditWorkoutFragment : Fragment() {
         }
     }
 
+    @Suppress("ReturnCount")
     private fun isEqual(first: MutableList<IActivityType>, second: List<WorkoutEntry>): Boolean {
         if (first.size != second.size) {
             return false

@@ -21,7 +21,7 @@ import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.adapters.HomeListAdapter
 import aschi2403.tsiy.screens.models.HomeViewModel
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.filterButtonAppBar
 
 
 class HomeFragment : Fragment() {

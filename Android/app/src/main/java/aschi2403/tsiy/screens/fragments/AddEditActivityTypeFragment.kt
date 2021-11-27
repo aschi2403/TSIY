@@ -119,7 +119,7 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
             ) {
                 Toast.makeText(
                     requireContext(),
-                    "Please insert all data for the activity",
+                    R.string.pleaseInsertAllDataForTheActivity,
                     Toast.LENGTH_LONG
                 ).show()
             } else {
@@ -143,8 +143,7 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
         }
     }
 
-    override
-    val iconDialogIconPack: IconPack
+    override val iconDialogIconPack: IconPack
         get() = iconPack
 
     override fun onIconDialogIconsSelected(dialog: IconDialog, icons: List<Icon>) {

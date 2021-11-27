@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentPauseScreenBinding
-import kotlinx.android.synthetic.main.fragment_pause_screen.*
+import kotlinx.android.synthetic.main.fragment_pause_screen.countdown
 import java.util.concurrent.TimeUnit
 
 const val VIBRATION_SHORT = 800L

@@ -32,6 +32,7 @@ import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 
 private const val MAP_ZOOM = 15.0
+
 class WorkoutScreenFragment : Fragment() {
     private lateinit var locationService: Intent
     private var workoutPlanId: Long = -1
@@ -179,11 +180,8 @@ class WorkoutScreenFragment : Fragment() {
                 saveInDatabase(
                     activities[set].iActivityTypeId,
                     activities[set].isPowerActivity,
-                    isFinished = false,
-                    navigate = false,
                     newWorkoutIdForDatabase = newWorkoutIdForDatabase,
-                    workoutPlanId = workoutPlanId,
-                    upNext
+                    workoutPlanId = workoutPlanId
                 )
                 // remove id of activity
                 idOfActivity = -1
@@ -205,12 +203,15 @@ class WorkoutScreenFragment : Fragment() {
             saveInDatabase(
                 activityTypeId,
                 isPowerActivity,
-                isFinished = true,
-                navigate = true,
                 newWorkoutIdForDatabase = newWorkoutIdForDatabase,
-                workoutPlanId = workoutPlanId,
-                upNext = null
+                workoutPlanId = workoutPlanId
             )
+            findNavController().navigate(
+                WorkoutScreenFragmentDirections.actionWorkoutScreenToChoosePowerActivityType(
+                    idOfPowerActivity = idOfActivity, finished = true, upNext = null
+                )
+            )
+            requireActivity().finish()
             viewModel.values.clear()
         }
     }
@@ -271,11 +272,8 @@ class WorkoutScreenFragment : Fragment() {
                     saveInDatabase(
                         activityTypeId,
                         isPowerActivity,
-                        isFinished = false,
-                        navigate = false,
                         newWorkoutIdForDatabase = newWorkoutIdForDatabase,
-                        workoutPlanId = workoutPlanId,
-                        upNext = upNext
+                        workoutPlanId = workoutPlanId
                     )
                     // remove id of activity
                     idOfActivity = -1
@@ -290,11 +288,8 @@ class WorkoutScreenFragment : Fragment() {
     private fun saveInDatabase(
         activityTypeId: Long,
         isPowerActivity: Boolean,
-        isFinished: Boolean,
-        navigate: Boolean,
         newWorkoutIdForDatabase: Int,
-        workoutPlanId: Long,
-        upNext: String?
+        workoutPlanId: Long
     ) {
         if (!isPowerActivity) { // normal activity
             database.updateActivity(
@@ -320,9 +315,7 @@ class WorkoutScreenFragment : Fragment() {
                 )
             })
 
-            if (isFinished) {
-                activity?.finish()
-            }
+
         } else { // power activity
             database.updatePowerActivity(
                 PowerActivity(
@@ -338,13 +331,6 @@ class WorkoutScreenFragment : Fragment() {
                     workoutPlanId = workoutPlanId
                 )
             )
-            if (navigate) {
-                findNavController().navigate(
-                    WorkoutScreenFragmentDirections.actionWorkoutScreenToChoosePowerActivityType(
-                        idOfPowerActivity = idOfActivity, finished = isFinished, upNext = upNext
-                    )
-                )
-            }
         }
         requireActivity().unregisterReceiver(receiver)
         requireActivity().stopService(locationService)

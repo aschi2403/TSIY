@@ -1,12 +1,9 @@
 package aschi2403.tsiy.model
 
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Ignore
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import androidx.room.*
 import aschi2403.tsiy.model.relations.IActivity
 
+@Suppress("LongParameterList")
 @Entity(
     tableName = "PowerActivity",
     foreignKeys = [
