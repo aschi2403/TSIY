@@ -17,7 +17,8 @@ import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.activities.MainActivity
-import kotlinx.android.synthetic.main.table_row.view.*
+import kotlinx.android.synthetic.main.table_row.view.weightValue
+import kotlinx.android.synthetic.main.table_row.view.repetitionsValue
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.BoundingBox

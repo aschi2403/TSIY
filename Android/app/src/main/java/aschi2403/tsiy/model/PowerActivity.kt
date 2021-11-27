@@ -1,7 +1,11 @@
 package aschi2403.tsiy.model
 
-import androidx.room.*
 import aschi2403.tsiy.model.relations.IActivity
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Ignore
+import androidx.room.Index
+import androidx.room.PrimaryKey
 
 @Suppress("LongParameterList")
 @Entity(
