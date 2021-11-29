@@ -17,7 +17,7 @@ import aschi2403.tsiy.BuildConfig
 import aschi2403.tsiy.R
 import aschi2403.tsiy.helper.LanguageHelper
 import aschi2403.tsiy.helper.PermissionHelper
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.main_nav
 import org.osmdroid.config.IConfigurationProvider
 import org.osmdroid.tileprovider.util.StorageUtils.getStorage
 
