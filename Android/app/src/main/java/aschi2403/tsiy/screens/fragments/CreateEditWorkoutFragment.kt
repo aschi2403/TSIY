@@ -68,7 +68,7 @@ class CreateEditWorkoutFragment : Fragment() {
 
         database = WorkoutRepo(this.requireContext())
 
-        allActivities = database.allActivityTypes.plus(database.allPowerActivityTypes)
+        allActivities = database.allActivityTypes
 
         configureAddButton()
 

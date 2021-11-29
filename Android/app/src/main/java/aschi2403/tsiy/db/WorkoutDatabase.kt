@@ -32,6 +32,7 @@ abstract class WorkoutDatabase : RoomDatabase() {
     abstract fun powerActivityDao(): PowerActivityDao
     abstract fun powerActivityTypeDao(): PowerActivityTypeDao
     abstract fun activityTypeDao(): ActivityTypeDao
+    abstract fun allActivityTypeDao(): AllActivityTypeDao
     abstract fun generalActivityDao(): GeneralActivityDao
     abstract fun weightEntryDao(): WeightEntryDao
     abstract fun setEntryDao(): SetEntryDao

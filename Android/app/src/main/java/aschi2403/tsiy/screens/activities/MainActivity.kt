@@ -2,7 +2,6 @@ package aschi2403.tsiy.screens.activities
 
 import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
@@ -12,19 +11,15 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import aschi2403.tsiy.BuildConfig
 import aschi2403.tsiy.R
-import aschi2403.tsiy.helper.DialogView
 import aschi2403.tsiy.helper.LanguageHelper
-import kotlinx.android.synthetic.main.activity_main.main_nav
+import aschi2403.tsiy.helper.PermissionHelper
+import kotlinx.android.synthetic.main.activity_main.*
 import org.osmdroid.config.IConfigurationProvider
 import org.osmdroid.tileprovider.util.StorageUtils.getStorage
-
-const val REQUEST_CODE = 500
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,7 +28,16 @@ class MainActivity : AppCompatActivity() {
 
         val sharedPreferences = this.getSharedPreferences("settings", Context.MODE_PRIVATE)
 
-        requestPermissions()
+        PermissionHelper().askPermissions(
+            this, arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            )
+        )
 
         LanguageHelper(this).changeLanguage(
             resources,
@@ -49,12 +53,10 @@ class MainActivity : AppCompatActivity() {
         if (!sharedPreferences.contains("darkMode")) {
             when (applicationContext.resources.configuration.uiMode and UI_MODE_NIGHT_MASK) {
                 UI_MODE_NIGHT_NO -> {
-                    sharedPreferences.edit().putInt("darkMode", AppCompatDelegate.MODE_NIGHT_NO)
-                        .apply()
+                    sharedPreferences.edit().putInt("darkMode", AppCompatDelegate.MODE_NIGHT_NO).apply()
                 }
                 UI_MODE_NIGHT_YES -> {
-                    sharedPreferences.edit().putInt("darkMode", AppCompatDelegate.MODE_NIGHT_YES)
-                        .apply()
+                    sharedPreferences.edit().putInt("darkMode", AppCompatDelegate.MODE_NIGHT_YES).apply()
                 }
             }
         }
@@ -91,41 +93,5 @@ class MainActivity : AppCompatActivity() {
             return true
         }
         return false
-    }
-
-    private fun requestPermissions() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            )
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                )
-            ) {
-                DialogView(this).showYesNoDialog(
-                    getString(R.string.locationPermission),
-                    getString(R.string.locationMessage),
-                    { _, _ ->
-                        requestLocationPermission()
-                    }, { _, _ -> }
-                )
-            } else {
-                requestLocationPermission()
-            }
-        }
-    }
-
-    private fun requestLocationPermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            ),
-            REQUEST_CODE
-        )
     }
 }
