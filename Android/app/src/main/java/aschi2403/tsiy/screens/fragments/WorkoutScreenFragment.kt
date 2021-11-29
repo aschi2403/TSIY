@@ -32,8 +32,9 @@ import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 
 private const val MAP_ZOOM = 15.0
+
 class WorkoutScreenFragment : Fragment() {
-    private lateinit var locationService: Intent
+    private var locationService: Intent? = null
     private var workoutPlanId: Long = -1
     private var newWorkoutIdForDatabase: Int = -1
     private var isPowerActivity: Boolean = true
@@ -77,32 +78,10 @@ class WorkoutScreenFragment : Fragment() {
             )
         )
 
-        binding.map.setTileSource(TileSourceFactory.MAPNIK)
-        val mapController: IMapController = binding.map.controller
-        mapController.setZoom(MAP_ZOOM)
         dialogView = DialogView(requireContext())
         isPowerActivity = arguments?.getBoolean("type")!!
 
-        if (!isPowerActivity) {
-            binding.generalActivityHeader.visibility = View.VISIBLE
-            binding.generalActivityBody.visibility = View.VISIBLE
-        }
-
         database = WorkoutRepo(requireActivity().applicationContext)
-
-        receiver = GPSReceiver(binding.map, binding.kmValue, binding.speedValue)
-        requireActivity().registerReceiver(receiver, IntentFilter("GPS_Data"))
-
-        locationService = Intent(
-            requireActivity(),
-            LocationForceGroundService::class.java
-        )
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            requireActivity().startForegroundService(locationService)
-        } else {
-            requireActivity().startService(locationService)
-        }
 
         workoutPlanId = arguments?.getLong("workoutPlanId", -1)!!
 
@@ -118,11 +97,21 @@ class WorkoutScreenFragment : Fragment() {
             closeButton(activities[set].iActivityTypeId, activities[set].isPowerActivity)
 
             val upNext = if (set + 1 < activities.size) {
-                database.activityTypeById(
-                    activities[set + 1].iActivityTypeId
-                ).name
+                if(activities[set+1].isPowerActivity){
+                    database.powerActivityTypeById(
+                        activities[set + 1].iActivityTypeId
+                    ).name
+                }else {
+                    database.activityTypeById(
+                        activities[set + 1].iActivityTypeId
+                    ).name
+                }
             } else {
                 null
+            }
+
+            if (!activities[set].isPowerActivity) {
+                showAndConfigureMapForNormalActivity()
             }
 
             createActivityInDb(
@@ -169,6 +158,9 @@ class WorkoutScreenFragment : Fragment() {
                 }
             }
         } else {
+            if (!isPowerActivity) {
+                showAndConfigureMapForNormalActivity()
+            }
             val activityTypeId = arguments?.getLong("activityTypeId")!!
 
             binding.activity.text = arguments?.getString("name")
@@ -191,6 +183,26 @@ class WorkoutScreenFragment : Fragment() {
             )
         }
         return binding.root
+    }
+
+    private fun showAndConfigureMapForNormalActivity() {
+        binding.map.visibility = View.VISIBLE
+        binding.map.setTileSource(TileSourceFactory.MAPNIK)
+        val mapController: IMapController = binding.map.controller
+        mapController.setZoom(MAP_ZOOM)
+        binding.generalActivityHeader.visibility = View.VISIBLE
+        binding.generalActivityBody.visibility = View.VISIBLE
+        receiver = GPSReceiver(binding.map, binding.kmValue, binding.speedValue)
+        requireActivity().registerReceiver(receiver, IntentFilter("GPS_Data"))
+        locationService = Intent(
+            requireActivity(),
+            LocationForceGroundService::class.java
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            requireActivity().startForegroundService(locationService)
+        } else {
+            requireActivity().startService(locationService)
+        }
     }
 
     private fun closeButton(activityTypeId: Long, isPowerActivity: Boolean) {
@@ -339,8 +351,10 @@ class WorkoutScreenFragment : Fragment() {
                 )
             }
         }
-        requireActivity().unregisterReceiver(receiver)
-        requireActivity().stopService(locationService)
+        if (!isPowerActivity) {
+            requireActivity().unregisterReceiver(receiver)
+            requireActivity().stopService(locationService)
+        }
     }
 
     override fun onDestroyView() {
