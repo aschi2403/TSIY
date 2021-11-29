@@ -23,10 +23,11 @@ import com.maltaisn.icondialog.IconDialogSettings
 import com.maltaisn.icondialog.data.Icon
 import com.maltaisn.icondialog.pack.IconPack
 
+const val DEFAULT_ICON_ID = 522 // Cycling icon as standard
 
 class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
 
-    private var iconId: Int = 522 // Cycling icon as standard
+    private var iconId: Int = DEFAULT_ICON_ID
     private lateinit var binding: FragmentAddeditactivitytypeBinding
 
     private lateinit var iconPack: IconPack
@@ -35,10 +36,7 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
         super.onCreate(savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (!binding.cardioPointsValue.text.isNullOrEmpty() ||
-                    !binding.caloriesValue.text.isNullOrEmpty() ||
-                    !binding.descriptionValue.text.isNullOrEmpty() ||
-                    !binding.activityType.text.isNullOrEmpty()
+                if (userChangedSomething()
                 ) {
                     DialogView(requireContext()).showYesNoDialog(
                         getString(R.string.attention),
@@ -55,6 +53,11 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
         })
     }
 
+    private fun userChangedSomething() = !binding.cardioPointsValue.text.isNullOrEmpty() ||
+            !binding.caloriesValue.text.isNullOrEmpty() ||
+            !binding.descriptionValue.text.isNullOrEmpty() ||
+            !binding.activityType.text.isNullOrEmpty()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,7 +68,6 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
         )
 
         (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
         iconPack = IconPackProvider(this.requireContext()).loadIconPack()
 
         val newActivity = arguments?.getBoolean("new")
@@ -74,7 +76,6 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
 
         val database = WorkoutRepo(requireContext())
         var activity: ActivityType
-
 
         val iconDialog = childFragmentManager.findFragmentByTag("ICON_DIALOG_TAG") as IconDialog?
             ?: IconDialog.newInstance(IconDialogSettings())
@@ -100,16 +101,29 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
             binding.icon.setColorFilter(Color.WHITE)
 
         binding.close.setOnClickListener { findNavController().popBackStack() }
+        handleSaveButton(powerActivity, idOfActivity, newActivity, database)
+        return binding.root
+    }
+
+    private fun handleSaveButton(
+        powerActivity: Boolean?,
+        idOfActivity: Long?,
+        newActivity: Boolean,
+        database: WorkoutRepo
+    ) {
+        var activity: ActivityType
         binding.save.setOnClickListener {
-            if (binding.activityType.text.isNullOrEmpty() || binding.caloriesValue.text.isNullOrEmpty() || binding.cardioPointsValue.text.isNullOrEmpty()) {
+            if (binding.activityType.text.isNullOrEmpty()
+                || binding.caloriesValue.text.isNullOrEmpty()
+                || binding.cardioPointsValue.text.isNullOrEmpty()
+            ) {
                 Toast.makeText(
                     requireContext(),
-                    "Please insert all data for the activity",
+                    R.string.pleaseInsertAllDataForTheActivity,
                     Toast.LENGTH_LONG
                 ).show()
             } else {
                 activity = ActivityType(
-                    idOfActivity,
                     binding.activityType.text.toString(),
                     iconId,
                     binding.descriptionValue.text.toString(),
@@ -117,6 +131,7 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
                     binding.caloriesValue.text.toString().toDouble(),
                     binding.cardioPointsValue.text.toString().toDouble()
                 )
+                activity.id = idOfActivity
                 if (!newActivity && idOfActivity != null) {
                     database.updateActivityType(activity)
                 } else {
@@ -126,11 +141,9 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
                 findNavController().popBackStack()
             }
         }
-        return binding.root
     }
 
-    override
-    val iconDialogIconPack: IconPack
+    override val iconDialogIconPack: IconPack
         get() = iconPack
 
     override fun onIconDialogIconsSelected(dialog: IconDialog, icons: List<Icon>) {

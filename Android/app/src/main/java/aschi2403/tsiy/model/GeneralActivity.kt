@@ -8,6 +8,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import aschi2403.tsiy.model.relations.IActivity
 
+@Suppress("LongParameterList")
 @Entity(
     tableName = "GeneralActivity",
     foreignKeys = [

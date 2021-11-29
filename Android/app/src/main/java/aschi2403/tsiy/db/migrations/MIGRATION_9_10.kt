@@ -3,6 +3,7 @@ package aschi2403.tsiy.db.migrations
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
+@Suppress("MagicNumber")
 val MIGRATION_9_10: Migration = object : Migration(9, 10) {
     override fun migrate(database: SupportSQLiteDatabase) {
         var tableName = "PowerActivity"

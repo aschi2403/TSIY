@@ -39,7 +39,9 @@
     <string name="delete_activity">Delete activity</string>
     <string name="legal_notice">Legal Notice</string>
     <string name="license">License</string>
-    <string name="license_content">Copyright 2020\-2021 Jakob Aschauer, Alexander Schönberger Licensed under the GNU General Public License v3.0</string>
+    <string name="license_content">Copyright 2020\-2021 Jakob Aschauer, Alexander Schönberger Licensed under the GNU
+        General Public License v3.0
+    </string>
     <string name="dependencies">Dependencies</string>
     <string name="MPAndroidChart">MPAndroidChart by PhilJay</string>
     <string name="description_content">Track your activities</string>
@@ -94,4 +96,7 @@
     <string name="unableToGetLocation">Unable to detect your location.</string>
     <string name="turnOnLocation">Please turn on location and start the activity again</string>
     <string name="locationIsNeedToRecordDistance">Location permission is needed to record the distance.</string>
+    <string name="pleaseInsertAllDataForTheActivity">Please insert all data for the activity</string>
+    <string name="pleaseInsertACorrectWeight">Please insert a correct weight</string>
+    <string name="zeroKmH" translatable="false">0 km/h</string>
 </resources>

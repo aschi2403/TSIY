@@ -38,7 +38,9 @@
     <string name="delete_activity">Aktivität löschen</string>
     <string name="legal_notice">Rechtshinweis</string>
     <string name="license">License</string>
-    <string name="license_content">Copyright 2020\-2021 Jakob Aschauer, Alexander Schönberger Licensed under the GNU General Public License v3.0</string>
+    <string name="license_content">Copyright 2020\-2021 Jakob Aschauer, Alexander Schönberger Licensed under the GNU
+        General Public License v3.0
+    </string>
     <string name="dependencies">Abhängigkeiten</string>
     <string name="MPAndroidChart">MPAndroidChart von PhilJay</string>
     <string name="description_content">Aktivitäten aufzeichnen</string>
@@ -88,11 +90,15 @@
     <string name="Year">Jahr</string>
     <string name="group_by">Gruppieren nach</string>
     <string name="workout">Workout</string>
-    <string name="locationMessage">"Der Standort wird benötigt, um die Entfernung einer Aktivität zu erfassen. Nochmals fragen?</string>
+    <string name="locationMessage">"Der Standort wird benötigt, um die Entfernung einer Aktivität zu erfassen. Nochmals
+        fragen?
+    </string>
     <string name="upNext">Als nächstes</string>
     <string name="unableToGetLocation">Ihr Standort konnte nicht ermittelt werden.</string>
     <string name="turnOnLocation">Bitte schalten Sie den Standort ein und starten Sie die Aktivität erneut</string>
     <string name="locationIsNeedToRecordDistance">Für die Aufzeichnung der Entfernung ist eine Standortgenehmigung
         erforderlich.
     </string>
+    <string name="pleaseInsertAllDataForTheActivity">Geben Sie bitte alle Daten für die Aktivität ein.</string>
+    <string name="pleaseInsertACorrectWeight">Bitte geben Sie ein korrektes Gewicht ein</string>
 </resources>

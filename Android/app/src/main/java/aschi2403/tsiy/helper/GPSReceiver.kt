@@ -8,8 +8,10 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
-import java.util.Locale
+import java.util.*
 import kotlin.collections.ArrayList
+
+const val M_IN_SECONDS_TO_KM_IN_HOURS = 3.6
 
 class GPSReceiver(
     private val map: MapView,
@@ -43,7 +45,8 @@ class GPSReceiver(
 
             geoPoints.add(point)
             kmValue.text = String.format(Locale.GERMAN, "%.2f km", distance)
-            speedValue.text = String.format(Locale.GERMAN, "%.2f km/h", speed * 3.6)
+            speedValue.text =
+                String.format(Locale.GERMAN, "%.2f km/h", speed * M_IN_SECONDS_TO_KM_IN_HOURS)
         }
     }
 }

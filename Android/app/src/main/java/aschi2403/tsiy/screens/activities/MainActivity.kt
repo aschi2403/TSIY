@@ -3,7 +3,9 @@ package aschi2403.tsiy.screens.activities
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.content.res.Configuration.*
+import android.content.res.Configuration.UI_MODE_NIGHT_MASK
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -18,10 +20,11 @@ import aschi2403.tsiy.BuildConfig
 import aschi2403.tsiy.R
 import aschi2403.tsiy.helper.DialogView
 import aschi2403.tsiy.helper.LanguageHelper
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.main_nav
 import org.osmdroid.config.IConfigurationProvider
 import org.osmdroid.tileprovider.util.StorageUtils.getStorage
 
+const val REQUEST_CODE = 500
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,10 +49,12 @@ class MainActivity : AppCompatActivity() {
         if (!sharedPreferences.contains("darkMode")) {
             when (applicationContext.resources.configuration.uiMode and UI_MODE_NIGHT_MASK) {
                 UI_MODE_NIGHT_NO -> {
-                    sharedPreferences.edit().putInt("darkMode", AppCompatDelegate.MODE_NIGHT_NO).apply()
+                    sharedPreferences.edit().putInt("darkMode", AppCompatDelegate.MODE_NIGHT_NO)
+                        .apply()
                 }
                 UI_MODE_NIGHT_YES -> {
-                    sharedPreferences.edit().putInt("darkMode", AppCompatDelegate.MODE_NIGHT_YES).apply()
+                    sharedPreferences.edit().putInt("darkMode", AppCompatDelegate.MODE_NIGHT_YES)
+                        .apply()
                 }
             }
         }
@@ -116,8 +121,11 @@ class MainActivity : AppCompatActivity() {
     private fun requestLocationPermission() {
         ActivityCompat.requestPermissions(
             this,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION),
-            500
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            ),
+            REQUEST_CODE
         )
     }
 }

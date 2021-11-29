@@ -8,9 +8,8 @@ import android.content.Intent
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
-import androidx.annotation.RequiresApi
 
-
+const val ID_OF_CHANNEL = 134
 class LocationForceGroundService : Service() {
     private lateinit var locationProvider: LocationProvider
 
@@ -28,7 +27,7 @@ class LocationForceGroundService : Service() {
                 NotificationChannel("TSIYLocationChannel", "TSIY Location Provider", NotificationManager.IMPORTANCE_LOW)
             getSystemService(NotificationManager::class.java).createNotificationChannel(serviceChannel)
 
-            startForeground(134, Notification.Builder(baseContext, "TSIYLocationChannel").build())
+            startForeground(ID_OF_CHANNEL, Notification.Builder(baseContext, "TSIYLocationChannel").build())
         }
     }
 

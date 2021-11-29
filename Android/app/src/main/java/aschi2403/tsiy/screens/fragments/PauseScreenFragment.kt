@@ -3,7 +3,11 @@ package aschi2403.tsiy.screens.fragments
 import android.content.Context
 import android.content.Context.VIBRATOR_SERVICE
 import android.content.SharedPreferences
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.SystemClock
+import android.os.Vibrator
+import android.os.VibrationEffect
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +17,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentPauseScreenBinding
-import kotlinx.android.synthetic.main.fragment_pause_screen.*
+import kotlinx.android.synthetic.main.fragment_pause_screen.countdown
 import java.util.concurrent.TimeUnit
+
+const val VIBRATION_SHORT = 800L
 
 class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
 
@@ -31,11 +37,11 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
         )
 
         val upNext = arguments?.getString("upNext")
-        if(upNext.isNullOrEmpty()){
-            binding.upNextLayout.visibility=View.INVISIBLE
-        }else{
-            binding.upNextLayout.visibility=View.VISIBLE
-            binding.upNext.text=upNext
+        if (upNext.isNullOrEmpty()) {
+            binding.upNextLayout.visibility = View.INVISIBLE
+        } else {
+            binding.upNextLayout.visibility = View.VISIBLE
+            binding.upNext.text = upNext
         }
 
         val sharedPreferences: SharedPreferences =
@@ -44,7 +50,12 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
         binding.countdown.isCountDown = true
         val pauseTime =
             if (sharedPreferences.getBoolean("timeUnitSeconds", true)) {
-                TimeUnit.SECONDS.toMillis(sharedPreferences.getLong("pauseTime", 20))
+                TimeUnit.SECONDS.toMillis(
+                    sharedPreferences.getLong(
+                        "pauseTime",
+                        DEFAULT_PAUSE_IN_SECONDS
+                    )
+                )
             } else {
                 TimeUnit.MINUTES.toMillis(sharedPreferences.getLong("pauseTime", 1))
             }
@@ -57,7 +68,7 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
         binding.skip.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.plusMin.setOnClickListener { binding.countdown.base += 60000 }
+        binding.plusMin.setOnClickListener { binding.countdown.base += TimeUnit.MINUTES.toMillis(1) }
         binding.pause.setOnClickListener {
             if (timerIsCounting) {
                 binding.pause.text = getString(R.string.resume)
@@ -104,15 +115,15 @@ class PauseScreenFragment : Fragment(), Chronometer.OnChronometerTickListener {
     }
 
     private fun vibrate() {
-        if (Build.VERSION.SDK_INT >= 26) { // > Android 8.0 Oreo
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // > Android 8.0 Oreo
             (context?.getSystemService(VIBRATOR_SERVICE) as Vibrator).vibrate(
                 VibrationEffect.createOneShot(
-                    800,
+                    VIBRATION_SHORT,
                     VibrationEffect.DEFAULT_AMPLITUDE
                 )
             )
         } else {
-            (context?.getSystemService(VIBRATOR_SERVICE) as Vibrator).vibrate(800)
+            (context?.getSystemService(VIBRATOR_SERVICE) as Vibrator).vibrate(VIBRATION_SHORT)
         }
     }
 

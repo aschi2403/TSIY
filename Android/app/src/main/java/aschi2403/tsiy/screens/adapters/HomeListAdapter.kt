@@ -17,13 +17,11 @@ import aschi2403.tsiy.model.PowerActivity
 import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.fragments.HomeFragmentDirections
-import aschi2403.tsiy.screens.fragments.HomeFragmentDirections.Companion.actionHomeFragmentToFragmentViewFinishedActivity
 import aschi2403.tsiy.screens.fragments.ViewFinishedWorkoutFragmentDirections
 import com.google.android.material.card.MaterialCardView
 import com.maltaisn.icondialog.pack.IconPack
 import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.Date
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class HomeListAdapter(
@@ -59,7 +57,7 @@ class HomeListAdapter(
         if (calledFromHomeFragment) {
             holder.cv.setOnClickListener {
                 Navigation.findNavController(it).navigate(
-                    actionHomeFragmentToFragmentViewFinishedActivity(
+                    HomeFragmentDirections.actionHomeFragmentToFragmentViewFinishedActivity(
                         type = data[position] is PowerActivity,
                         id = data[position].id!!
                     )
@@ -67,8 +65,9 @@ class HomeListAdapter(
             }
         } else {
             holder.cv.setOnClickListener {
+                val direction = ViewFinishedWorkoutFragmentDirections
                 Navigation.findNavController(it).navigate(
-                    ViewFinishedWorkoutFragmentDirections.actionViewFinishedWorkoutFragmentToFragmentViewFinishedActivity(
+                    direction.actionViewFinishedWorkoutFragmentToFragmentViewFinishedActivity(
                         type = data[position] is PowerActivity,
                         id = data[position].id!!
                     )

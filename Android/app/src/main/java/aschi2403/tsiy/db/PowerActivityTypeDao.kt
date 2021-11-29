@@ -1,7 +1,8 @@
 package aschi2403.tsiy.db
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Query
 import aschi2403.tsiy.model.ActivityType
 
 @Dao

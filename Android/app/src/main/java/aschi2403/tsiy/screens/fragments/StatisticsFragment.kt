@@ -39,7 +39,7 @@ class StatisticsFragment : Fragment() {
         )
 
         database = WorkoutRepo(this.requireContext())
-        changeChart(0, getString(R.string.Day))
+        changeChart(getString(R.string.Day))
 
         binding.workoutsChart.xAxis.valueFormatter = LineChartDateFormatter()
         binding.workoutsChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
@@ -64,7 +64,10 @@ class StatisticsFragment : Fragment() {
         binding.cardioPointsValue.text = activities.sumByDouble { a -> a.cardioPoints }.toString()
 
         val items = arrayOf(
-            getString(R.string.Day), getString(R.string.Week), getString(R.string.Month), getString(R.string.Year)
+            getString(R.string.Day),
+            getString(R.string.Week),
+            getString(R.string.Month),
+            getString(R.string.Year)
         )
 
         val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
@@ -74,11 +77,13 @@ class StatisticsFragment : Fragment() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.groupBy.adapter = adapter
         binding.groupBy.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                // noting to do
+            }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
                 binding.groupByLabel.text = p0?.selectedItem.toString()
-                changeChart(position, p0?.selectedItem.toString())
+                changeChart(p0?.selectedItem.toString())
                 changeCardioPoints(position)
             }
         }
@@ -86,43 +91,41 @@ class StatisticsFragment : Fragment() {
         return binding.root
     }
 
-    //TODO: implement
-    fun changeCardioPoints(position: Int) {}
+    fun changeCardioPoints(position: Int) {
+        //TODO: implement
+    }
 
-    fun changeChart(position: Int, groupBy: String) {
+    fun changeChart(groupBy: String) {
         workoutList.clear()
-        when (position) {
-            // Day
-            0 -> groupBy(
+        when (groupBy) {
+            getString(R.string.Day) -> groupBy(
                 SimpleDateFormat(
                     "dd/MM/yyyy",
-                    Locale.GERMAN
+                    Locale.getDefault()
                 )
             )
-            // Week
-            1
+            getString(R.string.Week)
             -> groupBy(
                 SimpleDateFormat(
                     "F/MM/yyyy",
-                    Locale.GERMAN
+                    Locale.getDefault()
                 )
             )
-            // Month
-            2 -> groupBy(
+            getString(R.string.Month) -> groupBy(
                 SimpleDateFormat(
                     "MM/yyyy",
-                    Locale.GERMAN
+                    Locale.getDefault()
                 )
             )
-            // Year
-            3 -> groupBy(
+            getString(R.string.Year) -> groupBy(
                 SimpleDateFormat(
                     "yyyy",
-                    Locale.GERMAN
+                    Locale.getDefault()
                 )
             )
         }
-        val weightLine = LineDataSet(workoutList, getString(R.string.activities) + "/" + groupBy)
+        val weightLine =
+            LineDataSet(workoutList, "${getString(R.string.activities)} / $groupBy")
         weightLine.color = Color.RED
         weightLine.valueTextColor = Color.BLACK
 
