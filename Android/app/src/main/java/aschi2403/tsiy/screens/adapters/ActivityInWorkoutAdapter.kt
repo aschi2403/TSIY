@@ -11,13 +11,14 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
+import aschi2403.tsiy.model.WorkoutEntry
 import aschi2403.tsiy.model.relations.IActivityType
 import aschi2403.tsiy.repository.WorkoutRepo
 import com.maltaisn.icondialog.pack.IconPack
 
 
 class ActivityInWorkoutAdapter(
-    private var data: MutableList<IActivityType>,
+    private var data: MutableList<Pair<IActivityType, WorkoutEntry>>,
     val context: Context,
     private val iconPack: IconPack
 ) :
@@ -31,7 +32,9 @@ class ActivityInWorkoutAdapter(
         val moveUp: ImageButton = itemView.findViewById(R.id.moveUp)
         val moveDown: ImageButton = itemView.findViewById(R.id.moveDown)
         val delete: ImageButton = itemView.findViewById(R.id.deleteItem)
-
+        val repetitionsOfWorkoutEntry: TextView = itemView.findViewById(R.id.number_of_repetitions)
+        val increase: ImageButton = itemView.findViewById(R.id.increase_number_of_repetitions)
+        val decrease: ImageButton = itemView.findViewById(R.id.decrease_number_of_repetitions)
     }
 
     override fun getItemCount(): Int {
@@ -46,8 +49,11 @@ class ActivityInWorkoutAdapter(
     }
 
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
-        holder.nameOfActivity.text = data[position].name
-        holder.imageOfActivity.setImageDrawable(iconPack.getIcon(data[position].icon)?.drawable)
+        holder.nameOfActivity.text = data[position].first.name
+
+        holder.repetitionsOfWorkoutEntry.text = data[position].second.repetitions.toString()
+
+        holder.imageOfActivity.setImageDrawable(iconPack.getIcon(data[position].first.icon)?.drawable)
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
             holder.imageOfActivity.setColorFilter(Color.WHITE)
 
@@ -70,6 +76,19 @@ class ActivityInWorkoutAdapter(
 
             }
         }
+
+        holder.increase.setOnClickListener {
+            data[position].second.repetitions++
+            notifyDataSetChanged()
+        }
+
+        holder.decrease.setOnClickListener {
+            if (data[position].second.repetitions >= 2) {
+                data[position].second.repetitions--
+                notifyDataSetChanged()
+            }
+        }
+
         holder.delete.setOnClickListener {
             data.removeAt(position)
             notifyDataSetChanged()

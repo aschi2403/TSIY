@@ -28,7 +28,7 @@ class CreateEditWorkoutFragment : Fragment() {
     lateinit var database: WorkoutRepo
 
     private lateinit var adapter: ActivityInWorkoutAdapter
-    private lateinit var selectedActivities: MutableList<IActivityType>
+    private lateinit var selectedActivities: MutableList<Pair<IActivityType, WorkoutEntry>>
 
     private lateinit var allActivities: List<IActivityType>
 
@@ -71,7 +71,7 @@ class CreateEditWorkoutFragment : Fragment() {
                     allActivities.map { iActivityType -> iActivityType.name },
                     { _, _ ->
                         if (allActivities.isNotEmpty()) {
-                            selectedActivities.add(allActivities[checkedItem])
+                            selectedActivities.add(Pair(allActivities[checkedItem], WorkoutEntry(workoutPlanId = 0, iActivityTypeId = 0, position = 0, isPowerActivity = false)))
                             adapter.notifyDataSetChanged()
                         }
                     }) { _, _ -> }
@@ -93,9 +93,10 @@ class CreateEditWorkoutFragment : Fragment() {
                             database.insertWorkoutEntry(
                                 WorkoutEntry(
                                     workoutPlanId = id,
-                                    isPowerActivity = selectedActivity.isPowerActivity,
-                                    iActivityTypeId = selectedActivity.id!!,
-                                    position = index
+                                    isPowerActivity = selectedActivity.first.isPowerActivity,
+                                    iActivityTypeId = selectedActivity.first.id!!,
+                                    position = index,
+                                    repetitions = selectedActivity.second.repetitions
                                 )
                             )
                         }
@@ -108,9 +109,10 @@ class CreateEditWorkoutFragment : Fragment() {
                         database.insertWorkoutEntry(
                             WorkoutEntry(
                                 workoutPlanId = workoutPlan.id!!,
-                                iActivityTypeId = selectedActivity.id!!,
+                                iActivityTypeId = selectedActivity.first.id!!,
                                 position = index,
-                                isPowerActivity = selectedActivity.isPowerActivity
+                                isPowerActivity = selectedActivity.first.isPowerActivity,
+                                repetitions = selectedActivity.second.repetitions
                             )
                         )
                     }
@@ -138,14 +140,15 @@ class CreateEditWorkoutFragment : Fragment() {
             database.workoutEntriesByWorkoutPlanId(id).sortedBy { it.position }
                 .map { workoutEntry ->
                     if (workoutEntry.isPowerActivity) {
-                        database.powerActivityTypeById(workoutEntry.iActivityTypeId)
+                        Pair(database.powerActivityTypeById(workoutEntry.iActivityTypeId), workoutEntry)
                     } else {
-                        database.activityTypeById(workoutEntry.iActivityTypeId)
+                        Pair(database.activityTypeById(workoutEntry.iActivityTypeId), workoutEntry)
                     }
                 }.toMutableList()
         } else {
             mutableListOf()
         }
+
         adapter = ActivityInWorkoutAdapter(
             selectedActivities,
             this.requireContext(),
@@ -158,12 +161,15 @@ class CreateEditWorkoutFragment : Fragment() {
         return binding.root
     }
 
-    private fun isEqual(first: MutableList<IActivityType>, second: List<WorkoutEntry>): Boolean {
+    private fun isEqual(first: MutableList<Pair<IActivityType, WorkoutEntry>>, second: List<WorkoutEntry>): Boolean {
         if (first.size != second.size) {
             return false
         }
         first.forEachIndexed { index, itemOfFirst ->
-            if (itemOfFirst.id != second[index].iActivityTypeId) {
+            if (itemOfFirst.first.id != second[index].iActivityTypeId) {
+                return false
+            }
+            if(itemOfFirst.second.repetitions != second[index].repetitions) {
                 return false
             }
         }

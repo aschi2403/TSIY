@@ -29,6 +29,29 @@
                 android:layout_weight="1"
                 android:textSize="24sp" />
 
+            <ImageButton
+                android:id="@+id/increase_number_of_repetitions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00FFFFFF"
+                android:contentDescription="Increase number of repetitions"
+                android:src="@drawable/ic_baseline_add_24"/>
+
+            <ImageButton
+                android:id="@+id/decrease_number_of_repetitions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00FFFFFF"
+                android:contentDescription="Decrease number of repetitions"
+                android:src="@drawable/ic_baseline_remove_24"/>
+
+            <TextView
+                android:id="@+id/number_of_repetitions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"/>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
