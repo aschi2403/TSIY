@@ -35,7 +35,7 @@ class WorkoutScreenFragment : Fragment() {
     private var isPowerActivity: Boolean = true
     private lateinit var database: WorkoutRepo
     private var idOfActivity: Long = -1
-    private var set = 0
+    private var workoutEntryIndex = 0
     private lateinit var binding: FragmentWorkoutScreenBinding
     private lateinit var dialogView: DialogView
 
@@ -113,42 +113,42 @@ class WorkoutScreenFragment : Fragment() {
         val activities =
             database.workoutEntriesByWorkoutPlanId(workoutPlanId).toMutableList()
 
-            closeButton(activities[set].iActivityTypeId, activities[set].isPowerActivity)
+            closeButton(activities[workoutEntryIndex].iActivityTypeId, activities[workoutEntryIndex].isPowerActivity)
 
-        val upNext = if (set + 1 < activities.size) {
+        val upNext = if (workoutEntryIndex + 1 < activities.size) {
             database.allActivityTypeById(
-                activities[set + 1].iActivityTypeId
+                activities[workoutEntryIndex + 1].iActivityTypeId
             ).name
         } else {
             null
         }
 
-            if (!activities[set].isPowerActivity) {
+            if (!activities[workoutEntryIndex].isPowerActivity) {
                 showAndConfigureMapForNormalActivity()
             }
 
             createActivityInDb(
-                activities[set].isPowerActivity,
-                activities[set].iActivityTypeId,
+                activities[workoutEntryIndex].isPowerActivity,
+                activities[workoutEntryIndex].iActivityTypeId,
                 isWorkout = true,
                 upNext
             )
 
         binding.activity.text =
-            database.allActivityTypeById(activities[set].iActivityTypeId).name
+            database.allActivityTypeById(activities[workoutEntryIndex].iActivityTypeId).name
 
-        if (set + 1 == activities.size) {
+        if (workoutEntryIndex + 1 == activities.size) {
             binding.next.visibility = View.INVISIBLE
         }
 
-        if (!activities[set].isPowerActivity && set + 1 < activities.size) {
+        if (!activities[workoutEntryIndex].isPowerActivity && workoutEntryIndex + 1 < activities.size) {
             binding.next.visibility = View.VISIBLE
             binding.next.setOnClickListener {
 
                 // finish activity
                 saveInDatabase(
-                    activities[set].iActivityTypeId,
-                    activities[set].isPowerActivity,
+                    activities[workoutEntryIndex].iActivityTypeId,
+                    activities[workoutEntryIndex].isPowerActivity,
                     newWorkoutIdForDatabase = newWorkoutIdForDatabase,
                     workoutPlanId = workoutPlanId
                 )
@@ -156,7 +156,7 @@ class WorkoutScreenFragment : Fragment() {
                 idOfActivity = -1
                 viewModel.values.putLong("stopTime", -1)
 
-                set++
+                workoutEntryIndex++
 
                 findNavController().navigate(
                     WorkoutScreenFragmentDirections.actionWorkoutScreenToPauseScreen(
@@ -262,7 +262,7 @@ class WorkoutScreenFragment : Fragment() {
                     viewModel.values.putLong("stopTime", -1)
                 }
 
-                set++
+                workoutEntryIndex++
             }
         }
     }
@@ -305,7 +305,7 @@ class WorkoutScreenFragment : Fragment() {
                     duration = SystemClock.elapsedRealtime() - binding.timer.base,
                     calories = 0.0,
                     cardioPoints = 0.0,
-                    sets = set,
+                    sets = workoutEntryIndex,
                     endDate = System.currentTimeMillis(),
                     workoutId = newWorkoutIdForDatabase,
                     workoutPlanId = workoutPlanId
