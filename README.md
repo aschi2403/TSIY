@@ -18,3 +18,4 @@ Licensed under the [GNU General Public License v3.0](https://github.com/aschi240
 - [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
 - [Icon picker dialog](https://github.com/maltaisn/icondialoglib)
 - [osmdroid](https://github.com/osmdroid/osmdroid)
+- [Apache 2 License](https://www.apache.org/licenses/LICENSE-2.0.html)
