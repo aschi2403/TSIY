@@ -8,12 +8,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import aschi2403.tsiy.screens.adapters.ActivitiesViewChooseAdapter
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentChooseActivityTypeBinding
 import aschi2403.tsiy.helper.IconPackProvider
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.activities.MainActivity
+import aschi2403.tsiy.screens.adapters.ActivitiesViewChooseAdapter
 
 class ChooseActivityTypeFragment : Fragment() {
 
@@ -39,7 +39,7 @@ class ChooseActivityTypeFragment : Fragment() {
 
         val generalActivity = arguments?.getBoolean("generalActivity", false)!!
         val list = if (generalActivity) {
-            database.allActivityTypes
+            database.allGeneralActivityTypes
         } else {
             database.allPowerActivityTypes
         }

@@ -1,14 +1,33 @@
 package aschi2403.tsiy.repository
 
 import android.content.Context
-import aschi2403.tsiy.db.*
-import aschi2403.tsiy.model.*
+import aschi2403.tsiy.db.ActivityTypeDao
+import aschi2403.tsiy.db.PowerActivityDao
+import aschi2403.tsiy.db.PowerActivityTypeDao
+import aschi2403.tsiy.db.WorkoutDatabase
+import aschi2403.tsiy.db.GeneralActivityDao
+import aschi2403.tsiy.db.WeightEntryDao
+import aschi2403.tsiy.db.SetEntryDao
+import aschi2403.tsiy.db.WorkoutEntryDao
+import aschi2403.tsiy.db.WorkoutPlanDao
+import aschi2403.tsiy.db.AllActivityTypeDao
+import aschi2403.tsiy.db.GPSPointsDao
+import aschi2403.tsiy.model.PowerActivity
+import aschi2403.tsiy.model.ActivityType
+import aschi2403.tsiy.model.GeneralActivity
+import aschi2403.tsiy.model.GPSPoint
+import aschi2403.tsiy.model.SetEntry
+import aschi2403.tsiy.model.WeightEntry
+import aschi2403.tsiy.model.WorkoutEntry
+import aschi2403.tsiy.model.WorkoutPlan
 
+@Suppress("TooManyFunctions")
 class WorkoutRepo(context: Context) {
     private var db = WorkoutDatabase.getInstance(context)
     private var powerActivityDao: PowerActivityDao = db.powerActivityDao()
     private var powerActivityTypeDao: PowerActivityTypeDao = db.powerActivityTypeDao()
     private var activityTypeDao: ActivityTypeDao = db.activityTypeDao()
+    private var allActivityTypeDao: AllActivityTypeDao = db.allActivityTypeDao()
     private var generalActivityDao: GeneralActivityDao = db.generalActivityDao()
     private var weightEntryDao: WeightEntryDao = db.weightEntryDao()
     private var setEntryDao: SetEntryDao = db.setEntryDao()
@@ -75,6 +94,16 @@ class WorkoutRepo(context: Context) {
     fun deleteGeneralActivity(generalActivity: GeneralActivity) {
         generalActivityDao.deleteGeneralActivity(generalActivity)
     }
+
+    // All ActivityType
+
+    val allActivityTypes: List<ActivityType>
+        get() {
+            return allActivityTypeDao.loadAll()
+        }
+
+    fun allActivityTypeById(id: Long) = allActivityTypeDao.loadActivityType(id)
+
     // PowerActivityType
 
     val allPowerActivityTypes: List<ActivityType>
@@ -101,7 +130,7 @@ class WorkoutRepo(context: Context) {
     }
 
 
-    val allActivityTypes: List<ActivityType>
+    val allGeneralActivityTypes: List<ActivityType>
         get() {
             return activityTypeDao.loadAll()
         }

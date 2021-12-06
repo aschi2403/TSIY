@@ -25,7 +25,7 @@ class ChooseWorkoutPlanFragment : Fragment() {
 
         (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        val database = context?.let { WorkoutRepo(it) }!!
+        val database = WorkoutRepo(requireContext())
 
         val rv = binding.listActivitiesRV
         rv.setHasFixedSize(true)

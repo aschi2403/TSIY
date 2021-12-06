@@ -34,7 +34,6 @@ class ChoosePowerActivityTypeFragment : Fragment() {
 
         val upNext = arguments?.getString("upNext")
 
-
         val finished = arguments?.getBoolean("finished")!!
 
         if (finished) {
@@ -51,9 +50,13 @@ class ChoosePowerActivityTypeFragment : Fragment() {
             } else {
                 saveDataInDatabase(idOfPowerActivity)
                 if (finished) {
-                    activity?.finish()
+                    requireActivity().finish()
                 } else {
-                    findNavController().navigate(ChoosePowerActivityTypeFragmentDirections.actionChoosePowerActivityTypeToPauseScreen(upNext = upNext))
+                    findNavController().navigate(
+                        ChoosePowerActivityTypeFragmentDirections.actionChoosePowerActivityTypeToPauseScreen(
+                            upNext = upNext
+                        )
+                    )
                 }
             }
         }
@@ -90,10 +93,10 @@ class ChoosePowerActivityTypeFragment : Fragment() {
 
     private fun preventNegativeValues(number: Number): Any {
         if (number.toDouble() < 0) {
-            if (number is Double) {
-                return 0.0
+            return when (number) {
+                is Double -> 0.0
+                else -> 0
             }
-            return 0
         }
         return number
     }

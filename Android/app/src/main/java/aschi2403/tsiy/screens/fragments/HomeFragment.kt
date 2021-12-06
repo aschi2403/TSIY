@@ -17,10 +17,12 @@ import aschi2403.tsiy.databinding.FragmentHomeBinding
 import aschi2403.tsiy.helper.DataMerger
 import aschi2403.tsiy.helper.DialogView
 import aschi2403.tsiy.helper.IconPackProvider
+import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.adapters.HomeListAdapter
 import aschi2403.tsiy.screens.models.HomeViewModel
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.filterButtonAppBar
+
 
 class HomeFragment : Fragment() {
 
@@ -31,7 +33,11 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private lateinit var dataMerger: DataMerger
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         binding = DataBindingUtil.inflate(
@@ -40,6 +46,36 @@ class HomeFragment : Fragment() {
 
         (activity as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(false)
 
+        handleFilter()
+
+        (activity as AppCompatActivity?)!!.filterButtonAppBar.visibility = View.VISIBLE
+
+        binding.homeViewModel = viewModel
+        binding.lifecycleOwner = this
+
+        handleFloatingButtons()
+
+        database = WorkoutRepo(this.requireContext())
+
+        dataMerger = DataMerger(database)
+
+        val rv = binding.listOfActivities
+        rv.setHasFixedSize(true)
+        val llm = LinearLayoutManager(this.context)
+
+        rv.layoutManager = llm
+        homeListAdapter = HomeListAdapter(
+            dataMerger.getData(checkedItem, getString(R.string.workout)),
+            this.requireContext(),
+            IconPackProvider(this.requireContext()).loadIconPack(),
+            checkedItem,
+            true
+        )
+        rv.adapter = homeListAdapter
+        return binding.root
+    }
+
+    private fun handleFilter() {
         (activity as AppCompatActivity?)!!.filterButtonAppBar.setOnClickListener {
             with(DialogView(this.requireContext())) {
                 showItemCheckDialog(R.string.filterDoneActivities, listOf(
@@ -47,18 +83,20 @@ class HomeFragment : Fragment() {
                     requireContext().getString(R.string.generalActivity),
                     requireContext().getString(R.string.powerActivity)
                 ), { _, _ ->
-                    homeListAdapter.setData(dataMerger.getData(checkedItem, getString(R.string.workout)))
+                    homeListAdapter.setData(
+                        dataMerger.getData(
+                            checkedItem,
+                            getString(R.string.workout)
+                        )
+                    )
                     homeListAdapter.notifyDataSetChanged()
                     this.checkedItem = checkedItem
                 }, { _, _ -> })
             }
         }
+    }
 
-        (activity as AppCompatActivity?)!!.filterButtonAppBar.visibility = View.VISIBLE
-
-        binding.homeViewModel = viewModel
-        binding.lifecycleOwner = this
-
+    private fun handleFloatingButtons() {
         binding.startNewActivity.setOnClickListener {
             if (binding.startGeneralActivity.isVisible) {
                 closeFloatingButtons()
@@ -84,31 +122,10 @@ class HomeFragment : Fragment() {
         binding.startWorkout.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToChooseWorkoutPlanFragment())
         }
-
-        database = WorkoutRepo(this.requireContext())
-
-        dataMerger = DataMerger(database)
-
-        val rv = binding.listOfActivities
-        rv.setHasFixedSize(true)
-        val llm = LinearLayoutManager(this.context)
-
-        rv.layoutManager = llm
-        homeListAdapter = HomeListAdapter(
-            dataMerger.getData(checkedItem, getString(R.string.workout)),
-            this.requireContext(),
-            IconPackProvider(this.requireContext()).loadIconPack(),
-            checkedItem,
-            true
-        )
-        rv.adapter = homeListAdapter
-        return binding.root
     }
 
     private fun showFloatingButtons() {
-        binding.startGeneralActivity.visibility = View.VISIBLE
-        binding.startPowerActivity.visibility = View.VISIBLE
-        binding.startWorkout.visibility = View.VISIBLE
+        changeVisibilityOfFloatingButtons(View.VISIBLE)
         binding.startNewActivity.setImageDrawable(
             ContextCompat.getDrawable(
                 this.requireContext(),
@@ -118,15 +135,37 @@ class HomeFragment : Fragment() {
     }
 
     private fun closeFloatingButtons() {
-        binding.startGeneralActivity.visibility = View.GONE
-        binding.startPowerActivity.visibility = View.GONE
-        binding.startWorkout.visibility = View.GONE
+        changeVisibilityOfFloatingButtons(View.GONE)
         binding.startNewActivity.setImageDrawable(
             ContextCompat.getDrawable(
                 this.requireContext(),
                 R.drawable.ic_baseline_add_24
             )
         )
+    }
+
+    private fun getData(): MutableList<IActivity> {
+        return when (checkedItem) {
+            0 -> {
+                val mergedList =
+                    database.allPowerActivities.plus(database.allGeneralActivities)
+                mergedList.sortedByDescending { it.startDate }.toMutableList()
+            }
+            1 -> {
+                database.allGeneralActivities.sortedByDescending { it.startDate }
+                    .toMutableList()
+            }
+            else -> {
+                database.allPowerActivities.sortedByDescending { it.startDate }
+                    .toMutableList()
+            }
+        }
+    }
+
+    private fun changeVisibilityOfFloatingButtons(visibility: Int) {
+        binding.startGeneralActivity.visibility = visibility
+        binding.startPowerActivity.visibility = visibility
+        binding.startWorkout.visibility = visibility
     }
 
     override fun onResume() {

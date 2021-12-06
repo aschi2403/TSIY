@@ -97,11 +97,11 @@ class ListActivitiesFragment : Fragment() {
         return binding.root
     }
 
-    private fun getData(type: Boolean): List<ActivityType> {
-        if (type) {
+    private fun getData(isPowerActivity: Boolean): List<ActivityType> {
+        if (isPowerActivity) {
             return database.allPowerActivityTypes
         }
-        return database.allActivityTypes
+        return database.allGeneralActivityTypes
     }
 
     override fun onResume() {

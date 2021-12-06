@@ -22,6 +22,7 @@ import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.activities.MainActivity
 import aschi2403.tsiy.screens.adapters.ActivityInWorkoutAdapter
 
+
 class CreateEditWorkoutFragment : Fragment() {
     private lateinit var binding: FragmentCreateEditWorkoutBinding
 
@@ -33,6 +34,7 @@ class CreateEditWorkoutFragment : Fragment() {
     private lateinit var allActivities: List<IActivityType>
 
     private lateinit var dialogView: DialogView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +54,10 @@ class CreateEditWorkoutFragment : Fragment() {
         })
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         dialogView = DialogView(requireContext())
         val id = requireArguments().getLong("id", -1)
@@ -63,8 +68,110 @@ class CreateEditWorkoutFragment : Fragment() {
 
         database = WorkoutRepo(this.requireContext())
 
-        allActivities = database.allActivityTypes.plus(database.allPowerActivityTypes)
+        allActivities = database.allActivityTypes
 
+        configureAddButton()
+
+        binding.close.setOnClickListener { findNavController().popBackStack() }
+
+        configureSaveButton(id)
+
+        if (id >= 0) {
+            val workoutPlan = database.workoutPlanById(id)
+            binding.nameValue.setText(workoutPlan.name)
+        }
+
+        val listView = binding.listOfActivities
+        listView.setHasFixedSize(true)
+        val llm = LinearLayoutManager(context)
+        listView.layoutManager = llm
+
+        selectedActivities = getSelectedActivities(id)
+        adapter = ActivityInWorkoutAdapter(
+            selectedActivities,
+            this.requireContext(),
+            IconPackProvider(this.requireContext()).loadIconPack()
+        )
+
+        listView.adapter = adapter
+
+        return binding.root
+    }
+
+    private fun getSelectedActivities(id: Long): MutableList<IActivityType> =
+        if (id >= 0) {
+            database.workoutEntriesByWorkoutPlanId(id).sortedBy { it.position }
+                .map { workoutEntry ->
+                    if (workoutEntry.isPowerActivity) {
+                        database.powerActivityTypeById(workoutEntry.iActivityTypeId)
+                    } else {
+                        database.activityTypeById(workoutEntry.iActivityTypeId)
+                    }
+                }.toMutableList()
+        } else {
+            mutableListOf()
+        }
+
+    private fun configureSaveButton(id: Long) {
+        binding.save.setOnClickListener {
+            if (binding.nameValue.text!!.isNotBlank() && selectedActivities.isNotEmpty()) {
+                if (id >= 0) {
+                    val workoutEntries =
+                        database.allWorkoutEntry.filter { a -> a.workoutPlanId == id }
+                    if (!isEqual(selectedActivities, workoutEntries)) {
+                        workoutEntries.forEach {
+                            database.deleteWorkoutEntry(it)
+                        }
+                        selectedActivities.forEachIndexed { index, selectedActivity ->
+                            insertNewWorkoutEntry(
+                                id,
+                                selectedActivity.id!!,
+                                index,
+                                selectedActivity.isPowerActivity
+                            )
+                        }
+                    }
+                } else {
+                    val workoutPlan = WorkoutPlan(name = binding.nameValue.text.toString())
+                    database.insertWorkoutPlan(workoutPlan)
+
+                    selectedActivities.forEachIndexed { index, selectedActivity ->
+                        insertNewWorkoutEntry(
+                            workoutPlan.id!!,
+                            selectedActivity.id!!,
+                            index,
+                            selectedActivity.isPowerActivity
+                        )
+                    }
+                }
+                findNavController().popBackStack()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    R.string.pleaseInsertAllDataForTheActivity,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    private fun insertNewWorkoutEntry(
+        id: Long,
+        activityTypeId: Long,
+        index: Int,
+        isPowerActivity: Boolean
+    ) {
+        database.insertWorkoutEntry(
+            WorkoutEntry(
+                workoutPlanId = id,
+                iActivityTypeId = activityTypeId,
+                position = index,
+                isPowerActivity = isPowerActivity
+            )
+        )
+    }
+
+    private fun configureAddButton() {
         binding.add.setOnClickListener {
             with(dialogView) {
                 showItemCheckDialog(R.string.chooseWorkout,
@@ -77,87 +184,9 @@ class CreateEditWorkoutFragment : Fragment() {
                     }) { _, _ -> }
             }
         }
-
-        binding.close.setOnClickListener { findNavController().popBackStack() }
-
-        binding.save.setOnClickListener {
-            if (binding.nameValue.text!!.isNotBlank() && selectedActivities.isNotEmpty()) {
-                if (id >= 0) {
-                    val workoutEntries =
-                        database.allWorkoutEntry.filter { a -> a.workoutPlanId == id }
-                    if (!isEqual(selectedActivities, workoutEntries)) {
-                        workoutEntries.forEach {
-                            database.deleteWorkoutEntry(it)
-                        }
-                        selectedActivities.forEachIndexed { index, selectedActivity ->
-                            database.insertWorkoutEntry(
-                                WorkoutEntry(
-                                    workoutPlanId = id,
-                                    isPowerActivity = selectedActivity.isPowerActivity,
-                                    iActivityTypeId = selectedActivity.id!!,
-                                    position = index
-                                )
-                            )
-                        }
-                    }
-                } else {
-                    val workoutPlan = WorkoutPlan(name = binding.nameValue.text.toString())
-                    database.insertWorkoutPlan(workoutPlan)
-
-                    selectedActivities.forEachIndexed { index, selectedActivity ->
-                        database.insertWorkoutEntry(
-                            WorkoutEntry(
-                                workoutPlanId = workoutPlan.id!!,
-                                iActivityTypeId = selectedActivity.id!!,
-                                position = index,
-                                isPowerActivity = selectedActivity.isPowerActivity
-                            )
-                        )
-                    }
-                }
-                findNavController().popBackStack()
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Please insert all data for the activity",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        }
-        if (id >= 0) {
-            val workoutPlan = database.workoutPlanById(id)
-            binding.nameValue.setText(workoutPlan.name)
-        }
-
-        val listView = binding.listOfActivities
-        listView.setHasFixedSize(true)
-        val llm = LinearLayoutManager(context)
-        listView.layoutManager = llm
-
-        selectedActivities = if (id >= 0) {
-            database.workoutEntriesByWorkoutPlanId(id).sortedBy { it.position }
-                .map { workoutEntry ->
-                    if (workoutEntry.isPowerActivity) {
-                        database.powerActivityTypeById(workoutEntry.iActivityTypeId)
-                    } else {
-                        database.activityTypeById(workoutEntry.iActivityTypeId)
-                    }
-                }.toMutableList()
-        } else {
-            mutableListOf()
-        }
-        adapter = ActivityInWorkoutAdapter(
-            selectedActivities,
-            this.requireContext(),
-            IconPackProvider(this.requireContext()).loadIconPack()
-
-        )
-
-        listView.adapter = adapter
-
-        return binding.root
     }
 
+    @Suppress("ReturnCount")
     private fun isEqual(first: MutableList<IActivityType>, second: List<WorkoutEntry>): Boolean {
         if (first.size != second.size) {
             return false

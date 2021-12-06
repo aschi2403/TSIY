@@ -15,9 +15,8 @@ import aschi2403.tsiy.databinding.FragmentSettingsBinding
 import aschi2403.tsiy.helper.LanguageHelper
 import aschi2403.tsiy.screens.activities.MainActivity
 
-/**
- * A simple [Fragment] subclass.
- */
+const val DEFAULT_PAUSE_IN_SECONDS = 20L
+
 class SettingsFragment : Fragment() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var binding: FragmentSettingsBinding
@@ -31,7 +30,6 @@ class SettingsFragment : Fragment() {
         )
 
         (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-
 
         binding.manageActivities.setOnClickListener { manageActivities() }
         binding.managePowerActivities.setOnClickListener { managePowerActivities() }
@@ -60,7 +58,7 @@ class SettingsFragment : Fragment() {
             editor.apply()
         }
 
-        binding.pauseTimeValue.setText(sharedPreferences.getLong("pauseTime", 20).toString())
+        binding.pauseTimeValue.setText(sharedPreferences.getLong("pauseTime", DEFAULT_PAUSE_IN_SECONDS).toString())
         binding.timeUnit.setSelection(
             if (sharedPreferences.getBoolean("timeUnitSeconds", true))
                 1
@@ -125,5 +123,4 @@ class SettingsFragment : Fragment() {
         editor.apply()
         editor.commit()
     }
-
 }

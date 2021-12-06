@@ -11,14 +11,14 @@ import androidx.room.Query
 import aschi2403.tsiy.model.ActivityType
 
 @Dao
-interface ActivityTypeDao {
-    @Query("SELECT * FROM ActivityType WHERE isPowerActivity = 0")
+interface AllActivityTypeDao {
+    @Query("SELECT * FROM ActivityType")
     fun loadAll(): List<ActivityType>
 
-    @Query("SELECT * FROM ActivityType WHERE id=:activityTypeId AND isPowerActivity = 0")
+    @Query("SELECT * FROM ActivityType WHERE id=:activityTypeId")
     fun loadActivityType(activityTypeId: Long): ActivityType
 
-    @Query("SELECT * FROM ActivityType WHERE id=:activityTypeId AND isPowerActivity = 0")
+    @Query("SELECT * FROM ActivityType WHERE id=:activityTypeId")
     fun loadLiveActivityType(activityTypeId: Long): LiveData<ActivityType>
 
     @Insert(onConflict = IGNORE)

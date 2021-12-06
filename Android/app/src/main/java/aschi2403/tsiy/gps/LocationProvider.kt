@@ -13,6 +13,8 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import aschi2403.tsiy.R
 
+const val THOUSAND = 1000L
+
 class LocationProvider(val context: Context) {
 
     private lateinit var locationManager: LocationManager
@@ -32,16 +34,24 @@ class LocationProvider(val context: Context) {
 
             val gpsData = Intent()
             gpsData.action = "GPS_Data"
-            gpsData.putExtra( "latitude",location.latitude)
-            gpsData.putExtra( "longitude",location.longitude)
-            gpsData.putExtra( "distance",oldLocation.distanceTo(location) / 1000)
+            gpsData.putExtra("latitude", location.latitude)
+            gpsData.putExtra("longitude", location.longitude)
+            gpsData.putExtra("distance", oldLocation.distanceTo(location) / THOUSAND)
             gpsData.putExtra("speed", location.speed)
             context.sendBroadcast(gpsData)
         }
 
-        override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
-        override fun onProviderEnabled(provider: String) {}
-        override fun onProviderDisabled(provider: String) {}
+        override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {
+            // noting to do
+        }
+
+        override fun onProviderEnabled(provider: String) {
+            // noting to do
+        }
+
+        override fun onProviderDisabled(provider: String) {
+            // noting to do
+        }
     }
 
 
@@ -61,7 +71,7 @@ class LocationProvider(val context: Context) {
 
                 locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    1000,
+                    THOUSAND,
                     1f,
                     locationListener
                 )
@@ -71,7 +81,11 @@ class LocationProvider(val context: Context) {
                     oldLocation.latitude = location.latitude
                     oldLocation.longitude = location.longitude
                 } else {
-                    Toast.makeText(context, context.getString(R.string.unableToGetLocation), Toast.LENGTH_LONG)
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.unableToGetLocation),
+                        Toast.LENGTH_LONG
+                    )
                         .show()
                 }
             } else {
