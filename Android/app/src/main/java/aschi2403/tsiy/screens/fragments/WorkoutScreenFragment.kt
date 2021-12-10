@@ -21,6 +21,7 @@ import aschi2403.tsiy.helper.GPSReceiver
 import aschi2403.tsiy.model.GPSPoint
 import aschi2403.tsiy.model.GeneralActivity
 import aschi2403.tsiy.model.PowerActivity
+import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.viewmodel.WorkoutScreenViewModel
 import org.osmdroid.api.IMapController
@@ -64,11 +65,11 @@ class WorkoutScreenFragment : Fragment() {
             inflater, R.layout.fragment_workout_screen, container, false
         )
         dialogView = DialogView(requireContext())
-        isPowerActivity = arguments?.getBoolean("type")!!
+        isPowerActivity = arguments?.getBoolean("type") ?: false
 
         database = WorkoutRepo(requireActivity().applicationContext)
 
-        workoutPlanId = arguments?.getLong("workoutPlanId", -1)!!
+        workoutPlanId = arguments?.getLong("workoutPlanId") ?: -1
 
         if (workoutPlanId >= 0) {
             handleWorkout()
@@ -96,10 +97,10 @@ class WorkoutScreenFragment : Fragment() {
 
         createActivityInDb(
             isPowerActivity,
-            activityTypeId,
-            isWorkout = false,
-            upNext = null
+            activityTypeId
         )
+
+        doPowerActivitySpecficStuff(isPowerActivity, isWorkout = false, activityTypeId = idOfActivity)
 
         closeButton(activityTypeId, isPowerActivity)
     }
@@ -113,26 +114,26 @@ class WorkoutScreenFragment : Fragment() {
         val activities =
             database.workoutEntriesByWorkoutPlanId(workoutPlanId).toMutableList()
 
-            closeButton(activities[workoutEntryIndex].iActivityTypeId, activities[workoutEntryIndex].isPowerActivity)
+        closeButton(activities[workoutEntryIndex].iActivityTypeId, activities[workoutEntryIndex].isPowerActivity)
 
         val upNext = if (workoutEntryIndex + 1 < activities.size) {
             database.allActivityTypeById(
                 activities[workoutEntryIndex + 1].iActivityTypeId
             ).name
         } else {
-            null
+            ""
         }
 
-            if (!activities[workoutEntryIndex].isPowerActivity) {
-                showAndConfigureMapForNormalActivity()
-            }
+        if (!activities[workoutEntryIndex].isPowerActivity) {
+            showAndConfigureMapForNormalActivity()
+        }
 
-            createActivityInDb(
-                activities[workoutEntryIndex].isPowerActivity,
-                activities[workoutEntryIndex].iActivityTypeId,
-                isWorkout = true,
-                upNext
-            )
+        createActivityInDb(
+            activities[workoutEntryIndex].isPowerActivity,
+            activities[workoutEntryIndex].iActivityTypeId
+        )
+
+        doPowerActivitySpecficStuff(isPowerActivity, upNext = upNext, isWorkout = true, idOfActivity)
 
         binding.activity.text =
             database.allActivityTypeById(activities[workoutEntryIndex].iActivityTypeId).name
@@ -216,32 +217,35 @@ class WorkoutScreenFragment : Fragment() {
 
     private fun createActivityInDb(
         isPowerActivity: Boolean,
-        activityTypeId: Long,
-        isWorkout: Boolean,
-        upNext: String?
+        activityTypeId: Long
     ) {
-        if (!isPowerActivity) { // normal activity
-            binding.next.visibility = View.INVISIBLE
-            if (idOfActivity == -1L) {
-                idOfActivity =
-                    database.addGeneralActivity(
-                        GeneralActivity(
-                            startDate = System.currentTimeMillis(),
-                            activityTypeId = activityTypeId,
-                            workoutId = -1
-                        )
-                    )
-            }
-        } else {
-            if (idOfActivity == -1L) {
-                idOfActivity = database.addPowerActivity(
-                    PowerActivity(
-                        startDate = System.currentTimeMillis(),
-                        activityTypeId = activityTypeId,
-                        workoutId = -1
-                    )
-                )
-            }
+        if (idOfActivity != -1L) {
+            return
+        }
+
+        val activity: IActivity = when (isPowerActivity) {
+            true -> PowerActivity(
+                startDate = System.currentTimeMillis(),
+                activityTypeId = activityTypeId,
+                workoutId = -1
+            )
+            false -> GeneralActivity(
+                startDate = System.currentTimeMillis(),
+                activityTypeId = activityTypeId,
+                workoutId = -1
+            )
+        }
+
+        idOfActivity = database.addActivity(activity)
+    }
+
+    private fun doPowerActivitySpecficStuff(
+        isPowerActivity: Boolean,
+        upNext: String = "",
+        isWorkout: Boolean,
+        activityTypeId: Long
+    ) {
+        if (isPowerActivity) {
             binding.next.setOnClickListener {
                 Navigation.findNavController(requireActivity(), R.id.fragNavWorkoutHost)
                     .navigate(
@@ -264,6 +268,8 @@ class WorkoutScreenFragment : Fragment() {
 
                 workoutEntryIndex++
             }
+        } else {
+            binding.next.visibility = View.INVISIBLE
         }
     }
 

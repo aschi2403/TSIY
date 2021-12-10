@@ -1,25 +1,9 @@
 package aschi2403.tsiy.repository
 
 import android.content.Context
-import aschi2403.tsiy.db.ActivityTypeDao
-import aschi2403.tsiy.db.PowerActivityDao
-import aschi2403.tsiy.db.PowerActivityTypeDao
-import aschi2403.tsiy.db.WorkoutDatabase
-import aschi2403.tsiy.db.GeneralActivityDao
-import aschi2403.tsiy.db.WeightEntryDao
-import aschi2403.tsiy.db.SetEntryDao
-import aschi2403.tsiy.db.WorkoutEntryDao
-import aschi2403.tsiy.db.WorkoutPlanDao
-import aschi2403.tsiy.db.AllActivityTypeDao
-import aschi2403.tsiy.db.GPSPointsDao
-import aschi2403.tsiy.model.PowerActivity
-import aschi2403.tsiy.model.ActivityType
-import aschi2403.tsiy.model.GeneralActivity
-import aschi2403.tsiy.model.GPSPoint
-import aschi2403.tsiy.model.SetEntry
-import aschi2403.tsiy.model.WeightEntry
-import aschi2403.tsiy.model.WorkoutEntry
-import aschi2403.tsiy.model.WorkoutPlan
+import aschi2403.tsiy.db.*
+import aschi2403.tsiy.model.*
+import aschi2403.tsiy.model.relations.IActivity
 
 @Suppress("TooManyFunctions")
 class WorkoutRepo(context: Context) {
@@ -212,4 +196,10 @@ class WorkoutRepo(context: Context) {
         }
 
     fun getGPSPointsFromActivity(workoutEntryId: Long): List<GPSPoint> = gpsPointsDao.loadGPSPoints(workoutEntryId)
+    fun addActivity(activity: IActivity): Long {
+        if (activity is GeneralActivity) {
+            return addGeneralActivity(activity)
+        }
+        return addPowerActivity(activity as PowerActivity)
+    }
 }
