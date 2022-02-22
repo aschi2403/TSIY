@@ -16,9 +16,13 @@ import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentWorkoutScreenBinding
 import aschi2403.tsiy.gps.LocationForceGroundService
+import aschi2403.tsiy.model.Activity
+import aschi2403.tsiy.model.CardioActivity
 import aschi2403.tsiy.helper.DialogView
 import aschi2403.tsiy.helper.GPSReceiver
-import aschi2403.tsiy.model.*
+import aschi2403.tsiy.model.GPSPoint
+import aschi2403.tsiy.model.WorkoutSession
+import aschi2403.tsiy.model.WorkoutPlanEntry
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.viewmodel.WorkoutScreenViewModel
 import org.osmdroid.api.IMapController

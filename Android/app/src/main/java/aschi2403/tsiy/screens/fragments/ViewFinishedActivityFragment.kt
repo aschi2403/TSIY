@@ -126,8 +126,8 @@ class ViewFinishedActivityFragment : Fragment() {
 
             if (activity.cardioActivity!!.distance > 0.0) {
                 binding.speedValue.text = "${
-                    (((activity.cardioActivity!!.distance / (millisToHours(activity.activity.duration))) * HUNDRED_DOT_ZERO)
-                        .roundToLong() / HUNDRED_DOT_ZERO)
+                    (((activity.cardioActivity!!.distance / (millisToHours(activity.activity.duration)))
+                            * HUNDRED_DOT_ZERO).roundToLong() / HUNDRED_DOT_ZERO)
                 } km/h "
             } else {
                 binding.speedValue.text = requireContext().getString(R.string.zeroKmH)
@@ -174,10 +174,11 @@ class ViewFinishedActivityFragment : Fragment() {
         if (TimeUnit.MILLISECONDS.toHours(duration) < 1) {
             return "00:"
         }
-        if (TimeUnit.MILLISECONDS.toHours(duration) < TEN) {
-            return "0"
+        return if(TimeUnit.MILLISECONDS.toHours(duration) < TEN) {
+            "0"
+        } else {
+            ""
         }
-        return ""
     }
 
     override fun onDestroy() {

@@ -1,7 +1,10 @@
 package aschi2403.tsiy.model
 
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import aschi2403.tsiy.model.relations.IActivity
 
 @Entity(
@@ -12,7 +15,8 @@ import aschi2403.tsiy.model.relations.IActivity
             parentColumns = ["id"],
             childColumns = ["activityTypeId"],
             onDelete = CASCADE
-        )],
+        )
+    ],
     indices = [Index("activityTypeId")]
 )
 open class Activity(
