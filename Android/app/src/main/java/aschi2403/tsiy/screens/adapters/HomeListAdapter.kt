@@ -20,9 +20,9 @@ import aschi2403.tsiy.screens.fragments.HomeFragmentDirections
 import aschi2403.tsiy.screens.fragments.ViewFinishedWorkoutFragmentDirections
 import com.google.android.material.card.MaterialCardView
 import com.maltaisn.icondialog.pack.IconPack
-import kotlinx.android.synthetic.main.activity_main.view.*
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
 class HomeListAdapter(

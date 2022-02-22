@@ -5,7 +5,8 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "WorkoutSession",
+@Entity(
+    tableName = "WorkoutSession",
     foreignKeys = [
         ForeignKey(
             entity = Activity::class,
@@ -19,7 +20,8 @@ import androidx.room.PrimaryKey
             childColumns = ["idOfWorkoutPlan"],
             onDelete = ForeignKey.CASCADE
         )],
-    indices = [Index("id")])
+    indices = [Index("id")]
+)
 class WorkoutSession(
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null,
@@ -51,6 +53,7 @@ class WorkoutSession(
     }
 
     override fun toString(): String {
-        return "WorkoutSession(id=$id, idOfActivity=$idOfActivity, idOfWorkoutPlan=$idOfWorkoutPlan, idForMerging=$idForMerging)"
+        return "WorkoutSession(id=$id, idOfActivity=$idOfActivity, idOfWorkoutPlan=$idOfWorkoutPlan," +
+                " idForMerging=$idForMerging)"
     }
 }

@@ -1,6 +1,7 @@
 package aschi2403.tsiy.model.relations
 
-import androidx.room.*
+import androidx.room.Embedded
+import androidx.room.Relation
 import aschi2403.tsiy.model.Activity
 import aschi2403.tsiy.model.ActivityType
 import aschi2403.tsiy.model.CardioActivity
@@ -19,9 +20,8 @@ open class ActivityWithCardioActivity {
     @Relation(
         entity = ActivityType::class,
         entityColumn = "id",
-        parentColumn = "activityTypeId",
-
-        )
+        parentColumn = "activityTypeId"
+    )
     lateinit var activityType: ActivityType
 
     var workoutId: Long? = null

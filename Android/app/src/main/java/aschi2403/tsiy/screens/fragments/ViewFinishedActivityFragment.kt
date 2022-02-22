@@ -24,7 +24,7 @@ import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polyline
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToLong
 
@@ -32,6 +32,9 @@ import kotlin.math.roundToLong
 private const val MAP_ZOOM = 15.0
 private const val HUNDRED_DOT_ZERO = 100.0
 private const val HUNDRED = 100
+private const val TAUSEND = 1000
+private const val SIXTY_DOT_ZERO = 60.0
+private const val SIXTY = 60.0
 private const val TEN = 10
 
 class ViewFinishedActivityFragment : Fragment() {
@@ -82,8 +85,9 @@ class ViewFinishedActivityFragment : Fragment() {
             )
         }"
 
+        val pause = activity.activity.endDate - activity.activity.startDate - activity.activity.duration
         val pauseDuration =
-            TimeUnit.MILLISECONDS.toSeconds(activity.activity.endDate - activity.activity.startDate - activity.activity.duration)
+            TimeUnit.MILLISECONDS.toSeconds(pause)
         binding.pause.text = "${durationLeadingZero(pauseDuration)}${DateUtils.formatElapsedTime(pauseDuration)}"
 
         // binding.cardioPoints.text = iActivity.cardioPoints.toString()
@@ -117,14 +121,12 @@ class ViewFinishedActivityFragment : Fragment() {
             binding.generalActivityHeader.visibility = View.VISIBLE
             binding.map.visibility = View.VISIBLE
             binding.distanceValue.text = "${
-                ((activity.cardioActivity!!.distance * HUNDRED).roundToLong() /
-                        HUNDRED_DOT_ZERO)
+                ((activity.cardioActivity!!.distance * HUNDRED).roundToLong() / HUNDRED_DOT_ZERO)
             } km "
 
             if (activity.cardioActivity!!.distance > 0.0) {
                 binding.speedValue.text = "${
-                    (((activity.cardioActivity!!.distance /
-                            (millisToHours(activity.activity.duration))) * HUNDRED_DOT_ZERO)
+                    (((activity.cardioActivity!!.distance / (millisToHours(activity.activity.duration))) * HUNDRED_DOT_ZERO)
                         .roundToLong() / HUNDRED_DOT_ZERO)
                 } km/h "
             } else {
@@ -134,7 +136,7 @@ class ViewFinishedActivityFragment : Fragment() {
     }
 
     private fun millisToHours(duration: Long): Double {
-        return ((duration / 1000) / 60.0) / 60
+        return ((duration / TAUSEND) / SIXTY_DOT_ZERO) / SIXTY
     }
 
     private fun createMap(database: WorkoutRepo, idOfActivity: Long) {

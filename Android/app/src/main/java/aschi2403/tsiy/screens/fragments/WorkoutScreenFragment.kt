@@ -18,10 +18,7 @@ import aschi2403.tsiy.databinding.FragmentWorkoutScreenBinding
 import aschi2403.tsiy.gps.LocationForceGroundService
 import aschi2403.tsiy.helper.DialogView
 import aschi2403.tsiy.helper.GPSReceiver
-import aschi2403.tsiy.model.GPSPoint
-import aschi2403.tsiy.model.CardioActivity
-import aschi2403.tsiy.model.Activity
-import aschi2403.tsiy.model.WorkoutSession
+import aschi2403.tsiy.model.*
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.viewmodel.WorkoutScreenViewModel
 import org.osmdroid.api.IMapController
@@ -157,6 +154,13 @@ class WorkoutScreenFragment : Fragment() {
             binding.next.visibility = View.INVISIBLE
         }
 
+        configureNextButtonForCardioActivities(activities, upNext)
+    }
+
+    private fun configureNextButtonForCardioActivities(
+        activities: MutableList<WorkoutPlanEntry>,
+        upNext: String
+    ) {
         if (!isPowerActivity && workoutEntryIndex + 1 < activities.size) {
             binding.next.visibility = View.VISIBLE
             binding.next.setOnClickListener {
@@ -216,7 +220,6 @@ class WorkoutScreenFragment : Fragment() {
 
         binding.generalActivityHeader.visibility = View.VISIBLE
         binding.generalActivityBody.visibility = View.VISIBLE
-
     }
 
     private fun closeButton(activityTypeId: Long, isWorkout: Boolean) {
@@ -319,12 +322,13 @@ class WorkoutScreenFragment : Fragment() {
         activityTypeId: Long,
         isPowerActivity: Boolean
     ) {
+        val duration = repo.getActivityById(idOfActivity).duration + SystemClock.elapsedRealtime() - binding.timer.base
         repo.updateActivity(
             Activity(
                 id = idOfActivity,
                 activityTypeId = activityTypeId,
                 startDate = repo.getActivityWithCardioActivityById(idOfActivity).activity.startDate,
-                duration = repo.getActivityById(idOfActivity).duration + SystemClock.elapsedRealtime() - binding.timer.base,
+                duration = duration,
                 endDate = System.currentTimeMillis()
             )
         )
