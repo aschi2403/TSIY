@@ -11,7 +11,7 @@ import androidx.room.Query
 import aschi2403.tsiy.model.ActivityType
 
 @Dao
-interface ActivityTypeDao {
+interface CardioActivityTypeDao {
     @Query("SELECT * FROM ActivityType WHERE isPowerActivity = 0")
     fun loadAll(): List<ActivityType>
 

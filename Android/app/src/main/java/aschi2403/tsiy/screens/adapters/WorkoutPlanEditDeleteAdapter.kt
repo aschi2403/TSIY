@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
+import aschi2403.tsiy.helper.DialogView
 import aschi2403.tsiy.model.WorkoutPlan
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.fragments.ListWorkoutPlansFragmentDirections
@@ -20,7 +21,7 @@ class WorkoutPlanEditDeleteAdapter(
     val context: Context
 ) :
     RecyclerView.Adapter<WorkoutPlanEditDeleteAdapter.DataViewHolder>() {
-    val database = WorkoutRepo(context)
+    val repo = WorkoutRepo(context)
 
     class DataViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nameOfWorkout: TextView = itemView.findViewById(R.id.nameOfItem)
@@ -51,10 +52,16 @@ class WorkoutPlanEditDeleteAdapter(
             editActivityType(it, position)
         }
         holder.delete.setOnClickListener {
-            //TODO: warn user if a workout plan with done exercises gets deleted
-            database.deleteWorkoutPlan(data[position])
-            data.removeAt(position)
-            notifyDataSetChanged()
+            if (repo.isWorkoutPlanInWorkoutSession(data[position].id!!)) {
+                DialogView(context).showYesNoDialog(
+                    context.getString(R.string.delete_workout_plan),
+                    context.getString(R.string.relation_workout_plan_workout_session)
+                ) { _, _ ->
+                    repo.deleteWorkoutPlan(data[position])
+                    data.removeAt(position)
+                    notifyDataSetChanged()
+                }
+            }
         }
     }
 

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentChooseActivityTypeBinding
 import aschi2403.tsiy.helper.IconPackProvider
+import aschi2403.tsiy.model.ActivityType
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.activities.MainActivity
 import aschi2403.tsiy.screens.adapters.ActivitiesViewChooseAdapter
@@ -44,6 +45,22 @@ class ChooseActivityTypeFragment : Fragment() {
             database.allPowerActivityTypes
         }
 
+        showCreateActivityMessageIfThereAreNo(list, generalActivity)
+
+        val adapter =
+            ActivitiesViewChooseAdapter(
+                list.toMutableList(),
+                requireContext(),
+                IconPackProvider(this.requireContext()).loadIconPack()
+            )
+        rv.adapter = adapter
+        return binding.root
+    }
+
+    private fun showCreateActivityMessageIfThereAreNo(
+        list: List<ActivityType>,
+        generalActivity: Boolean
+    ) {
         if (list.isEmpty()) {
             if (generalActivity) {
                 binding.createOne.setOnClickListener {
@@ -62,15 +79,6 @@ class ChooseActivityTypeFragment : Fragment() {
             }
             binding.noActivityInfoText.visibility = View.VISIBLE
             binding.createOne.visibility = View.VISIBLE
-
         }
-        val adapter =
-            ActivitiesViewChooseAdapter(
-                list.toMutableList(),
-                requireContext(),
-                IconPackProvider(this.requireContext()).loadIconPack()
-            )
-        rv.adapter = adapter
-        return binding.root
     }
 }

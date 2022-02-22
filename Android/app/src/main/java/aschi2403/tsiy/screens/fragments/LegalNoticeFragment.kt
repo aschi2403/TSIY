@@ -25,6 +25,10 @@ class LegalNoticeFragment : Fragment() {
             inflater, R.layout.fragment_legal__notice, container, false
         )
 
+        binding.gnuLicense.setOnClickListener {
+            openBrowser("https://www.apache.org/licenses/LICENSE-2.0.html")
+        }
+
         binding.MPAndroidChart.setOnClickListener {
             openBrowser("https://github.com/PhilJay/MPAndroidChart")
         }

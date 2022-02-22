@@ -52,9 +52,9 @@ class ActivitiesViewChooseAdapter(
 
         holder.cv.setOnClickListener { view: View ->
             val intent = Intent(view.context, MainWorkoutActivity::class.java)
-            intent.putExtra("activityTypeId", data[position].id)
+            intent.putExtra("activityTypeId", data[position].id!!)
             intent.putExtra("name", data[position].name)
-            intent.putExtra("type", data[position].isPowerActivity)
+            intent.putExtra("workoutPlanId", -1L)
             context.startActivity(intent)
         }
     }

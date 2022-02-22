@@ -1,75 +1,83 @@
 package aschi2403.tsiy.helper
 
+import aschi2403.tsiy.model.Activity
 import aschi2403.tsiy.model.ActivityType
-import aschi2403.tsiy.model.DoneWorkout
-import aschi2403.tsiy.model.relations.IActivity
+import aschi2403.tsiy.model.WorkoutSession
+import aschi2403.tsiy.model.relations.ActivityWithCardioActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 
-private const val IS_IN_NO_WORKOUT = -1
+class DataMerger(private val repo: WorkoutRepo) {
 
-class DataMerger(val database: WorkoutRepo) {
-
-    fun getData(checkedItem: Int, workoutPrefix: String): MutableList<IActivity> {
+    fun getData(checkedItem: Int, workoutPrefix: String): MutableList<ActivityWithCardioActivity> {
         return when (checkedItem) {
             0 -> {
-                mergeByWorkouts(database.allPowerActivities.plus(database.allGeneralActivities), workoutPrefix)
+                mergeByWorkouts(repo.allActivities, workoutPrefix)
             }
             1 -> {
-                mergeByWorkouts(database.allGeneralActivities, workoutPrefix)
+                mergeByWorkouts(repo.allActivities.filter { entry -> entry.cardioActivity != null }, workoutPrefix)
             }
             else -> {
-                mergeByWorkouts(database.allPowerActivities, workoutPrefix)
+                mergeByWorkouts(repo.allActivities.filter { entry -> entry.cardioActivity == null }, workoutPrefix)
             }
         }
     }
 
-    private fun mergeByWorkouts(list: List<IActivity>, workoutPrefix: String): MutableList<IActivity> {
-        val mergedList = mutableListOf<IActivity>()
-        val groupedList = list.groupBy { a -> a.workoutId }
+    private fun mergeByWorkouts(
+        list: List<ActivityWithCardioActivity>,
+        workoutPrefix: String
+    ): MutableList<ActivityWithCardioActivity> {
+        val mergedList = mutableListOf<ActivityWithCardioActivity>()
+        repo.allWorkoutSessions().groupBy { k -> k.idForMerging }
+            .forEach { entry -> mergedList.add(getWorkoutInfoByActivities(entry.value, workoutPrefix)) }
 
-        for (activity in groupedList) {
-            if (activity.key == IS_IN_NO_WORKOUT || activity.value.size == 1) {
-                mergedList.addAll(activity.value)
-            } else {
-                mergedList.add(getWorkoutInfoByActivities(activity.value, workoutPrefix))
-            }
-        }
-        return mergedList.sortedByDescending { it.startDate }.toMutableList()
+        list.filter { activityWithCardioActivity ->
+            isActivityNotInAWorkout(activityWithCardioActivity.activity.id)
+        }.forEach { activityWithCardioActivity -> mergedList.add(activityWithCardioActivity) }
+
+        return mergedList.sortedByDescending { it.activity.startDate }.toMutableList()
     }
 
-    private fun getWorkoutInfoByActivities(activities: List<IActivity>, workoutPrefix: String): IActivity {
-        val doneWorkout = DoneWorkout()
-        doneWorkout.startDate = activities.minOf { a -> a.startDate }
-        doneWorkout.endDate = activities.maxOf { a -> a.endDate }
-        doneWorkout.cardioPoints = activities.sumByDouble { a -> a.cardioPoints }
-        doneWorkout.duration = activities.sumOf { a -> a.duration }
-        doneWorkout.workoutPlanId = activities[0].workoutPlanId
-        doneWorkout.workoutId = activities[0].workoutId
+    private fun isActivityNotInAWorkout(activityId: Long?) =
+        repo.allWorkoutSessions()
+            .find { entry -> entry.idOfActivity == activityId } == null
 
-        doneWorkout.activityType = ActivityType(
-            name = "$workoutPrefix ${database.workoutPlanById(activities.first().workoutPlanId).name}",
+    private fun getWorkoutInfoByActivities(
+        workoutSession: List<WorkoutSession>,
+        workoutPrefix: String
+    ): ActivityWithCardioActivity {
+        val mergedWorkout = ActivityWithCardioActivity()
+        mergedWorkout.activity = Activity()
+        mergedWorkout.activity.startDate = workoutSession.minOf { a -> repo.getActivityById(a.idOfActivity).startDate }
+        mergedWorkout.activity.endDate = workoutSession.maxOf { a -> repo.getActivityById(a.idOfActivity).endDate }
+        mergedWorkout.activity.duration = workoutSession.sumOf { a -> repo.getActivityById(a.idOfActivity).duration }
+        mergedWorkout.workoutId = workoutSession.first().idForMerging
+
+        mergedWorkout.activityType = ActivityType(
+            name = "$workoutPrefix ${repo.workoutPlanById(workoutSession.first().idOfWorkoutPlan).name}",
             icon = 1,
             caloriesPerMinute = 0.0,
             cardioPointsPerMinute = 0.0,
             description = "",
             isPowerActivity = false
         )
-        return doneWorkout
+        return mergedWorkout
     }
 
-    fun getDataFromWorkoutId(checkedItem: Int, workoutId: Int): MutableList<IActivity> {
-        return when (checkedItem) {
-            0 -> {
-                database.allPowerActivities.filter { a -> a.workoutId == workoutId }
-                    .plus(database.allGeneralActivities.filter { a -> a.workoutId == workoutId })
-                    .toMutableList()
+    fun getDataFromWorkoutId(workoutId: Long): List<ActivityWithCardioActivity> {
+        return repo.workoutSessionById(workoutId)
+            .map { entry ->
+                setWorkoutId(
+                    repo.getActivityWithCardioActivityById(entry.idOfActivity),
+                    workoutId
+                )
             }
-            1 -> {
-                database.allGeneralActivities.filter { a -> a.workoutId == workoutId }.toMutableList()
-            }
-            else -> {
-                database.allPowerActivities.filter { a -> a.workoutId == workoutId }.toMutableList()
-            }
-        }
+    }
+
+    private fun setWorkoutId(
+        activityWithCardioActivityById: ActivityWithCardioActivity,
+        workoutId: Long
+    ): ActivityWithCardioActivity {
+        activityWithCardioActivityById.workoutId = workoutId
+        return activityWithCardioActivityById
     }
 }

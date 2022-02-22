@@ -12,9 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentViewfinishedactivityBinding
-import aschi2403.tsiy.model.GeneralActivity
-import aschi2403.tsiy.model.PowerActivity
-import aschi2403.tsiy.model.relations.IActivity
+import aschi2403.tsiy.helper.ButtonHelper
+import aschi2403.tsiy.model.relations.ActivityWithCardioActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.activities.MainActivity
 import kotlinx.android.synthetic.main.table_row.view.weightValue
@@ -37,6 +36,7 @@ private const val TEN = 10
 
 class ViewFinishedActivityFragment : Fragment() {
 
+    private lateinit var repo: WorkoutRepo
     private lateinit var binding: FragmentViewfinishedactivityBinding
 
     override fun onCreateView(
@@ -50,68 +50,59 @@ class ViewFinishedActivityFragment : Fragment() {
 
         (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        val idOfActivity = arguments?.getLong("id")
-        val powerActivity = arguments?.getBoolean("type")
+        val idOfActivity = arguments?.getLong("id")!!
 
-        val database = activity?.let { WorkoutRepo(it) }!!
-        val iActivity = if (powerActivity!!) {
-            database.powerActivityById(idOfActivity!!)
-        } else {
-            database.generalActivityById(idOfActivity!!)
+        repo = WorkoutRepo(requireActivity())
+        val activity = repo.getActivityWithCardioActivityById(idOfActivity)
+
+        ButtonHelper().configureDeleteButton(requireActivity()) {
+            repo.deleteActivity(activity.activity)
+            findNavController().popBackStack()
         }
 
-        configureDeleteButton(powerActivity, database, iActivity)
-
-        setGuiData(iActivity, powerActivity, database, idOfActivity)
+        setGuiData(activity, repo, idOfActivity)
         return binding.root
     }
 
     @SuppressLint("SetTextI18n")
     private fun setGuiData(
-        iActivity: IActivity,
-        powerActivity: Boolean,
+        activity: ActivityWithCardioActivity,
         database: WorkoutRepo,
         idOfActivity: Long
     ) {
         val sdf = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.GERMAN)
-        binding.startDate.text = sdf.format(iActivity.startDate)
-        binding.endDate.text = sdf.format(iActivity.endDate)
+        binding.startDate.text = sdf.format(activity.activity.startDate)
+        binding.endDate.text = sdf.format(activity.activity.endDate)
 
-        binding.duration.text = "${durationLeadingZero(iActivity.duration)}${
+        binding.duration.text = "${durationLeadingZero(activity.activity.duration)}${
             DateUtils.formatElapsedTime(
                 TimeUnit.MILLISECONDS.toSeconds(
-                    iActivity.duration
+                    activity.activity.duration
                 )
             )
         }"
 
         val pauseDuration =
-            TimeUnit.MILLISECONDS.toSeconds(iActivity.endDate - iActivity.startDate - iActivity.duration)
+            TimeUnit.MILLISECONDS.toSeconds(activity.activity.endDate - activity.activity.startDate - activity.activity.duration)
         binding.pause.text = "${durationLeadingZero(pauseDuration)}${DateUtils.formatElapsedTime(pauseDuration)}"
 
-        binding.cardioPoints.text = iActivity.cardioPoints.toString()
-        binding.caloriesValue.text = iActivity.calories.toString()
+        // binding.cardioPoints.text = iActivity.cardioPoints.toString()
+        // binding.caloriesValue.text = iActivity.calories.toString()
 
-        binding.activity.text = if (powerActivity) {
-            database.powerActivityTypeById(iActivity.activityTypeId).name
-        } else {
-            database.activityTypeById(iActivity.activityTypeId).name
-        }
+        binding.activity.text = database.allActivityTypeById(activity.activityType.id!!).name
 
-        setActivitySpecificInformation(powerActivity, database, idOfActivity, iActivity)
+        setActivitySpecificInformation(database, activity)
 
         createMap(database, idOfActivity)
     }
 
     @SuppressLint("SetTextI18n")
     private fun setActivitySpecificInformation(
-        powerActivity: Boolean,
         database: WorkoutRepo,
-        idOfActivity: Long,
-        iActivity: IActivity
+        activity: ActivityWithCardioActivity
     ) {
-        if (powerActivity) {
-            val sets = database.getSetEntriesByPowerActivityId(idOfActivity).toTypedArray()
+        if (activity.activityType.isPowerActivity) {
+            val sets = database.getSetEntriesByPowerActivityId(activity.activity.id!!).toTypedArray()
             if (sets.isNotEmpty()) {
                 binding.header.visibility = View.VISIBLE
             }
@@ -126,19 +117,24 @@ class ViewFinishedActivityFragment : Fragment() {
             binding.generalActivityHeader.visibility = View.VISIBLE
             binding.map.visibility = View.VISIBLE
             binding.distanceValue.text = "${
-                (((iActivity as GeneralActivity).distance * HUNDRED).roundToLong() /
+                ((activity.cardioActivity!!.distance * HUNDRED).roundToLong() /
                         HUNDRED_DOT_ZERO)
             } km "
-            if (iActivity.distance > 0) {
+
+            if (activity.cardioActivity!!.distance > 0.0) {
                 binding.speedValue.text = "${
-                    (((iActivity.distance /
-                            (TimeUnit.MILLISECONDS.toHours(iActivity.duration))) * HUNDRED_DOT_ZERO)
+                    (((activity.cardioActivity!!.distance /
+                            (millisToHours(activity.activity.duration))) * HUNDRED_DOT_ZERO)
                         .roundToLong() / HUNDRED_DOT_ZERO)
                 } km/h "
             } else {
-                binding.speedValue.text = R.string.zeroKmH.toString()
+                binding.speedValue.text = requireContext().getString(R.string.zeroKmH)
             }
         }
+    }
+
+    private fun millisToHours(duration: Long): Double {
+        return ((duration / 1000) / 60.0) / 60
     }
 
     private fun createMap(database: WorkoutRepo, idOfActivity: Long) {
@@ -171,22 +167,6 @@ class ViewFinishedActivityFragment : Fragment() {
         binding.map.invalidate()
     }
 
-    private fun configureDeleteButton(
-        powerActivity: Boolean,
-        database: WorkoutRepo,
-        iActivity: IActivity
-    ) {
-        val deleteButton = requireActivity().findViewById<Button>(R.id.deleteButtonAppBar)
-        deleteButton.visibility = View.VISIBLE
-        deleteButton.setOnClickListener {
-            if (powerActivity) {
-                database.deletePowerActivity(iActivity as PowerActivity)
-            } else {
-                database.deleteGeneralActivity(iActivity as GeneralActivity)
-            }
-            findNavController().popBackStack()
-        }
-    }
 
     private fun durationLeadingZero(duration: Long): String {
         if (TimeUnit.MILLISECONDS.toHours(duration) < 1) {

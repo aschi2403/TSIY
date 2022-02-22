@@ -39,8 +39,7 @@
     <string name="delete_activity">Delete activity</string>
     <string name="legal_notice">Legal Notice</string>
     <string name="license">License</string>
-    <string name="license_content">Copyright 2020\-2021 Jakob Aschauer, Alexander Schönberger Licensed under the GNU
-        General Public License v3.0
+    <string name="license_content">"Copyright 2020\-2022\nJakob Aschauer, Alexander Schönberger\nLicensed under the"
     </string>
     <string name="dependencies">Dependencies</string>
     <string name="MPAndroidChart">MPAndroidChart by PhilJay</string>
@@ -99,4 +98,10 @@
     <string name="pleaseInsertAllDataForTheActivity">Please insert all data for the activity</string>
     <string name="pleaseInsertACorrectWeight">Please insert a correct weight</string>
     <string name="zeroKmH" translatable="false">0 km/h</string>
+    <string name="delete_workout_plan">Really delete workout plan with done activities?</string>
+    <string name="relation_workout_plan_workout_session">The relation between workouts and workout plan will be deleted!
+    </string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="gnuLicense" translatable="false">"GNU General Public License v3.0 "</string>
 </resources>

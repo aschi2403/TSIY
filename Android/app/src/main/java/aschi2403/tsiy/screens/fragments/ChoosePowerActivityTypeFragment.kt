@@ -17,7 +17,7 @@ class ChoosePowerActivityTypeFragment : Fragment() {
 
     private lateinit var binding: FragmentChoosePowerActivityTypeBinding
 
-    lateinit var database: WorkoutRepo
+    lateinit var repo: WorkoutRepo
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,8 +27,7 @@ class ChoosePowerActivityTypeFragment : Fragment() {
             inflater, R.layout.fragment_choose_power_activity_type, container, false
         )
 
-
-        database = context?.let { WorkoutRepo(it) }!!
+        repo = WorkoutRepo(this.requireContext())
 
         val idOfPowerActivity = arguments?.getLong("idOfPowerActivity")!!
 
@@ -61,7 +60,7 @@ class ChoosePowerActivityTypeFragment : Fragment() {
             }
         }
 
-        val sets = database.getSetEntriesByPowerActivityId(idOfPowerActivity)
+        val sets = repo.getSetEntriesByPowerActivityId(idOfPowerActivity)
         if (sets.isNotEmpty()) {
             binding.repetitionsValue.setText(sets.last().repetitions.toString())
             binding.weightValue.setText(sets.last().weight.toString())
@@ -102,7 +101,7 @@ class ChoosePowerActivityTypeFragment : Fragment() {
     }
 
     private fun saveDataInDatabase(idOfPowerActivity: Long) {
-        database.insertSetEntry(
+        repo.insertSetEntry(
             SetEntry(
                 weight = binding.weightValue.text.toString().toDouble(),
                 repetitions = binding.repetitionsValue.text.toString().toInt(),

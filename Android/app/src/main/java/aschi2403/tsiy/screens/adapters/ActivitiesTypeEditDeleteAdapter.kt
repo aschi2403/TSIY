@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
 import aschi2403.tsiy.helper.DialogView
 import aschi2403.tsiy.model.ActivityType
-import aschi2403.tsiy.model.GeneralActivity
-import aschi2403.tsiy.model.PowerActivity
+import aschi2403.tsiy.model.CardioActivity
+import aschi2403.tsiy.model.relations.ActivityWithCardioActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.fragments.ListActivitiesFragmentDirections
 import com.google.android.material.card.MaterialCardView
@@ -59,27 +59,26 @@ class ActivitiesTypeEditDeleteAdapter(
             holder.icon.setColorFilter(Color.WHITE)
         holder.delete.setOnClickListener {
             val items = if (data[position].isPowerActivity) {
-                database.allPowerActivities.stream()
-                    .filter { activity: PowerActivity -> activity.activityTypeId == data[position].id }
+                database.allActivities.stream()
+                    .filter { activity: ActivityWithCardioActivity -> activity.activityType.id == data[position].id }
                     .count()
             } else {
-                database.allGeneralActivities.stream()
-                    .filter { activity: GeneralActivity -> activity.activityTypeId == data[position].id }
+                database.allCardioActivities.stream()
+                    .filter { activity: CardioActivity -> activity.activityTypeId == data[position].id }
                     .count()
             }
             if (items > 0) {
                 DialogView(context).showYesNoDialog(
                     context.getString(R.string.attention),
-                    "Do you really want to delete $items saved activities?",
-                    { _, _ ->
-                        deleteData(position)
-                        Toast.makeText(
-                            context,
-                            "Activity type and saved activities deleted.",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    },
-                    { _, _ -> })
+                    "Do you really want to delete $items saved activities?"
+                ) { _, _ ->
+                    deleteData(position)
+                    Toast.makeText(
+                        context,
+                        "Activity type and saved activities deleted.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             } else {
                 deleteData(position)
             }

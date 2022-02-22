@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,13 +37,12 @@ class ViewFinishedWorkoutFragment : Fragment() {
         rv.layoutManager = llm
         val homeListAdapter = HomeListAdapter(
             dataMerger.getDataFromWorkoutId(
-                checkedItem,
-                arguments?.getInt("workoutId")!!
+                arguments?.getLong("workoutId")!!
             ),
             requireContext(),
             IconPackProvider(requireContext()).loadIconPack(),
             checkedItem,
-            false
+            false, requireActivity()
         )
 
         hideStartActivityButton()
@@ -57,5 +57,10 @@ class ViewFinishedWorkoutFragment : Fragment() {
         binding.startPowerActivity.visibility = View.INVISIBLE
         binding.startWorkout.visibility = View.INVISIBLE
         binding.startNewActivity.visibility = View.INVISIBLE
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        requireActivity().findViewById<Button>(R.id.deleteButtonAppBar).visibility = View.GONE
     }
 }

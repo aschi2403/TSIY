@@ -53,7 +53,7 @@
         android:label="fragment_view_finished_workout_fragment"
         tools:layout="@layout/fragment_home">
         <argument android:name="checkedItem" app:argType="integer"/>
-        <argument android:name="workoutId" app:argType="integer"/>
+        <argument android:name="workoutId" app:argType="long"/>
         <action android:id="@+id/action_viewFinishedWorkoutFragment_to_fragment_view_finished_activity"
                 app:destination="@id/fragment_view_finished_activity"/>
     </fragment>
