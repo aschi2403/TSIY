@@ -51,6 +51,35 @@ class ActivityInWorkoutAdapter(
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
             holder.imageOfActivity.setColorFilter(Color.WHITE)
 
+        configureMoveUpButton(position, holder)
+
+        configureMoveDownButton(position, holder)
+
+        holder.delete.setOnClickListener {
+            data.removeAt(position)
+            notifyDataSetChanged()
+        }
+    }
+
+    private fun configureMoveDownButton(
+        position: Int,
+        holder: DataViewHolder
+    ) {
+        if (data.size == position + 1) {
+            holder.moveDown.visibility = View.GONE
+        } else {
+            holder.moveDown.visibility = View.VISIBLE
+            holder.moveDown.setOnClickListener {
+                data.add(position + 1, data.removeAt(position))
+                notifyDataSetChanged()
+            }
+        }
+    }
+
+    private fun configureMoveUpButton(
+        position: Int,
+        holder: DataViewHolder
+    ) {
         if (position == 0) {
             holder.moveUp.visibility = View.GONE
         } else {
@@ -59,20 +88,6 @@ class ActivityInWorkoutAdapter(
                 data.add(position - 1, data.removeAt(position))
                 notifyDataSetChanged()
             }
-        }
-        if (data.size == position + 1) {
-            holder.moveDown.visibility = View.GONE
-        } else {
-            holder.moveDown.visibility = View.VISIBLE
-            holder.moveDown.setOnClickListener {
-                data.add(position + 1, data.removeAt(position))
-                notifyDataSetChanged()
-
-            }
-        }
-        holder.delete.setOnClickListener {
-            data.removeAt(position)
-            notifyDataSetChanged()
         }
     }
 }

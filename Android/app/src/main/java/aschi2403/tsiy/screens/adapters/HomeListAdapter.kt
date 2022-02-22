@@ -12,27 +12,29 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import aschi2403.tsiy.R
-import aschi2403.tsiy.model.DoneWorkout
-import aschi2403.tsiy.model.PowerActivity
-import aschi2403.tsiy.model.relations.IActivity
+import aschi2403.tsiy.helper.ButtonHelper
+import aschi2403.tsiy.model.Activity
+import aschi2403.tsiy.model.relations.ActivityWithCardioActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.fragments.HomeFragmentDirections
 import aschi2403.tsiy.screens.fragments.ViewFinishedWorkoutFragmentDirections
 import com.google.android.material.card.MaterialCardView
 import com.maltaisn.icondialog.pack.IconPack
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
 class HomeListAdapter(
-    private var data: MutableList<IActivity>,
+    private var data: List<ActivityWithCardioActivity>,
     val context: Context,
     private val iconPack: IconPack,
     private val checkedItem: Int,
-    private val calledFromHomeFragment: Boolean
+    private val calledFromHomeFragment: Boolean,
+    private val androidActivity: android.app.Activity
 ) :
     RecyclerView.Adapter<HomeListAdapter.DataViewHolder>() {
-    val database = WorkoutRepo(context)
+    private val repo = WorkoutRepo(context)
 
     class DataViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val icon: ImageView = itemView.findViewById(R.id.icon)
@@ -55,48 +57,65 @@ class HomeListAdapter(
 
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
         if (calledFromHomeFragment) {
-            holder.cv.setOnClickListener {
-                Navigation.findNavController(it).navigate(
-                    HomeFragmentDirections.actionHomeFragmentToFragmentViewFinishedActivity(
-                        type = data[position] is PowerActivity,
-                        id = data[position].id!!
-                    )
-                )
-            }
+            calledFromHomeFragment(holder, position)
         } else {
-            holder.cv.setOnClickListener {
-                val direction = ViewFinishedWorkoutFragmentDirections
-                Navigation.findNavController(it).navigate(
-                    direction.actionViewFinishedWorkoutFragmentToFragmentViewFinishedActivity(
-                        type = data[position] is PowerActivity,
-                        id = data[position].id!!
-                    )
-                )
-            }
+            calledFromWorkoutView(position, holder)
         }
 
-        holder.timeValue.text = generateTimeValueText(data[position].duration)
+        holder.timeValue.text = generateTimeValueText(data[position].activity.duration)
 
-        holder.cardioPointsValue.text = data[position].cardioPoints.toString()
+        holder.cardioPointsValue.text = "0"
         holder.firstLine.text = data[position].activityType.name
         holder.icon.setImageDrawable(iconPack.getIcon(data[position].activityType.icon)!!.drawable)
 
-        if (data[position] is DoneWorkout) {
-            holder.cv.setOnClickListener {
-                (context as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-                Navigation.findNavController(it).navigate(
-                    HomeFragmentDirections.actionHomeFragmentToViewFinishedWorkoutFragment(
-                        checkedItem,
-                        data[position].workoutId
-                    )
-                )
-            }
-        }
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
             holder.icon.setColorFilter(Color.WHITE)
         }
 
-        holder.secondLine.text = formatDate(data[position].startDate)
+        holder.secondLine.text = formatDate(data[position].activity.startDate)
+    }
+
+    private fun calledFromWorkoutView(
+        position: Int,
+        holder: DataViewHolder
+    ) {
+        ButtonHelper().configureDeleteButton(androidActivity) {
+            repo.deleteWorkoutSessionWithActivities(data[position].workoutId!!)
+            Navigation.findNavController(androidActivity, holder.cv.id).popBackStack()
+        }
+        holder.cv.setOnClickListener {
+            val direction = ViewFinishedWorkoutFragmentDirections
+            Navigation.findNavController(it).navigate(
+                direction.actionViewFinishedWorkoutFragmentToFragmentViewFinishedActivity(
+                    type = data[position] is Activity,
+                    id = data[position].activity.id!!
+                )
+            )
+        }
+    }
+
+    private fun calledFromHomeFragment(
+        holder: DataViewHolder,
+        position: Int
+    ) {
+        holder.cv.setOnClickListener {
+            if (data[position].activity.id == null && data[position].workoutId != null) {
+                (context as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+                Navigation.findNavController(it).navigate(
+                    HomeFragmentDirections.actionHomeFragmentToViewFinishedWorkoutFragment(
+                        checkedItem,
+                        data[position].workoutId!!
+                    )
+                )
+            } else {
+                Navigation.findNavController(it).navigate(
+                    HomeFragmentDirections.actionHomeFragmentToFragmentViewFinishedActivity(
+                        type = data[position] is Activity,
+                        id = data[position].activity.id!!
+                    )
+                )
+            }
+        }
     }
 
     private fun formatDate(startDate: Long): String {
@@ -109,11 +128,10 @@ class HomeListAdapter(
     ): String {
         val minutes = TimeUnit.MILLISECONDS.toMinutes(duration)
         val seconds = TimeUnit.MILLISECONDS.toSeconds(duration)
-
         return "$minutes minutes and $seconds seconds"
     }
 
-    fun setData(data: MutableList<IActivity>) {
+    fun setData(data: MutableList<ActivityWithCardioActivity>) {
         this.data = data
         this.notifyDataSetChanged()
     }

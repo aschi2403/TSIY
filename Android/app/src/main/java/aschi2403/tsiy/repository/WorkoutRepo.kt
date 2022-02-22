@@ -1,101 +1,89 @@
 package aschi2403.tsiy.repository
 
 import android.content.Context
-import aschi2403.tsiy.db.ActivityTypeDao
-import aschi2403.tsiy.db.PowerActivityDao
-import aschi2403.tsiy.db.PowerActivityTypeDao
-import aschi2403.tsiy.db.WorkoutDatabase
-import aschi2403.tsiy.db.GeneralActivityDao
-import aschi2403.tsiy.db.WeightEntryDao
-import aschi2403.tsiy.db.SetEntryDao
-import aschi2403.tsiy.db.WorkoutEntryDao
-import aschi2403.tsiy.db.WorkoutPlanDao
+import aschi2403.tsiy.db.ActivityDao
 import aschi2403.tsiy.db.AllActivityTypeDao
+import aschi2403.tsiy.db.CardioActivityDao
+import aschi2403.tsiy.db.CardioActivityTypeDao
 import aschi2403.tsiy.db.GPSPointsDao
-import aschi2403.tsiy.model.PowerActivity
+import aschi2403.tsiy.db.SetEntryDao
+import aschi2403.tsiy.db.PowerActivityTypeDao
+import aschi2403.tsiy.db.WeightEntryDao
+import aschi2403.tsiy.db.WorkoutSessionDao
+import aschi2403.tsiy.db.WorkoutDatabase
+import aschi2403.tsiy.db.WorkoutPlanDao
+import aschi2403.tsiy.db.WorkoutPlanEntryDao
+import aschi2403.tsiy.model.Activity
 import aschi2403.tsiy.model.ActivityType
-import aschi2403.tsiy.model.GeneralActivity
+import aschi2403.tsiy.model.CardioActivity
 import aschi2403.tsiy.model.GPSPoint
+import aschi2403.tsiy.model.relations.ActivityWithCardioActivity
+import aschi2403.tsiy.model.relations.IActivity
 import aschi2403.tsiy.model.SetEntry
 import aschi2403.tsiy.model.WeightEntry
-import aschi2403.tsiy.model.WorkoutEntry
 import aschi2403.tsiy.model.WorkoutPlan
+import aschi2403.tsiy.model.WorkoutPlanEntry
+import aschi2403.tsiy.model.WorkoutSession
+
 
 @Suppress("TooManyFunctions")
 class WorkoutRepo(context: Context) {
     private var db = WorkoutDatabase.getInstance(context)
-    private var powerActivityDao: PowerActivityDao = db.powerActivityDao()
+    private var activityDao: ActivityDao = db.activityDao()
     private var powerActivityTypeDao: PowerActivityTypeDao = db.powerActivityTypeDao()
-    private var activityTypeDao: ActivityTypeDao = db.activityTypeDao()
+    private var cardioActivityTypeDao: CardioActivityTypeDao = db.activityTypeDao()
     private var allActivityTypeDao: AllActivityTypeDao = db.allActivityTypeDao()
-    private var generalActivityDao: GeneralActivityDao = db.generalActivityDao()
+    private var cardioActivityDao: CardioActivityDao = db.generalActivityDao()
     private var weightEntryDao: WeightEntryDao = db.weightEntryDao()
     private var setEntryDao: SetEntryDao = db.setEntryDao()
-    private var workoutEntryDao: WorkoutEntryDao = db.workoutEntryDao()
+    private var workoutPlanEntryDao: WorkoutPlanEntryDao = db.workoutPlanEntryDao()
     private var workoutPlanDao: WorkoutPlanDao = db.workoutPlanDao()
     private var gpsPointsDao: GPSPointsDao = db.gpsPointDao()
+    private var workoutSessionDao: WorkoutSessionDao = db.getWorkoutSessionDao()
 
-
-    // PowerActivity
-
-    fun addPowerActivity(powerActivity: PowerActivity): Long {
-        val newId = powerActivityDao.insertPowerActivity(powerActivity)
-        powerActivity.id = newId
+    fun addActivity(activity: Activity): Long {
+        val newId = activityDao.insertActivity(activity)
+        activity.id = newId
         return newId
     }
 
-    val allPowerActivities: /*LiveData<*/List<PowerActivity>
-        /*>*/
+    val allActivities: List<ActivityWithCardioActivity>
         get() {
-            val list = powerActivityDao.loadAll()
-
-            list.forEach {
-                it.activityType = powerActivityTypeById(it.activityTypeId)
-            }
-
-            return list
+            return activityDao.loadAll()
         }
 
-    fun powerActivityById(id: Long) = powerActivityDao.loadPowerActivity(id)
-
-    fun updatePowerActivity(powerActivity: PowerActivity) {
-        powerActivityDao.updatePowerActivity(powerActivity)
+    fun getActivityWithCardioActivityById(activityId: Long): ActivityWithCardioActivity {
+        return activityDao.getActivityWithCardioActivity(activityId)
     }
 
-    fun deletePowerActivity(powerActivity: PowerActivity) {
-        powerActivityDao.deletePowerActivity(powerActivity)
+    fun getActivityById(activityId: Long): Activity {
+        return activityDao.loadActivity(activityId)
     }
 
-    // GeneralActivity
+    fun updateActivity(activity: Activity) {
+        activityDao.updateActivity(activity)
+    }
 
-    fun addGeneralActivity(generalActivity: GeneralActivity): Long {
-        val newId = generalActivityDao.insertGeneralActivity(generalActivity)
-        generalActivity.id = newId
+    // CardioActivity
+
+    fun addCardioActivity(cardioActivity: CardioActivity): Long {
+        val newId = cardioActivityDao.insertCardioActivity(cardioActivity)
+        cardioActivity.id = newId
         return newId
     }
 
-    fun updateActivity(generalActivity: GeneralActivity) {
-        generalActivityDao.updateGeneralActivity(generalActivity)
+    fun updateActivity(cardioActivity: CardioActivity) {
+        cardioActivityDao.updateCardioActivity(cardioActivity)
     }
 
-    val allGeneralActivities: List<GeneralActivity>
+    val allCardioActivities: List<CardioActivity>
         get() {
-            val list = generalActivityDao.loadAll()
-
-            list.forEach {
-                it.activityType = activityTypeById(it.activityTypeId)
-            }
-
-            return list
+            return cardioActivityDao.loadAll()
         }
 
-    fun generalActivityById(id: Long) = generalActivityDao.loadGeneralActivity(id)
+    fun cardioActivityById(id: Long) = cardioActivityDao.loadCardioActivity(id)
 
-    fun deleteGeneralActivity(generalActivity: GeneralActivity) {
-        generalActivityDao.deleteGeneralActivity(generalActivity)
-    }
-
-    // All ActivityType
+// All ActivityType
 
     val allActivityTypes: List<ActivityType>
         get() {
@@ -104,7 +92,7 @@ class WorkoutRepo(context: Context) {
 
     fun allActivityTypeById(id: Long) = allActivityTypeDao.loadActivityType(id)
 
-    // PowerActivityType
+// PowerActivityType
 
     val allPowerActivityTypes: List<ActivityType>
         get() {
@@ -113,29 +101,28 @@ class WorkoutRepo(context: Context) {
 
     fun powerActivityTypeById(id: Long) = powerActivityTypeDao.loadPowerActivityType(id)
 
-    // ActivityType
+// ActivityType
 
     fun addActivityType(activityType: ActivityType): Long {
-        val newId = activityTypeDao.insertActivityType(activityType)
+        val newId = cardioActivityTypeDao.insertActivityType(activityType)
         activityType.id = newId
         return newId
     }
 
     fun updateActivityType(activityType: ActivityType) {
-        activityTypeDao.updateActivityType(activityType)
+        cardioActivityTypeDao.updateActivityType(activityType)
     }
 
     fun deleteActivityType(activityType: ActivityType) {
-        activityTypeDao.deleteActivityType(activityType)
+        cardioActivityTypeDao.deleteActivityType(activityType)
     }
-
 
     val allGeneralActivityTypes: List<ActivityType>
         get() {
-            return activityTypeDao.loadAll()
+            return cardioActivityTypeDao.loadAll()
         }
 
-    fun activityTypeById(id: Long) = activityTypeDao.loadActivityType(id)
+    fun cardioActivityTypeById(id: Long) = cardioActivityTypeDao.loadActivityType(id)
 
     // WeightEntry
     fun addWeightEntry(weightEntry: WeightEntry): Long {
@@ -151,7 +138,6 @@ class WorkoutRepo(context: Context) {
 
     fun weightEntryById(id: Long) = weightEntryDao.loadWeightEntry(id)
 
-
     fun insertSetEntry(setEntry: SetEntry): Long {
         val newId = setEntryDao.insertSetEntry(setEntry)
         setEntry.id = newId
@@ -162,7 +148,7 @@ class WorkoutRepo(context: Context) {
         return setEntryDao.getSetEntriesByPowerActivityId(powerActivityId)
     }
 
-    // WorkoutPlan
+// WorkoutPlan
 
     val allWorkoutPlans: List<WorkoutPlan>
         get() {
@@ -170,7 +156,6 @@ class WorkoutRepo(context: Context) {
         }
 
     fun workoutPlanById(id: Long) = workoutPlanDao.loadWorkoutPlan(id)
-
 
     fun insertWorkoutPlan(workoutPlan: WorkoutPlan): Long {
         val newId = workoutPlanDao.insertWorkoutPlan(workoutPlan)
@@ -182,34 +167,71 @@ class WorkoutRepo(context: Context) {
         workoutPlanDao.deleteWorkoutPlan(workoutPlan)
     }
 
-    // WorkoutEntry
+// WorkoutEntry
 
-    val allWorkoutEntry: List<WorkoutEntry>
+    val allWorkoutEntry: List<WorkoutPlanEntry>
         get() {
-            return workoutEntryDao.loadAll()
+            return workoutPlanEntryDao.loadAll()
         }
 
     fun workoutEntryById(id: Long) = workoutPlanDao.loadWorkoutPlan(id)
 
-    fun workoutEntriesByWorkoutPlanId(workoutPlanId: Long): List<WorkoutEntry> = allWorkoutEntry
+    fun workoutEntriesByWorkoutPlanId(workoutPlanId: Long): List<WorkoutPlanEntry> = allWorkoutEntry
         .filter { workoutEntry -> workoutEntry.workoutPlanId == workoutPlanId }
 
-    fun updateWorkoutEntry(workoutEntry: WorkoutEntry) =
-        workoutEntryDao.updateWorkoutEntry(workoutEntry)
+    fun updateWorkoutEntry(workoutEntry: WorkoutPlanEntry) =
+        workoutPlanEntryDao.updateWorkoutEntry(workoutEntry)
 
-    fun insertWorkoutEntry(workoutEntry: WorkoutEntry): Long {
-        val newId = workoutEntryDao.insertWorkoutEntry(workoutEntry)
+    fun insertWorkoutEntry(workoutEntry: WorkoutPlanEntry): Long {
+        val newId = workoutPlanEntryDao.insertWorkoutEntry(workoutEntry)
         workoutEntry.id = newId
         return newId
     }
 
-    fun deleteWorkoutEntry(workoutEntry: WorkoutEntry) =
-        workoutEntryDao.deleteWorkoutEntry(workoutEntry)
+    fun deleteWorkoutEntry(workoutEntry: WorkoutPlanEntry) =
+        workoutPlanEntryDao.deleteWorkoutEntry(workoutEntry)
 
     fun insertGPSPoints(gpsPoints: List<GPSPoint>) =
         gpsPoints.forEach {
             gpsPointsDao.insertGPSPoint(it)
         }
 
-    fun getGPSPointsFromActivity(workoutEntryId: Long): List<GPSPoint> = gpsPointsDao.loadGPSPoints(workoutEntryId)
+    fun getGPSPointsFromActivity(activityId: Long): List<GPSPoint> = gpsPointsDao.loadGPSPoints(activityId)
+
+    fun addActivity(activity: IActivity): Long {
+        if (activity is CardioActivity) {
+            return addCardioActivity(activity)
+        }
+        return addActivity(activity as Activity)
+    }
+
+    fun isPowerActivity(activityTypeId: Long): Boolean {
+        return allActivityTypeById(activityTypeId).isPowerActivity
+    }
+
+    fun deleteActivity(activity: Activity) {
+        activityDao.deleteActivity(activity)
+    }
+
+    fun allWorkoutSessions(): List<WorkoutSession> {
+        return workoutSessionDao.loadAll()
+    }
+
+    fun insertWorkoutSession(workoutSession: WorkoutSession) {
+        workoutSessionDao.insertWorkoutSession(workoutSession)
+    }
+
+    fun workoutSessionById(workoutId: Long): List<WorkoutSession> {
+        return workoutSessionDao.getWorkoutByMergingId(workoutId)
+    }
+
+    fun isWorkoutPlanInWorkoutSession(workoutId: Long): Boolean {
+        return allWorkoutSessions().find { entry -> entry.idOfWorkoutPlan == workoutId } != null
+    }
+
+    fun deleteWorkoutSessionWithActivities(workoutId: Long) {
+        workoutSessionDao.getWorkoutByMergingId(workoutId)
+            .forEach { entry -> activityDao.deleteActivityById(entry.idOfActivity) }
+        workoutSessionDao.deleteWorkoutSessionByMergingId(workoutId)
+    }
 }

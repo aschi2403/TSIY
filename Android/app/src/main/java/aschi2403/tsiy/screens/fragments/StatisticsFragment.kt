@@ -51,17 +51,17 @@ class StatisticsFragment : Fragment() {
 
         // daily cardio points and calories
 
-        val activities = database.allGeneralActivities.filter { generalActivity ->
+        val activities = database.allCardioActivities.filter { generalActivity ->
             formatter.parse(formatter.format(Date(generalActivity.startDate))) == formatter.parse(
                 formatter.format(Date())
             )
-        }.plus(database.allPowerActivities.filter { powerActivity ->
-            formatter.parse(formatter.format(Date(powerActivity.startDate))) == formatter.parse(
+        }.plus(database.allActivities.filter { powerActivity ->
+            formatter.parse(formatter.format(Date(powerActivity.activity.startDate))) == formatter.parse(
                 formatter.format(Date())
             )
         })
-        binding.caloriesValue.text = activities.sumByDouble { a -> a.calories }.toString()
-        binding.cardioPointsValue.text = activities.sumByDouble { a -> a.cardioPoints }.toString()
+        // binding.caloriesValue.text = activities.sumByDouble { a -> a.calories }.toString()
+        // binding.cardioPointsValue.text = activities.sumByDouble { a -> a.cardioPoints }.toString()
 
         val items = arrayOf(
             getString(R.string.Day),
@@ -136,16 +136,15 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun groupBy(groupByFormatter: SimpleDateFormat) {
-        database.allPowerActivities.plus(database.allGeneralActivities)
+        database.allActivities/*.plus(database.allCardioActivities)*/
             .groupBy {
                 groupByFormatter.parse(
-                    groupByFormatter.format(Date(it.startDate))
+                    groupByFormatter.format(Date(it.activity.startDate))
                 )
             }.entries.forEach { list ->
                 workoutList.add(
                     Entry(list.key!!.time.toFloat(), list.value.size.toFloat(), list.value)
                 )
             }
-
     }
 }

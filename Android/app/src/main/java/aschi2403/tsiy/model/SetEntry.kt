@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "SetEntry", foreignKeys = [
         ForeignKey(
-            entity = PowerActivity::class,
+            entity = Activity::class,
             parentColumns = ["id"],
             childColumns = ["powerActivityId"],
             onDelete = ForeignKey.CASCADE

@@ -14,11 +14,11 @@ interface GPSPointsDao {
     @Query("SELECT * FROM GPSPoints")
     fun loadAll(): List<GPSPoint>
 
-    @Query("SELECT * FROM GPSPoints WHERE workoutEntryId=:workoutEntryId")
-    fun loadGPSPoints(workoutEntryId: Long): List<GPSPoint>
+    @Query("SELECT * FROM GPSPoints WHERE id=:activityId")
+    fun loadGPSPoints(activityId: Long): List<GPSPoint>
 
-    @Query("SELECT * FROM GPSPoints WHERE id=:workoutEntryId")
-    fun loadLiveGPSPoints(workoutEntryId: Long): LiveData<GPSPoint>
+    @Query("SELECT * FROM GPSPoints WHERE id=:activityId")
+    fun loadLiveGPSPoints(activityId: Long): LiveData<GPSPoint>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertGPSPoint(gPSPoint: GPSPoint): Long

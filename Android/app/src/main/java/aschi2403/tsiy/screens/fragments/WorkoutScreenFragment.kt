@@ -16,11 +16,13 @@ import androidx.navigation.fragment.findNavController
 import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentWorkoutScreenBinding
 import aschi2403.tsiy.gps.LocationForceGroundService
+import aschi2403.tsiy.model.Activity
+import aschi2403.tsiy.model.CardioActivity
 import aschi2403.tsiy.helper.DialogView
 import aschi2403.tsiy.helper.GPSReceiver
 import aschi2403.tsiy.model.GPSPoint
-import aschi2403.tsiy.model.GeneralActivity
-import aschi2403.tsiy.model.PowerActivity
+import aschi2403.tsiy.model.WorkoutSession
+import aschi2403.tsiy.model.WorkoutPlanEntry
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.viewmodel.WorkoutScreenViewModel
 import org.osmdroid.api.IMapController
@@ -29,11 +31,11 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 private const val MAP_ZOOM = 15.0
 
 class WorkoutScreenFragment : Fragment() {
+    private var isPowerActivity: Boolean = false
     private var locationService: Intent? = null
     private var workoutPlanId: Long = -1
-    private var newWorkoutIdForDatabase: Int = -1
-    private var isPowerActivity: Boolean = true
-    private lateinit var database: WorkoutRepo
+    private var newWorkoutIdForDatabase: Long = -1
+    private lateinit var repo: WorkoutRepo
     private var idOfActivity: Long = -1
     private var workoutEntryIndex = 0
     private lateinit var binding: FragmentWorkoutScreenBinding
@@ -49,12 +51,10 @@ class WorkoutScreenFragment : Fragment() {
             override fun handleOnBackPressed() {
                 dialogView.showYesNoDialog(
                     getString(R.string.attention),
-                    getString(R.string.goBackMessage),
-                    { _, _ ->
-                        activity?.finish()
-                    },
-                    { _, _ -> }
-                )
+                    getString(R.string.goBackMessage)
+                ) { _, _ ->
+                    activity?.finish()
+                }
             }
         })
     }
@@ -64,11 +64,10 @@ class WorkoutScreenFragment : Fragment() {
             inflater, R.layout.fragment_workout_screen, container, false
         )
         dialogView = DialogView(requireContext())
-        isPowerActivity = arguments?.getBoolean("type")!!
 
-        database = WorkoutRepo(requireActivity().applicationContext)
+        repo = WorkoutRepo(requireActivity().applicationContext)
 
-        workoutPlanId = arguments?.getLong("workoutPlanId", -1)!!
+        workoutPlanId = arguments?.getLong("workoutPlanId") ?: -1
 
         if (workoutPlanId >= 0) {
             handleWorkout()
@@ -87,71 +86,108 @@ class WorkoutScreenFragment : Fragment() {
     }
 
     private fun handleActivity() {
+        val activityTypeId = arguments?.getLong("activityTypeId")!!
+        isPowerActivity = repo.isPowerActivity(activityTypeId)
+
         if (!isPowerActivity) {
             showAndConfigureMapForNormalActivity()
         }
 
-        val activityTypeId = arguments?.getLong("activityTypeId")!!
         binding.activity.text = arguments?.getString("name")
 
+        if (viewModel.startDate == 0L) {
+            viewModel.startDate = System.currentTimeMillis()
+        }
         createActivityInDb(
-            isPowerActivity,
-            activityTypeId,
-            isWorkout = false,
-            upNext = null
+            activityTypeId
         )
 
-        closeButton(activityTypeId, isPowerActivity)
+        configureNextButton(isPowerActivity, isWorkout = false, activityTypeId = idOfActivity)
+
+        closeButton(activityTypeId, false)
     }
 
     private fun handleWorkout() {
-        val data = database.allGeneralActivities.plus(database.allPowerActivities)
-        if (data.isNotEmpty() && newWorkoutIdForDatabase == -1) {
+        val data = repo.allWorkoutSessions()
+        if (data.isEmpty()) {
+            newWorkoutIdForDatabase = 0
+        }
+        if (newWorkoutIdForDatabase == -1L) {
             newWorkoutIdForDatabase = data
-                .maxOf { activity -> activity.workoutId }.plus(1)
+                .maxOf { workoutSession -> workoutSession.idForMerging }.plus(1)
         }
         val activities =
-            database.workoutEntriesByWorkoutPlanId(workoutPlanId).toMutableList()
+            repo.workoutEntriesByWorkoutPlanId(workoutPlanId).toMutableList()
 
-            closeButton(activities[workoutEntryIndex].iActivityTypeId, activities[workoutEntryIndex].isPowerActivity)
+        isPowerActivity =
+            repo.allActivityTypeById(activities[workoutEntryIndex].iActivityTypeId).isPowerActivity
+
+        closeButton(activities[workoutEntryIndex].iActivityTypeId, true)
 
         val upNext = if (workoutEntryIndex + 1 < activities.size) {
-            database.allActivityTypeById(
+            repo.allActivityTypeById(
                 activities[workoutEntryIndex + 1].iActivityTypeId
             ).name
         } else {
-            null
+            ""
         }
 
-            if (!activities[workoutEntryIndex].isPowerActivity) {
-                showAndConfigureMapForNormalActivity()
-            }
+        if (!isPowerActivity) {
+            showAndConfigureMapForNormalActivity()
+        }
 
-            createActivityInDb(
-                activities[workoutEntryIndex].isPowerActivity,
-                activities[workoutEntryIndex].iActivityTypeId,
-                isWorkout = true,
-                upNext
-            )
+        idOfActivity = viewModel.donePowerActivities.getOrDefault(activities[workoutEntryIndex].iActivityTypeId, -1)
+
+        createActivityInDb(
+            activities[workoutEntryIndex].iActivityTypeId
+        )
+
+        viewModel.startDate = System.currentTimeMillis()
+
+        configureNextButton(
+            isPowerActivity,
+            upNext = upNext,
+            isWorkout = true,
+            activities[workoutEntryIndex].iActivityTypeId
+        )
 
         binding.activity.text =
-            database.allActivityTypeById(activities[workoutEntryIndex].iActivityTypeId).name
+            repo.allActivityTypeById(activities[workoutEntryIndex].iActivityTypeId).name
 
         if (workoutEntryIndex + 1 == activities.size) {
             binding.next.visibility = View.INVISIBLE
         }
 
-        if (!activities[workoutEntryIndex].isPowerActivity && workoutEntryIndex + 1 < activities.size) {
+        configureNextButtonForCardioActivities(activities, upNext)
+    }
+
+    private fun configureNextButtonForCardioActivities(
+        activities: MutableList<WorkoutPlanEntry>,
+        upNext: String
+    ) {
+        if (!isPowerActivity && workoutEntryIndex + 1 < activities.size) {
             binding.next.visibility = View.VISIBLE
             binding.next.setOnClickListener {
 
                 // finish activity
                 saveInDatabase(
                     activities[workoutEntryIndex].iActivityTypeId,
-                    activities[workoutEntryIndex].isPowerActivity,
-                    newWorkoutIdForDatabase = newWorkoutIdForDatabase,
-                    workoutPlanId = workoutPlanId
+                    isPowerActivity
                 )
+
+                if (!viewModel.donePowerActivities.containsKey(activities[workoutEntryIndex].iActivityTypeId)) {
+                    repo.insertWorkoutSession(
+                        WorkoutSession(
+                            idOfActivity = idOfActivity,
+                            idOfWorkoutPlan = workoutPlanId,
+                            idForMerging = newWorkoutIdForDatabase
+                        )
+                    )
+                }
+
+                if (isPowerActivity) {
+                    viewModel.donePowerActivities[activities[workoutEntryIndex].iActivityTypeId] = idOfActivity
+                }
                 // remove id of activity
                 idOfActivity = -1
                 viewModel.values.putLong("stopTime", -1)
@@ -168,32 +204,43 @@ class WorkoutScreenFragment : Fragment() {
     }
 
     private fun showAndConfigureMapForNormalActivity() {
-        binding.map.visibility = View.VISIBLE
-        binding.map.setTileSource(TileSourceFactory.MAPNIK)
         val mapController: IMapController = binding.map.controller
         mapController.setZoom(MAP_ZOOM)
-        binding.generalActivityHeader.visibility = View.VISIBLE
-        binding.generalActivityBody.visibility = View.VISIBLE
         receiver = GPSReceiver(binding.map, binding.kmValue, binding.speedValue)
         requireActivity().registerReceiver(receiver, IntentFilter("GPS_Data"))
         locationService = Intent(
             requireActivity(),
             LocationForceGroundService::class.java
         )
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             requireActivity().startForegroundService(locationService)
         } else {
             requireActivity().startService(locationService)
         }
+
+        binding.map.visibility = View.VISIBLE
+        binding.map.setTileSource(TileSourceFactory.MAPNIK)
+
+        binding.generalActivityHeader.visibility = View.VISIBLE
+        binding.generalActivityBody.visibility = View.VISIBLE
     }
 
-    private fun closeButton(activityTypeId: Long, isPowerActivity: Boolean) {
+    private fun closeButton(activityTypeId: Long, isWorkout: Boolean) {
         binding.close.setOnClickListener {
+            if (isWorkout && !viewModel.donePowerActivities.containsKey(activityTypeId)) {
+                repo.insertWorkoutSession(
+                    WorkoutSession(
+                        idOfActivity = idOfActivity,
+                        idOfWorkoutPlan = workoutPlanId,
+                        idForMerging = newWorkoutIdForDatabase
+                    )
+                )
+            }
+
             saveInDatabase(
                 activityTypeId,
-                isPowerActivity,
-                newWorkoutIdForDatabase = newWorkoutIdForDatabase,
-                workoutPlanId = workoutPlanId
+                isPowerActivity
             )
             if (isPowerActivity) {
                 findNavController().navigate(
@@ -215,80 +262,89 @@ class WorkoutScreenFragment : Fragment() {
     }
 
     private fun createActivityInDb(
-        isPowerActivity: Boolean,
-        activityTypeId: Long,
-        isWorkout: Boolean,
-        upNext: String?
+        activityTypeId: Long
     ) {
-        if (!isPowerActivity) { // normal activity
+        if (idOfActivity != -1L) {
+            return
+        }
+
+        idOfActivity = repo.addActivity(
+            Activity(
+                startDate = System.currentTimeMillis(),
+                activityTypeId = activityTypeId
+            )
+        )
+    }
+
+    private fun configureNextButton(
+        isPowerActivity: Boolean,
+        upNext: String = "",
+        isWorkout: Boolean,
+        activityTypeId: Long
+    ) {
+        if (!isPowerActivity) {
             binding.next.visibility = View.INVISIBLE
-            if (idOfActivity == -1L) {
-                idOfActivity =
-                    database.addGeneralActivity(
-                        GeneralActivity(
-                            startDate = System.currentTimeMillis(),
-                            activityTypeId = activityTypeId,
-                            workoutId = -1
-                        )
-                    )
-            }
-        } else {
-            if (idOfActivity == -1L) {
-                idOfActivity = database.addPowerActivity(
-                    PowerActivity(
-                        startDate = System.currentTimeMillis(),
-                        activityTypeId = activityTypeId,
-                        workoutId = -1
+            return
+        }
+        binding.next.setOnClickListener {
+            Navigation.findNavController(requireActivity(), R.id.fragNavWorkoutHost)
+                .navigate(
+                    WorkoutScreenFragmentDirections.actionWorkoutScreenToChoosePowerActivityType(
+                        idOfPowerActivity = idOfActivity, finished = false, upNext = upNext
                     )
                 )
-            }
-            binding.next.setOnClickListener {
-                Navigation.findNavController(requireActivity(), R.id.fragNavWorkoutHost)
-                    .navigate(
-                        WorkoutScreenFragmentDirections.actionWorkoutScreenToChoosePowerActivityType(
-                            idOfPowerActivity = idOfActivity, finished = false, upNext = upNext
+            if (isWorkout) {
+                if (!viewModel.donePowerActivities.containsKey(activityTypeId)) {
+                    repo.insertWorkoutSession(
+                        WorkoutSession(
+                            idOfActivity = idOfActivity,
+                            idOfWorkoutPlan = workoutPlanId,
+                            idForMerging = newWorkoutIdForDatabase
                         )
                     )
-                if (isWorkout) {
-                    // finish activity
-                    saveInDatabase(
-                        activityTypeId,
-                        isPowerActivity,
-                        newWorkoutIdForDatabase = newWorkoutIdForDatabase,
-                        workoutPlanId = workoutPlanId
-                    )
-                    // remove id of activity
-                    idOfActivity = -1
-                    viewModel.values.putLong("stopTime", -1)
                 }
 
-                workoutEntryIndex++
+                // finish activity
+                saveInDatabase(
+                    activityTypeId,
+                    isPowerActivity
+                )
+
+                if (isPowerActivity) {
+                    viewModel.donePowerActivities[activityTypeId] = idOfActivity
+                }
+                // remove id of activity
+                idOfActivity = -1
+                viewModel.values.putLong("stopTime", -1)
             }
+
+            workoutEntryIndex++
         }
     }
 
     private fun saveInDatabase(
         activityTypeId: Long,
-        isPowerActivity: Boolean,
-        newWorkoutIdForDatabase: Int,
-        workoutPlanId: Long
+        isPowerActivity: Boolean
     ) {
-        if (!isPowerActivity) { // normal activity
-            database.updateActivity(
-                GeneralActivity(
+        val duration = repo.getActivityById(idOfActivity).duration + SystemClock.elapsedRealtime() - binding.timer.base
+        repo.updateActivity(
+            Activity(
+                id = idOfActivity,
+                activityTypeId = activityTypeId,
+                startDate = repo.getActivityWithCardioActivityById(idOfActivity).activity.startDate,
+                duration = duration,
+                endDate = System.currentTimeMillis()
+            )
+        )
+        if (!isPowerActivity) { // cardio activity
+            // save additional data
+            repo.addCardioActivity(
+                CardioActivity(
                     id = idOfActivity,
-                    activityTypeId = activityTypeId,
-                    startDate = database.generalActivityById(idOfActivity).startDate,
-                    duration = SystemClock.elapsedRealtime() - binding.timer.base,
-                    calories = 0.0,
-                    cardioPoints = 0.0,
-                    endDate = System.currentTimeMillis(),
-                    distance = receiver.distance,
-                    workoutId = newWorkoutIdForDatabase,
-                    workoutPlanId = workoutPlanId
+                    distance = receiver.distance
                 )
-            ) // TODO: calculate cardioPoints and calories
-            database.insertGPSPoints(receiver.geoPoints.map {
+            )
+            repo.insertGPSPoints(receiver.geoPoints.map {
                 GPSPoint(
                     null,
                     it.latitude,
@@ -296,23 +352,7 @@ class WorkoutScreenFragment : Fragment() {
                     idOfActivity
                 )
             })
-        } else { // power activity
-            database.updatePowerActivity(
-                PowerActivity(
-                    id = idOfActivity,
-                    activityTypeId = activityTypeId,
-                    startDate = database.powerActivityById(idOfActivity).startDate,
-                    duration = SystemClock.elapsedRealtime() - binding.timer.base,
-                    calories = 0.0,
-                    cardioPoints = 0.0,
-                    sets = workoutEntryIndex,
-                    endDate = System.currentTimeMillis(),
-                    workoutId = newWorkoutIdForDatabase,
-                    workoutPlanId = workoutPlanId
-                )
-            )
-        }
-        if (!isPowerActivity) {
+
             requireActivity().unregisterReceiver(receiver)
             requireActivity().stopService(locationService)
         }

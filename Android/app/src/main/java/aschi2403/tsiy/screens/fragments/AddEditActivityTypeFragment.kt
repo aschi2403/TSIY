@@ -40,12 +40,10 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
                 ) {
                     DialogView(requireContext()).showYesNoDialog(
                         getString(R.string.attention),
-                        getString(R.string.goBackMessage),
-                        { _, _ ->
-                            findNavController().popBackStack()
-                        },
-                        { _, _ -> }
-                    )
+                        getString(R.string.goBackMessage)
+                    ) { _, _ ->
+                        findNavController().popBackStack()
+                    }
                 } else {
                     findNavController().popBackStack()
                 }
@@ -74,18 +72,14 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
         val idOfActivity = arguments?.getLong("id")
         val powerActivity = arguments?.getBoolean("type")
 
-        val database = WorkoutRepo(requireContext())
-        var activity: ActivityType
+        val repo = WorkoutRepo(requireContext())
+        val activity: ActivityType
 
         val iconDialog = childFragmentManager.findFragmentByTag("ICON_DIALOG_TAG") as IconDialog?
             ?: IconDialog.newInstance(IconDialogSettings())
 
         if (!newActivity!! && idOfActivity != null) {
-            activity = if (powerActivity!!) {
-                database.powerActivityTypeById(idOfActivity)
-            } else {
-                database.activityTypeById(idOfActivity)
-            }
+            activity = repo.allActivityTypeById(idOfActivity)
             binding.activityType.setText(activity.name)
             binding.descriptionValue.setText(activity.description)
             iconId = activity.icon
@@ -101,7 +95,7 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
             binding.icon.setColorFilter(Color.WHITE)
 
         binding.close.setOnClickListener { findNavController().popBackStack() }
-        handleSaveButton(powerActivity, idOfActivity, newActivity, database)
+        handleSaveButton(powerActivity, idOfActivity, newActivity, repo)
         return binding.root
     }
 
@@ -111,7 +105,6 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
         newActivity: Boolean,
         database: WorkoutRepo
     ) {
-        var activity: ActivityType
         binding.save.setOnClickListener {
             if (binding.activityType.text.isNullOrEmpty()
                 || binding.caloriesValue.text.isNullOrEmpty()
@@ -123,7 +116,7 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
                     Toast.LENGTH_LONG
                 ).show()
             } else {
-                activity = ActivityType(
+                val activity = ActivityType(
                     binding.activityType.text.toString(),
                     iconId,
                     binding.descriptionValue.text.toString(),
@@ -131,11 +124,10 @@ class AddEditActivityTypeFragment : Fragment(), IconDialog.Callback {
                     binding.caloriesValue.text.toString().toDouble(),
                     binding.cardioPointsValue.text.toString().toDouble()
                 )
-                activity.id = idOfActivity
+
                 if (!newActivity && idOfActivity != null) {
                     database.updateActivityType(activity)
                 } else {
-                    activity.id = null
                     database.addActivityType(activity)
                 }
                 findNavController().popBackStack()

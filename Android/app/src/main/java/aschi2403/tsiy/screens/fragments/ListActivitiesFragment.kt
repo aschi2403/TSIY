@@ -23,7 +23,7 @@ import java.util.stream.Collectors
 class ListActivitiesFragment : Fragment() {
 
     private lateinit var editDeleteAdapter: ActivitiesTypeEditDeleteAdapter
-    private lateinit var database: WorkoutRepo
+    private lateinit var repo: WorkoutRepo
     private var type: Boolean? = false
 
     private lateinit var binding: FragmentListViewBinding
@@ -39,10 +39,11 @@ class ListActivitiesFragment : Fragment() {
 
         (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        database = WorkoutRepo(requireContext())
+        repo = WorkoutRepo(requireContext())
         type = arguments?.getBoolean("type")
 
         val data = getData(type!!)
+
         binding.addNewActivity.setOnClickListener {
             findNavController().navigate(
                 ListActivitiesFragmentDirections.actionListActivitiesFragmentToFragmentAddEditFragment(
@@ -64,6 +65,12 @@ class ListActivitiesFragment : Fragment() {
             )
         rv.adapter = editDeleteAdapter
 
+        configureSearchButton()
+
+        return binding.root
+    }
+
+    private fun configureSearchButton() {
         binding.search.setOnQueryTextListener(object : OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 callSearch(query)
@@ -93,15 +100,13 @@ class ListActivitiesFragment : Fragment() {
                 }
             }
         })
-
-        return binding.root
     }
 
     private fun getData(isPowerActivity: Boolean): List<ActivityType> {
         if (isPowerActivity) {
-            return database.allPowerActivityTypes
+            return repo.allPowerActivityTypes
         }
-        return database.allGeneralActivityTypes
+        return repo.allGeneralActivityTypes
     }
 
     override fun onResume() {

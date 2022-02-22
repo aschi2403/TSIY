@@ -17,7 +17,7 @@ import aschi2403.tsiy.databinding.FragmentHomeBinding
 import aschi2403.tsiy.helper.DataMerger
 import aschi2403.tsiy.helper.DialogView
 import aschi2403.tsiy.helper.IconPackProvider
-import aschi2403.tsiy.model.relations.IActivity
+import aschi2403.tsiy.model.relations.ActivityWithCardioActivity
 import aschi2403.tsiy.repository.WorkoutRepo
 import aschi2403.tsiy.screens.adapters.HomeListAdapter
 import aschi2403.tsiy.screens.models.HomeViewModel
@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.activity_main.filterButtonAppBar
 class HomeFragment : Fragment() {
 
     private var checkedItem: Int = 0
-    private lateinit var database: WorkoutRepo
+    private lateinit var repo: WorkoutRepo
     private lateinit var homeListAdapter: HomeListAdapter
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
@@ -55,9 +55,9 @@ class HomeFragment : Fragment() {
 
         handleFloatingButtons()
 
-        database = WorkoutRepo(this.requireContext())
+        repo = WorkoutRepo(this.requireContext())
 
-        dataMerger = DataMerger(database)
+        dataMerger = DataMerger(repo)
 
         val rv = binding.listOfActivities
         rv.setHasFixedSize(true)
@@ -69,7 +69,7 @@ class HomeFragment : Fragment() {
             this.requireContext(),
             IconPackProvider(this.requireContext()).loadIconPack(),
             checkedItem,
-            true
+            true, requireActivity()
         )
         rv.adapter = homeListAdapter
         return binding.root
@@ -90,7 +90,6 @@ class HomeFragment : Fragment() {
                         )
                     )
                     homeListAdapter.notifyDataSetChanged()
-                    this.checkedItem = checkedItem
                 }, { _, _ -> })
             }
         }
@@ -142,24 +141,6 @@ class HomeFragment : Fragment() {
                 R.drawable.ic_baseline_add_24
             )
         )
-    }
-
-    private fun getData(): MutableList<IActivity> {
-        return when (checkedItem) {
-            0 -> {
-                val mergedList =
-                    database.allPowerActivities.plus(database.allGeneralActivities)
-                mergedList.sortedByDescending { it.startDate }.toMutableList()
-            }
-            1 -> {
-                database.allGeneralActivities.sortedByDescending { it.startDate }
-                    .toMutableList()
-            }
-            else -> {
-                database.allPowerActivities.sortedByDescending { it.startDate }
-                    .toMutableList()
-            }
-        }
     }
 
     private fun changeVisibilityOfFloatingButtons(visibility: Int) {

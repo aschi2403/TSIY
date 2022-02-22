@@ -6,7 +6,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "WorkoutEntry", foreignKeys = [
+    tableName = "WorkoutPlanEntry", foreignKeys = [
         ForeignKey(
             entity = WorkoutPlan::class,
             parentColumns = ["id"],
@@ -21,25 +21,23 @@ import androidx.room.PrimaryKey
         )
     ], indices = [Index("id")]
 )
-class WorkoutEntry(
+class WorkoutPlanEntry(
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null,
     var workoutPlanId: Long,
     var iActivityTypeId: Long,
-    var position: Int,
-    val isPowerActivity: Boolean
+    var position: Int
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as WorkoutEntry
+        other as WorkoutPlanEntry
 
         if (id != other.id) return false
         if (workoutPlanId != other.workoutPlanId) return false
         if (iActivityTypeId != other.iActivityTypeId) return false
         if (position != other.position) return false
-        if (isPowerActivity != other.isPowerActivity) return false
 
         return true
     }
@@ -49,12 +47,11 @@ class WorkoutEntry(
         result = 31 * result + workoutPlanId.hashCode()
         result = 31 * result + iActivityTypeId.hashCode()
         result = 31 * result + position
-        result = 31 * result + isPowerActivity.hashCode()
         return result
     }
 
     override fun toString(): String {
         return "WorkoutEntry(id=$id, workoutPlanId=$workoutPlanId, iActivityTypeId=$iActivityTypeId, " +
-                "position=$position, isPowerActivity=$isPowerActivity)"
+                "position=$position"
     }
 }

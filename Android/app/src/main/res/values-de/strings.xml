@@ -101,4 +101,10 @@
     </string>
     <string name="pleaseInsertAllDataForTheActivity">Geben Sie bitte alle Daten für die Aktivität ein.</string>
     <string name="pleaseInsertACorrectWeight">Bitte geben Sie ein korrektes Gewicht ein</string>
+    <string name="delete_workout_plan">Workoutplan mit abgeschlossenen Aktivitäten wirklich löschen?</string>
+    <string name="relation_workout_plan_workout_session">Die Verlinkung zwischen Aktivitäten und dem Workoutplan wird
+        gelöscht!
+    </string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
 </resources>

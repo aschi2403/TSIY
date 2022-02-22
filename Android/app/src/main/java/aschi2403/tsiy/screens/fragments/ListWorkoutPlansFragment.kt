@@ -53,6 +53,12 @@ class ListWorkoutPlansFragment : Fragment() {
             )
         rv.adapter = workoutPlanEditDeleteAdapter
 
+        configureSearchButton()
+
+        return binding.root
+    }
+
+    private fun configureSearchButton() {
         binding.search.setOnQueryTextListener(object : OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 callSearch(query)
@@ -83,8 +89,6 @@ class ListWorkoutPlansFragment : Fragment() {
                 }
             }
         })
-
-        return binding.root
     }
 
     override fun onResume() {

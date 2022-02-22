@@ -28,10 +28,6 @@ class LocationProvider(val context: Context) {
                 oldLocation.longitude = location.longitude
             }
 
-            oldLocation.latitude = location.latitude
-            oldLocation.longitude = location.longitude
-
-
             val gpsData = Intent()
             gpsData.action = "GPS_Data"
             gpsData.putExtra("latitude", location.latitude)
@@ -39,6 +35,10 @@ class LocationProvider(val context: Context) {
             gpsData.putExtra("distance", oldLocation.distanceTo(location) / THOUSAND)
             gpsData.putExtra("speed", location.speed)
             context.sendBroadcast(gpsData)
+
+
+            oldLocation.latitude = location.latitude
+            oldLocation.longitude = location.longitude
         }
 
         override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {
@@ -85,16 +85,14 @@ class LocationProvider(val context: Context) {
                         context,
                         context.getString(R.string.unableToGetLocation),
                         Toast.LENGTH_LONG
-                    )
-                        .show()
+                    ).show()
                 }
             } else {
                 Toast.makeText(
                     context,
                     context.getString(R.string.turnOnLocation),
                     Toast.LENGTH_LONG
-                )
-                    .show()
+                ).show()
             }
         } else {
             Toast.makeText(

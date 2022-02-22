@@ -15,7 +15,7 @@ import aschi2403.tsiy.R
 import aschi2403.tsiy.databinding.FragmentCreateEditWorkoutBinding
 import aschi2403.tsiy.helper.DialogView
 import aschi2403.tsiy.helper.IconPackProvider
-import aschi2403.tsiy.model.WorkoutEntry
+import aschi2403.tsiy.model.WorkoutPlanEntry
 import aschi2403.tsiy.model.WorkoutPlan
 import aschi2403.tsiy.model.relations.IActivityType
 import aschi2403.tsiy.repository.WorkoutRepo
@@ -43,10 +43,8 @@ class CreateEditWorkoutFragment : Fragment() {
                 if (!binding.nameValue.text.isNullOrEmpty() || binding.listOfActivities.isNotEmpty()) {
                     dialogView.showYesNoDialog(
                         getString(R.string.attention),
-                        getString(R.string.goBackMessage),
-                        { _, _ -> findNavController().popBackStack() },
-                        { _, _ -> }
-                    )
+                        getString(R.string.goBackMessage)
+                    ) { _, _ -> findNavController().popBackStack() }
                 } else {
                     findNavController().popBackStack()
                 }
@@ -102,11 +100,7 @@ class CreateEditWorkoutFragment : Fragment() {
         if (id >= 0) {
             database.workoutEntriesByWorkoutPlanId(id).sortedBy { it.position }
                 .map { workoutEntry ->
-                    if (workoutEntry.isPowerActivity) {
-                        database.powerActivityTypeById(workoutEntry.iActivityTypeId)
-                    } else {
-                        database.activityTypeById(workoutEntry.iActivityTypeId)
-                    }
+                    database.allActivityTypeById(workoutEntry.iActivityTypeId)
                 }.toMutableList()
         } else {
             mutableListOf()
@@ -126,8 +120,7 @@ class CreateEditWorkoutFragment : Fragment() {
                             insertNewWorkoutEntry(
                                 id,
                                 selectedActivity.id!!,
-                                index,
-                                selectedActivity.isPowerActivity
+                                index
                             )
                         }
                     }
@@ -139,8 +132,7 @@ class CreateEditWorkoutFragment : Fragment() {
                         insertNewWorkoutEntry(
                             workoutPlan.id!!,
                             selectedActivity.id!!,
-                            index,
-                            selectedActivity.isPowerActivity
+                            index
                         )
                     }
                 }
@@ -159,14 +151,12 @@ class CreateEditWorkoutFragment : Fragment() {
         id: Long,
         activityTypeId: Long,
         index: Int,
-        isPowerActivity: Boolean
     ) {
         database.insertWorkoutEntry(
-            WorkoutEntry(
+            WorkoutPlanEntry(
                 workoutPlanId = id,
                 iActivityTypeId = activityTypeId,
-                position = index,
-                isPowerActivity = isPowerActivity
+                position = index
             )
         )
     }
@@ -187,7 +177,7 @@ class CreateEditWorkoutFragment : Fragment() {
     }
 
     @Suppress("ReturnCount")
-    private fun isEqual(first: MutableList<IActivityType>, second: List<WorkoutEntry>): Boolean {
+    private fun isEqual(first: MutableList<IActivityType>, second: List<WorkoutPlanEntry>): Boolean {
         if (first.size != second.size) {
             return false
         }

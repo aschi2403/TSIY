@@ -12,18 +12,27 @@ class DialogView(val context: Context) {
     fun showYesNoDialog(
         title: String,
         message: String,
+        yes: DialogInterface.OnClickListener
+    ) {
+        showYesNoDialog(title, message, yes) { _, _ -> }
+    }
+
+    private fun showYesNoDialog(
+        title: String,
+        message: String,
         yes: DialogInterface.OnClickListener,
         no: DialogInterface.OnClickListener
     ) {
         val alertDialog = AlertDialog.Builder(context)
         alertDialog.setTitle(title)
         alertDialog.setMessage(message)
-        alertDialog.setPositiveButton("YES", yes)
+        alertDialog.setPositiveButton(context.getString(R.string.yes), yes)
         alertDialog.setNegativeButton(
-            "NO", no
+            context.getString(R.string.no), no
         )
         alertDialog.create().show()
     }
+
     fun showItemCheckDialog(
         title: Int,
         items: List<String>,
@@ -39,8 +48,8 @@ class DialogView(val context: Context) {
             // user checked an item
         }
 
-        itemCheckDialog.setPositiveButton(R.string.ok, ok)
-        itemCheckDialog.setNegativeButton(R.string.cancel, cancel)
+        itemCheckDialog.setPositiveButton(context.getString(R.string.ok), ok)
+        itemCheckDialog.setNegativeButton(context.getString(R.string.cancel), cancel)
         itemCheckDialog.create().show()
     }
 }
